@@ -1,3 +1,6 @@
+#ifndef __OBJ_FILE_HPP__
+#define __OBJ_FILE_HPP__
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -5,8 +8,9 @@
 #include <sstream>
 #include <limits>
 #include "HELPER.hpp"
-// #include "AABB.hpp"
+#include "OBJ_Face.hpp"
 // #include "OBJ_Mesh.hpp"
+// #include "AABB.hpp"
 
 namespace OBJ_Loader
 {
@@ -15,16 +19,17 @@ namespace OBJ_Loader
     {
     public:
 
-        // OBJ_Material materials;
-        // OBJ_Mesh m; // meshes
-        // OBJ_Face f; // faces
+        // OBJ_Material* materials;
+        // OBJ_Mesh* m; // meshes
+        // OBJ_Face* f; // faces
         float** v; // vertices
         float** vt; // texture coordinates (normalized)
         float** vn; // vertex-normals
+        // Math::AABB aabb; // Axis Aligned Bounding Box
+        
         int row_v = 0, col_v = 0;
         int row_vt = 0, col_vt = 0;
         int row_vn = 0, col_vn = 0;
-        // Math::AABB aabb; // Axis Aligned Bounding Box
         
         OBJ_File(const char *filename)
         {
@@ -33,18 +38,15 @@ namespace OBJ_Loader
             std::vector<std::string> lines = helper.readASCIIfile(filename);
             
             // dynamic data buffers
-            std::vector<float> tmp_v;
-            std::vector<float> tmp_vt;
-            std::vector<float> tmp_vn;
-            std::vector<std::vector<float>> vec_tmp_v;
-            std::vector<std::vector<float>> vec_tmp_vt;
-            std::vector<std::vector<float>> vec_tmp_vn;
-            // std::vector<OBJ_Face> tmp_f;
-            // std::vector<OBJ_Mesh> tmp_m;
+            std::vector<std::vector<float>> buf_vertices;
+            std::vector<std::vector<float>> buf_textures;
+            std::vector<std::vector<float>> buf_normals;
+            std::vector<OBJ_Face>           buf_faces;
+            std::vector<OBJ_Mesh>           buf_meshes;
 
-            // OBJ_Material mat_cur = OBJ_Material.MAT_DEFAULT;
-            // OBJ_Mesh mesh_cur = new OBJ_Mesh(this, "___DEFAULT___");
-            // tmp_m.push_back(mesh_cur);
+            OBJ_Material mat_cur = OBJ_Material.MAT_DEFAULT;
+            OBJ_Mesh mesh_cur = new OBJ_Mesh(this, "___DEFAULT___");
+            buf_meshes.push_back(mesh_cur);
             
             for (int i=0; i < lines.size(); i++)
             {
@@ -115,157 +117,134 @@ namespace OBJ_Loader
                 if (token == "v")
                 {
                     std::istringstream stoken(line);
-                    std::string element;
+                    std::string element = new std::string();
+                    std::vector<float> vertex = new std::vector<float>(3);
                     while (std::getline(stoken, element, ' '))
                     {
                         if (element != "v")
                         {
                             if(element.size() > 0)
                             {
-                                tmp_v.push_back(helper.string2float(element));   
-                                // std::cout << "v = " << element << std::endl;             
+                                vertex.push_back(helper.string2float(element));   
                             }
                         }
                     }
-                    vec_tmp_v.push_back(tmp_v);
-                    tmp_v.clear();
-                    // std::cout << "" << std::endl;
+                    buf_vertices.push_back(vertex);
+                    vertex.clear();
                 
                 }
-
                 // texture coordinates
                 else if (token == "vt")
                 {
                     std::istringstream stoken(line);
-                    std::string element;
+                    std::string element = new std::string();
+                    std::vector<float> texture = new std::vector<float>(2);
                     while (std::getline(stoken, element, ' '))
                     {
                         if (element != "vt")
                         {
                             if(element.size() > 0)
                             {
-                                tmp_vt.push_back(helper.string2float(element));                
-                                // std::cout << "vt = " << element << std::endl;             
+                                texture.push_back(helper.string2float(element));                
                             }
                         }
                     }
-                    vec_tmp_vt.push_back(tmp_vt);
-                    tmp_vt.clear();
-                    // std::cout << "" << std::endl;
-
+                    buf_textures.push_back(texture);
+                    texture.clear();
                 }
                 // vertex normals
                 else if (token == "vn")
                 {
                     std::istringstream stoken(line);
-                    std::string element;
+                    std::string element = new std::string();
+                    std::vector<float> normal = new std::vector<float>(3);
                     while (std::getline(stoken, element, ' '))
                     {
                         if (element != "vn")
                         {
                             if(element.size() > 0)
                             {
-                                tmp_vn.push_back(helper.string2float(element));                
-                                // std::cout << "vn = " << element << std::endl;             
+                                normal.push_back(helper.string2float(element));                
                             }
                         }
                     }
-                    vec_tmp_vn.push_back(tmp_vn);
-                    tmp_vn.clear();
-                    // std::cout << "" << std::endl;
-
+                    buf_normals.push_back(normal);
+                    normal.clear();
                 }
-                // // faces
-                // else if (token == "f")
-                // {
-                //     std::istringstream stoken(line);
-                //     std::string element;
-                //     while (std::getline(stoken, element, ' '))
-                //     {
-                //         if (element != "f")
-                //         {
-                //             if(element.size() > 0)
-                //             {
-                //                 std::istringstream sub_stoken(element);
-                //                 std::string new_element;
-                //                 std::vector<int> tmp(3);
-                //                 int count = 0;
-                //                 int reset = 0;
-                //                 while (std::getline(sub_stoken, new_element, '/'))
-                //                 {
-                //                     tmp[count] = helper.string2integer(new_element);
-                //                     count++;
-                //                     std::cout << "f = " << new_element << std::endl;             
-                //                 }
-                //                 OBJ_Face face = new OBJ_Face(this);
-                //                 face.IDX_V[0] = tmp[0] -1;
-                //                 if( A.length > 1 && !A[1].isEmpty()) face.IDX_T[0] = Integer.parseInt(A[1]) - 1;
-                //                 if( A.length > 2 && !A[2].isEmpty()) face.IDX_N[0] = Integer.parseInt(A[2]) - 1;
-            
-                //                 face.IDX_V[1] = Integer.parseInt(B[0]) - 1;
-                //                 if( B.length > 1 && !B[1].isEmpty()) face.IDX_T[1] = Integer.parseInt(B[1]) - 1;
-                //                 if( B.length > 2 && !B[2].isEmpty()) face.IDX_N[1] = Integer.parseInt(B[2]) - 1;
-            
-                //                 face.IDX_V[2] = Integer.parseInt(C[0]) - 1;
-                //                 if( C.length > 1 && !C[1].isEmpty()) face.IDX_T[2] = Integer.parseInt(C[1]) - 1;
-                //                 if( C.length > 2 && !C[2].isEmpty()) face.IDX_N[2] = Integer.parseInt(C[2]) - 1;
-                                        
-                //                 tmp_f.push_back(face)
-                //                 mesh_cur.faces.push_back(face);
-                //                 face.MESH = mesh_cur;
-                //                 face.MATERIAL = mat_cur;
-                //                 // tmp_f.push_back(tmp);
-                //                 // tmp.clear();              
-                //             }
-                //         }
-                //     }
-                //     f.push_back(tmp_f);
-                //     tmp_f.clear();
-                //     std::cout << "" << std::endl;
-                // }
-
+                // faces
+                else if (token == "f")
+                {
+                    std::istringstream stoken(line);
+                    std::string element;
+                    OBJ_Face face = new OBJ_Face(this);
+                    for (int i=0, std::getline(stoken, element, ' '); i<3; i++)
+                    {
+                        if (element != "f")
+                        {
+                            if(element.size() > 0)
+                            {
+                                std::istringstream sub_stoken(element);
+                                std::string sFace;
+                                std::vector<int> vFace;
+                                while (std::getline(sub_stoken, sFace, '/'))
+                                {
+                                    vFace.push_back(helper.string2integer(sFace));
+                                    std::cout << "f = " << sFace << std::endl;
+                                }
+                                face.IDX_V[i] = vFace[0] -1;
+                                if( vFace.size() > 1 && !vFace[1].empty()) face.IDX_T[i] = vFace[1] - 1;
+                                if( vFace.size() > 2 && !vFace[2].empty()) face.IDX_N[i] = vFace[2] - 1;
+                                vFace.clear();
+                            }
+                        }
+                    }
+                    buf_faces.push_back(face);
+                    mesh_cur.faces.push_back(face);
+                    face.MESH = mesh_cur;
+                    face.MATERIAL = mat_cur;
+                }
             }
 
             // Contiguous Memory Allocation
-            row_v = vec_tmp_v.size(), col_v = vec_tmp_v[0].size();
-            row_vt = vec_tmp_vt.size(), col_vt = vec_tmp_vt[0].size();
-            row_vn = vec_tmp_vn.size(), col_vn = vec_tmp_vn[0].size();
+            row_v = buf_vertices.size(), col_v = buf_vertices[0].size();
+            row_vt = buf_textures.size(), col_vt = buf_textures[0].size();
+            row_vn = buf_normals.size(), col_vn = buf_normals[0].size();
             v = (float**)malloc2d(sizeof(float), row_v, col_v);
             vt = (float**)malloc2d(sizeof(float), row_vt, col_vt);
             vn = (float**)malloc2d(sizeof(float), row_vn, col_vn);
-            // v = (float**)malloc(vec_tmp_v.size() * sizeof(float*));
-            // v[0] = (float*)malloc(vec_tmp_v.size() * 3 * sizeof(float));
-            // for (int i=1; i<vec_tmp_v.size();i++) v[i] = v[i-1]+ 3;
+            // v = (float**)malloc(buf_vertices.size() * sizeof(float*));
+            // v[0] = (float*)malloc(buf_vertices.size() * 3 * sizeof(float));
+            // for (int i=1; i<buf_vertices.size();i++) v[i] = v[i-1]+ 3;
             
-            // vt = (float**)malloc(vec_tmp_vt.size() * sizeof(float*));
-            // vt[0] = (float*)malloc(vec_tmp_vt.size() * 2 * sizeof(float));
-            // for (int i=1; i<vec_tmp_vt.size();i++) vt[i] = vt[i-1]+ 2;
+            // vt = (float**)malloc(buf_textures.size() * sizeof(float*));
+            // vt[0] = (float*)malloc(buf_textures.size() * 2 * sizeof(float));
+            // for (int i=1; i<buf_textures.size();i++) vt[i] = vt[i-1]+ 2;
             
-            // vn = (float**)malloc(vec_tmp_vn.size() * sizeof(float*));
-            // vn[0] = (float*)malloc(vec_tmp_vn.size() * 3 * sizeof(float));
-            // for (int i=1; i<vec_tmp_vn.size();i++) vn[i] = vn[i-1]+ 3;
+            // vn = (float**)malloc(buf_normals.size() * sizeof(float*));
+            // vn[0] = (float*)malloc(buf_normals.size() * 3 * sizeof(float));
+            // for (int i=1; i<buf_normals.size();i++) vn[i] = vn[i-1]+ 3;
 
-            for (int i=0; i < vec_tmp_v.size(); i++)
+            for (int i=0; i < buf_vertices.size(); i++)
             {
-                for (int j=0; j < vec_tmp_v[0].size(); j++)
+                for (int j=0; j < buf_vertices[0].size(); j++)
                 {
-                    v[i][j] = vec_tmp_v[i][j];
+                    v[i][j] = buf_vertices[i][j];
                 }
             }
 
-            for (int i=0; i < vec_tmp_vt.size(); i++)
+            for (int i=0; i < buf_textures.size(); i++)
             {
-                for (int j=0; j < vec_tmp_vt[0].size(); j++)
+                for (int j=0; j < buf_textures[0].size(); j++)
                 {
-                    vt[i][j] = vec_tmp_vt[i][j];
+                    vt[i][j] = buf_textures[i][j];
                 }
             }
 
-            for (int i=0; i < vec_tmp_vn.size(); i++)
+            for (int i=0; i < buf_normals.size(); i++)
             {
-                for (int j=0; j < vec_tmp_vn[0].size(); j++)
+                for (int j=0; j < buf_normals[0].size(); j++)
                 {
-                    vn[i][j] = vec_tmp_vn[i][j];
+                    vn[i][j] = buf_normals[i][j];
                 }
             }
 
@@ -326,3 +305,5 @@ namespace OBJ_Loader
     };
 
 }
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef __OBJ_FACE_HPP__
+#define __OBJ_FACE_HPP__
+
 #include "AABB.hpp"
 #include "Vec3.hpp"
 #include "OBJ_File.hpp"
@@ -13,7 +16,7 @@ namespace OBJ_Loader
         OBJ_Material MATERIAL = OBJ_Material.MAT_DEFAULT;
         OBJ_Mesh MESH = null;
         Math::AABB aabb;
-        Math::Vec3 Vector3;
+        Math::Vec3 vector3;
 
         int IDX_V[3]; // indices - vertices
         int IDX_N[3]; // indices - normals
@@ -63,31 +66,31 @@ namespace OBJ_Loader
         
         float* getCenter()
         {
-            return Vector3.triangle_midpoint_new(A(), B(), C());
+            return vector3.triangle_midpoint_new(A(), B(), C());
         }
         
         bool isDegenerate()
         {
             float* n = getNormalUnormalized();
-            return Vector3.mag(n) == 0.0f;
+            return vector3.mag(n) == 0.0f;
         }
         
         float getArea()
         {
-            return Vector3.mag(getNormalUnormalized())*0.5f;
+            return vector3.mag(getNormalUnormalized())*0.5f;
         }
         
         float* getNormalUnormalized()
         {
-            float* E1 = Vector3.sub_new(B(), A());
-            float* E2 = Vector3.sub_new(C(), A());
-            return Vector3.cross_new(E1, E2);
+            float* E1 = vector3.sub_new(B(), A());
+            float* E2 = vector3.sub_new(C(), A());
+            return vector3.cross_new(E1, E2);
         }
         
         float* getNormal()
         {
             float* n = getNormalUnormalized();
-            Vector3.normalize_ref_slf(n);
+            vector3.normalize_ref_slf(n);
             return n;
         }
 
@@ -98,7 +101,7 @@ namespace OBJ_Loader
             float* n = {   nA[0]*w + nC[0]*u + nB[0]*v,
                             nA[1]*w + nC[1]*u + nB[1]*v,
                             nA[2]*w + nC[2]*u + nB[2]*v     };
-            Vector3.normalize_ref_slf(n);
+            vector3.normalize_ref_slf(n);
             return n;
         }
 
@@ -109,7 +112,7 @@ namespace OBJ_Loader
             dst[0] = nA[0]*w + nC[0]*u + nB[0]*v;
             dst[1] = nA[1]*w + nC[1]*u + nB[1]*v;
             dst[2] = nA[2]*w + nC[2]*u + nB[2]*v;
-            Vector3.normalize_ref_slf(dst);
+            vector3.normalize_ref_slf(dst);
         }
         
         float* getPoint(float u, float v)
@@ -131,8 +134,8 @@ namespace OBJ_Loader
         
         float* getUniformlySampledPoint()
         {
-            float u = Vector3.get_random();
-            float v = Vector3.get_random();
+            float u = vector3.get_random();
+            float v = vector3.get_random();
             float w = std::sqrt(u);
             u = 1-w;
             v = v*w;
@@ -141,8 +144,8 @@ namespace OBJ_Loader
 
         static void getUniformlySampledUVs(float* uv)
         {
-            float u = Vector3.get_random();
-            float v = Vector3.get_random();
+            float u = vector3.get_random();
+            float v = vector3.get_random();
             float w = std::sqrt(u);
             uv[0] = (1-w);
             uv[1] = (v*w);
@@ -150,11 +153,13 @@ namespace OBJ_Loader
         
         float* getCenterWeightedSampledPoint()
         {
-            float r = Vector3.get_random();
-            float s = Vector3.get_random();
-            float t = Vector3.get_random();
+            float r = vector3.get_random();
+            float s = vector3.get_random();
+            float t = vector3.get_random();
             float z = 1/(r+s+t);
             return getPoint(r*z, s*z, t*z);              
         }
     };
 }
+
+#endif

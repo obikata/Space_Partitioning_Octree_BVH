@@ -1,3 +1,6 @@
+#ifndef __AABB_HPP__
+#define __AABB_HPP__
+
 // #include <cstddef>
 // #include <iostream>
 // #include <limits>
@@ -126,3 +129,5 @@ namespace Math
         }
     };
 }
+
+#endif

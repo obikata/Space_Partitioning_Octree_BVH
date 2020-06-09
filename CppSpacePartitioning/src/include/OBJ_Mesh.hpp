@@ -1,5 +1,9 @@
+#ifndef __OBJ_MESH_HPP__
+#define __OBJ_MESH_HPP__
+
 #include "AABB.hpp"
 #include "OBJ_Face.hpp"
+#include "OBJ_File.hpp"
 
 namespace OBJ_Loader
 {
@@ -30,3 +34,5 @@ namespace OBJ_Loader
 
     };
 }
+
+#endif

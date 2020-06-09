@@ -1,3 +1,5 @@
+#ifndef __HELPER_HPP__
+#define __HELPER_HPP__
 
 #include <string>
 #include <vector>
@@ -87,3 +89,5 @@ namespace Utils
         }
     };
 }
+
+#endif
