@@ -196,7 +196,8 @@ namespace Math
 
         static float* sumlist_new(float** arr)
         {
-            float dst[3];
+            // static float dst[3];
+            float* dst = new float[3];
             int len = sizeof(arr) / sizeof(arr[0]);
             for(int i = 0; i < len; i++)
             {

@@ -1,3 +1,6 @@
+#ifndef __OBJ_MATERIAL_HPP__
+#define __OBJ_MATERIAL_HPP__
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -32,6 +35,11 @@ namespace OBJ_Loader
           material_list.push_back(mat);
         }
 
+        static OBJ_Material mat_null()
+        {
+            NULL;
+        }
+
         static OBJ_Material mat_default()
         {
             MAT_DEFAULT = OBJ_Material("mat_default");
@@ -49,7 +57,7 @@ namespace OBJ_Loader
 
     public:
         static OBJ_Material MAT_DEFAULT;
-        Math::Vec3 Vector3;
+        Math::Vec3 vector3;
 
         std::string name = ""; // material name
         float Ns = 0; // coeff specular [0,100] ... glossiness
@@ -79,12 +87,12 @@ namespace OBJ_Loader
             std::cout << "   Ni     = " << Ni << std::endl;
             std::cout << "   d      = " << d << std::endl;
             std::cout << "   Tr     = " << Tr << std::endl;
-            std::cout << "   Tf     = " << Vector3.toStr(Tf, 3) << std::endl;
+            std::cout << "   Tf     = " << vector3.toStr(Tf, 3) << std::endl;
             std::cout << "   illum  = " << illum << std::endl;
-            std::cout << "   Ka     = " << Vector3.toStr(Ka, 3) << std::endl;
-            std::cout << "   Kd     = " << Vector3.toStr(Kd, 3) << std::endl;
-            std::cout << "   Ks     = " << Vector3.toStr(Ks, 3) << std::endl;
-            std::cout << "   Ke     = " << Vector3.toStr(Ke, 3) << std::endl;
+            std::cout << "   Ka     = " << vector3.toStr(Ka, 3) << std::endl;
+            std::cout << "   Kd     = " << vector3.toStr(Kd, 3) << std::endl;
+            std::cout << "   Ks     = " << vector3.toStr(Ks, 3) << std::endl;
+            std::cout << "   Ke     = " << vector3.toStr(Ke, 3) << std::endl;
             std::cout << "   reflectivity = " << reflectivity << std::endl;
             std::cout << "------------------- </ OBJ MTL > -------------------" << std::endl;
         }
@@ -301,22 +309,24 @@ namespace OBJ_Loader
             return material_list;
         }
   
-        static OBJ_Material* getByName(std::vector<OBJ_Material> materials, std::string name)
+        static OBJ_Material getByName(std::vector<OBJ_Material> materials, std::string name)
         {
             if( materials.size() == 0)
             {
-                return NULL;
+                return mat_null();
             }
             for(int i = 0; i < materials.size(); i++ )
             {
                 OBJ_Material mat_tmp = materials[i];
                 if( name == mat_tmp.name )
                 {
-                    return &mat_tmp;
+                    return mat_tmp;
                 }
             }
-            return NULL;
+            return mat_null();
         }
 
     };
 }
+
+#endif

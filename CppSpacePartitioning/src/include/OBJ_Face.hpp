@@ -7,14 +7,23 @@
 #include "OBJ_Material.hpp"
 #include "OBJ_Mesh.hpp"
 
+// C++ Return float/int array
+// https://www.geeksforgeeks.org/return-local-array-c-function/
+
 namespace OBJ_Loader
 {
+
+    class OBJ_File;
+    class OBJ_Mesh;
+    // class OBJ_Material;
+        
     class OBJ_Face
     {
     public:
-        OBJ_File parent_obj_file;
-        OBJ_Material MATERIAL = OBJ_Material.MAT_DEFAULT;
-        OBJ_Mesh MESH = null;
+
+        OBJ_File* parent_obj_file;
+        // OBJ_Material* MATERIAL = OBJ_Material.MAT_DEFAULT;
+        OBJ_Mesh* MESH = NULL;
         Math::AABB aabb;
         Math::Vec3 vector3;
 
@@ -24,44 +33,44 @@ namespace OBJ_Loader
                 
         bool FLAG_CHECKED = false;
         
-        OBJ_Face(OBJ_File parent_obj_file)
+        OBJ_Face(OBJ_File* parent_obj_file)
         {
-            this.parent_obj_file = parent_obj_file;
+            this->parent_obj_file = parent_obj_file;
         }
         
         float* A() 
         {
-            return parent_obj_file.v[IDX_V[0]];
+            return parent_obj_file->v[IDX_V[0]];
         }
         
         float* B() 
         {
-            return parent_obj_file.v[IDX_V[1]];
+            return parent_obj_file->v[IDX_V[1]];
         }
         
         float* C()
         {
-            return parent_obj_file.v[IDX_V[2]];
+            return parent_obj_file->v[IDX_V[2]];
         }
                         
         float* An()
         {
-            return parent_obj_file.n[IDX_N[0]];
+            return parent_obj_file->vn[IDX_N[0]];
         }
         
         float* Bn()
         {
-            return parent_obj_file.n[IDX_N[1]];
+            return parent_obj_file->vn[IDX_N[1]];
         }
         
         float* Cn()
         {
-            return parent_obj_file.n[IDX_N[2]];
+            return parent_obj_file->vn[IDX_N[2]];
         }
 
         void computeAABB()
         {
-            aabb = new AABB(A(), B(), C());
+            aabb = Math::AABB(A(), B(), C());
         }
         
         float* getCenter()
@@ -96,40 +105,58 @@ namespace OBJ_Loader
 
         float* getNormal(float u, float v)
         {
-            float* nA = An(), nB = Bn(),  nC = Cn();
+            static float* n = new float[3];
+            float* nA = An();
+            float* nB = Bn();
+            float* nC = Cn();
             float w = 1-u-v;
-            float* n = {   nA[0]*w + nC[0]*u + nB[0]*v,
-                            nA[1]*w + nC[1]*u + nB[1]*v,
-                            nA[2]*w + nC[2]*u + nB[2]*v     };
+            n[0] = nA[0]*w + nC[0]*u + nB[0]*v;
+            n[1] = nA[1]*w + nC[1]*u + nB[1]*v;
+            n[2] = nA[2]*w + nC[2]*u + nB[2]*v;
+            // n = {nA[0]*w + nC[0]*u + nB[0]*v, nA[1]*w + nC[1]*u + nB[1]*v, nA[2]*w + nC[2]*u + nB[2]*v};
             vector3.normalize_ref_slf(n);
+            
             return n;
         }
 
-        void getNormal_ref(float u, float v, float* dst)
+        void getNormal_ref(float u, float v, float* n)
         {
-            float* nA = An(), nB = Bn(),  nC = Cn();
+            float* nA = An();
+            float* nB = Bn();
+            float* nC = Cn();
             float w = 1-u-v;
-            dst[0] = nA[0]*w + nC[0]*u + nB[0]*v;
-            dst[1] = nA[1]*w + nC[1]*u + nB[1]*v;
-            dst[2] = nA[2]*w + nC[2]*u + nB[2]*v;
-            vector3.normalize_ref_slf(dst);
+            n[0] = nA[0]*w + nC[0]*u + nB[0]*v;
+            n[1] = nA[1]*w + nC[1]*u + nB[1]*v;
+            n[2] = nA[2]*w + nC[2]*u + nB[2]*v;
+            vector3.normalize_ref_slf(n);
         }
         
         float* getPoint(float u, float v)
         {
-            float* A = A(), B = B(),  C = C();
+            static float* n = new float[3];
+            float* a = A();
+            float* b = B();
+            float* c = C();
             float w = 1-u-v;
-            return new float* {   A[0]*w + C[0]*u + B[0]*v,
-                                    A[1]*w + C[1]*u + B[1]*v,
-                                    A[2]*w + C[2]*u + B[2]*v     };
+            n[0] = a[0]*w + c[0]*u + b[0]*v;
+            n[1] = a[1]*w + c[1]*u + b[1]*v;
+            n[2] = a[2]*w + c[2]*u + b[2]*v;
+            return n;
         }
 
         float* getPoint(float u, float v, float w)
         {
-            float* A = A(), B = B(),  C = C();
-            return new float* {   A[0]*w + C[0]*u + B[0]*v,
-                                    A[1]*w + C[1]*u + B[1]*v,
-                                    A[2]*w + C[2]*u + B[2]*v     };
+            static float* p = new float[3];
+            float* a = A();
+            float* b = B();
+            float* c = C();
+            p[0] = a[0]*w + c[0]*u + b[0]*v;
+            p[1] = a[1]*w + c[1]*u + b[1]*v;
+            p[2] = a[2]*w + c[2]*u + b[2]*v;
+            // return new float[3] {   A[0]*w + C[0]*u + B[0]*v,
+            //                         A[1]*w + C[1]*u + B[1]*v,
+            //                         A[2]*w + C[2]*u + B[2]*v     };
+            return p;
         }
         
         float* getUniformlySampledPoint()
@@ -142,7 +169,7 @@ namespace OBJ_Loader
             return getPoint(u, v);
         }
 
-        static void getUniformlySampledUVs(float* uv)
+        void getUniformlySampledUVs(float* uv)
         {
             float u = vector3.get_random();
             float v = vector3.get_random();

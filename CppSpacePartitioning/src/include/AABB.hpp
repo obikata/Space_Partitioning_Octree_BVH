@@ -10,30 +10,32 @@ namespace Math
 {
     class AABB
     {
+
+    protected:
+        float* _min;
+        float* _max;
+
     public:
-        float* min;
-        float* max;
-        Math::Vec3 Vector3;
+
+        Math::Vec3 vector3;
+
+        AABB() : _min(vector3.nullvector()), _max(vector3.nullvector()) {};
         
-        AABB(float* min, float* max)
-        {
-            this->min = min;
-            this->max = max;
-        }
-        
+        AABB(float* min, float* max) : _min(min), _max(max) {};
+
         AABB(float* A, float* B, float* C)
         {
             float min[3]
             {
-                Vector3.minComponent(A[0], B[0], C[0]),
-                Vector3.minComponent(A[1], B[1], C[1]),
-                Vector3.minComponent(A[2], B[2], C[2])
+                vector3.minComponent(A[0], B[0], C[0]),
+                vector3.minComponent(A[1], B[1], C[1]),
+                vector3.minComponent(A[2], B[2], C[2])
             };
             float max[3]
             {
-                Vector3.maxComponent(A[0], B[0], C[0]),
-                Vector3.maxComponent(A[1], B[1], C[1]),
-                Vector3.maxComponent(A[2], B[2], C[2])
+                vector3.maxComponent(A[0], B[0], C[0]),
+                vector3.maxComponent(A[1], B[1], C[1]),
+                vector3.maxComponent(A[2], B[2], C[2])
             };
             this->min = min;
             this->max = max;
@@ -50,7 +52,7 @@ namespace Math
 
         AABB copy()
         {
-            return AABB(Vector3.copy_new(min), Vector3.copy_new(max));
+            return AABB(vector3.copy_new(min), vector3.copy_new(max));
         }
 
         float getVolume()
@@ -67,17 +69,17 @@ namespace Math
 
         float* getSize()
         {
-            return Vector3.sub_new(max, min);
+            return vector3.sub_new(max, min);
         }
 
         float* getHalfSize()
         {
-            return Vector3.scale_new(getSize(), 0.5f);
+            return vector3.scale_new(getSize(), 0.5f);
         }
 
         float* getCenter()
         {
-            return Vector3.scale_new(Vector3.add_new(max, min), 0.5f);
+            return vector3.scale_new(vector3.add_new(max, min), 0.5f);
         }
 
         float** getCorners()
@@ -106,8 +108,8 @@ namespace Math
 
         AABB grow(AABB& aabb)
         {
-            Vector3.min_ref_slf(this->min, aabb.min);
-            Vector3.max_ref_slf(this->max, aabb.max);
+            vector3.min_ref_slf(this->min, aabb.min);
+            vector3.max_ref_slf(this->max, aabb.max);
             // if( aabb.min[0] < min[0] ) min[0]=aabb.min[0];
             // if( aabb.min[1] < min[1] ) min[1]=aabb.min[1];
             // if( aabb.min[2] < min[2] ) min[2]=aabb.min[2];

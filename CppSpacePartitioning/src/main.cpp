@@ -26,7 +26,8 @@ int main(int argc, char **argv)
     // Read object file
     //----------------------------------------------------------------------------
     std::cout << "Read OBJ file." << std::endl;
-    OBJ_Loader::OBJ_File obj = OBJ_Loader::OBJ_File("text.obj");
+    OBJ_Loader::OBJ_File obj;
+    obj.read_file("text.obj");
 
     // Debug: Check OBJ_Loader functionality
     obj.display();
