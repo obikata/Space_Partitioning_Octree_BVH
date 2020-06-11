@@ -1,6 +1,7 @@
 #include "include/OBJ_File.hpp"
 #include <iostream>
 #include <chrono>
+#include <sstream>
 
 static std::string toStr(double a, int prec) 
 {

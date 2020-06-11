@@ -19,7 +19,7 @@ namespace Math
 
         Math::Vec3 vector3;
 
-        AABB() : _min(vector3.nullvector()), _max(vector3.nullvector()) {};
+        AABB() : _min(nullptr), _max(nullptr) {};
         
         AABB(float* min, float* max) : _min(min), _max(max) {};
 
@@ -37,8 +37,8 @@ namespace Math
                 vector3.maxComponent(A[1], B[1], C[1]),
                 vector3.maxComponent(A[2], B[2], C[2])
             };
-            this->min = min;
-            this->max = max;
+            this->_min = min;
+            this->_max = max;
         }
 
         static AABB init()
@@ -52,7 +52,7 @@ namespace Math
 
         AABB copy()
         {
-            return AABB(vector3.copy_new(min), vector3.copy_new(max));
+            return AABB(vector3.copy_new(_min), vector3.copy_new(_max));
         }
 
         float getVolume()
@@ -69,7 +69,7 @@ namespace Math
 
         float* getSize()
         {
-            return vector3.sub_new(max, min);
+            return vector3.sub_new(_max, _min);
         }
 
         float* getHalfSize()
@@ -79,20 +79,20 @@ namespace Math
 
         float* getCenter()
         {
-            return vector3.scale_new(vector3.add_new(max, min), 0.5f);
+            return vector3.scale_new(vector3.add_new(_max, _min), 0.5f);
         }
 
         float** getCorners()
         {
             float** multiArr = new float*[8];
-            multiArr[0] = new float[3] { min[0], min[1],min[2] }; // [0]
-            multiArr[1] = new float[3] { min[0], min[1],max[2] }; // [1]
-            multiArr[2] = new float[3] { min[0], max[1],min[2] }; // [2]
-            multiArr[3] = new float[3] { min[0], max[1],max[2] }; // [3]
-            multiArr[4] = new float[3] { max[0], min[1],min[2] }; // [4]
-            multiArr[5] = new float[3] { max[0], min[1],max[2] }; // [5]
-            multiArr[6] = new float[3] { max[0], max[1],min[2] }; // [6]
-            multiArr[7] = new float[3] { max[0], max[1],max[2] }; // [7]
+            multiArr[0] = new float[3] { _min[0], _min[1], _min[2] }; // [0]
+            multiArr[1] = new float[3] { _min[0], _min[1], _max[2] }; // [1]
+            multiArr[2] = new float[3] { _min[0], _max[1], _min[2] }; // [2]
+            multiArr[3] = new float[3] { _min[0], _max[1], _max[2] }; // [3]
+            multiArr[4] = new float[3] { _max[0], _min[1], _min[2] }; // [4]
+            multiArr[5] = new float[3] { _max[0], _min[1], _max[2] }; // [5]
+            multiArr[6] = new float[3] { _max[0], _max[1], _min[2] }; // [6]
+            multiArr[7] = new float[3] { _max[0], _max[1], _max[2] }; // [7]
             return multiArr;
         }
 
@@ -103,13 +103,13 @@ namespace Math
 
         bool isInside(float* v)
         {
-            return( (v[0]>=min[0]) && (v[1]>=min[1]) && (v[2]>=min[2]) && (v[0]<=max[0]) && (v[1]<=max[1]) && (v[2]<=max[2]));
+            return( (v[0]>=_min[0]) && (v[1]>=_min[1]) && (v[2]>=_min[2]) && (v[0]<=_max[0]) && (v[1]<=_max[1]) && (v[2]<=_max[2]));
         }
 
         AABB grow(AABB& aabb)
         {
-            vector3.min_ref_slf(this->min, aabb.min);
-            vector3.max_ref_slf(this->max, aabb.max);
+            vector3.min_ref_slf(this->_min, aabb._min);
+            vector3.max_ref_slf(this->_max, aabb._max);
             // if( aabb.min[0] < min[0] ) min[0]=aabb.min[0];
             // if( aabb.min[1] < min[1] ) min[1]=aabb.min[1];
             // if( aabb.min[2] < min[2] ) min[2]=aabb.min[2];
@@ -121,12 +121,12 @@ namespace Math
 
         bool hasSameValues(AABB& aabb)
         {
-            if( aabb.min[0] != min[0] ) return false;
-            if( aabb.min[1] != min[1] ) return false;
-            if( aabb.min[2] != min[2] ) return false;
-            if( aabb.max[0] != max[0] ) return false;
-            if( aabb.max[1] != max[1] ) return false;
-            if( aabb.max[2] != max[2] ) return false;
+            if( aabb._min[0] != _min[0] ) return false;
+            if( aabb._min[1] != _min[1] ) return false;
+            if( aabb._min[2] != _min[2] ) return false;
+            if( aabb._max[0] != _max[0] ) return false;
+            if( aabb._max[1] != _max[1] ) return false;
+            if( aabb._max[2] != _max[2] ) return false;
             return true;
         }
     };
