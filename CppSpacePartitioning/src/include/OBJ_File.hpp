@@ -1,33 +1,35 @@
 #ifndef __OBJ_FILE_HPP__
 #define __OBJ_FILE_HPP__
 
-#include <iostream>
+#include "AABB.hpp"
 
 namespace OBJ_Loader
 {
 
     class OBJ_Face;
+    class OBJ_Mesh;
+    class OBJ_Material;
 
     class OBJ_File
     {
 
-    protected:
-        // OBJ_Material* materials;
-        // OBJ_Mesh* m; // meshes
+    public:
+
         float** _v; // vertices
         float** _vt; // texture coordinates (normalized)
         float** _vn; // vertex-normals
         OBJ_Face* _f; // faces
-        // Math::AABB aabb; // Axis Aligned Bounding Box
+        OBJ_Mesh* _m; // meshes
+        OBJ_Material* _materials; // materials
+        Math::AABB _aabb; // Axis Aligned Bounding Box
         
         int row_v = 0, col_v = 0;
         int row_vt = 0, col_vt = 0;
         int row_vn = 0, col_vn = 0;
         int row_f = 0;
+        int row_m = 0;
 
-    public:
-
-        // Math::Vec3 vector3;
+        // OBJ_Face query_face;
 
     	/**
     	Constructor 
@@ -39,6 +41,8 @@ namespace OBJ_Loader
         void* malloc2d(size_t size, int row, int col);
 
         void display();
+
+        void computeAABB();
 
     };
 

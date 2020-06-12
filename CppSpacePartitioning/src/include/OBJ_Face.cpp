@@ -1,8 +1,6 @@
 #include "AABB.hpp"
 #include "Vec3.hpp"
 #include "OBJ_Face.hpp"
-// #include "OBJ_Material.hpp"
-// #include "OBJ_Mesh.hpp"
 
 // C++ Return float/int array
 // https://www.geeksforgeeks.org/return-local-array-c-function/
@@ -42,7 +40,7 @@ namespace OBJ_Loader
 
     void OBJ_Face::computeAABB()
     {
-        aabb = Math::AABB(A(), B(), C());
+        _aabb = Math::AABB(A(), B(), C());
     }
     
     float* OBJ_Face::getCenter()
@@ -158,4 +156,5 @@ namespace OBJ_Loader
         float z = 1/(r+s+t);
         return getPoint(r*z, s*z, t*z);              
     }
+
 }
