@@ -25,10 +25,13 @@ namespace OBJ_Loader
         std::vector<std::vector<float>> buf_textures;
         std::vector<std::vector<float>> buf_normals;
         std::vector<OBJ_Face>           buf_faces;
+        std::vector<OBJ_Mesh>           buf_meshes;
+        std::vector<OBJ_Face>           mg_buf_faces;
 
         // OBJ_Material mat_cur = OBJ_Material.MAT_DEFAULT();
         // OBJ_Mesh mesh_cur    = OBJ_Mesh.MESH_DEFAULT();
         OBJ_Mesh mesh_cur = OBJ_Mesh( "___DEFAULT___");
+        int mesh_group_idx = 0;
         buf_meshes.push_back(mesh_cur);
         
         for (int i=0; i < lines.size(); i++)
@@ -108,8 +111,16 @@ namespace OBJ_Loader
                     {
                         if(element.size() > 0)
                         {
+
+                            // Store previous mesh group faces and clear
+                            buf_meshes[mesh_group_idx]._buf_faces = mg_buf_faces;
+                            mg_buf_faces.clear();
+
+                            // Store current mesh group index and name
+                            mesh_group_idx += 1;
                             mesh_cur = OBJ_Mesh(element);
                             buf_meshes.push_back(mesh_cur);
+
                         }
                     }
                 }
@@ -201,12 +212,14 @@ namespace OBJ_Loader
                         }
                     }
                 }
+                face.MeshGroupIdx = mesh_group_idx;
                 buf_faces.push_back(face);
-                mesh_cur.buf_faces.push_back(face);
-                // face.MESH = mesh_cur;
+                mg_buf_faces.push_back(face);
                 // face.MATERIAL = mat_cur;
             }
         }
+        
+        buf_meshes[mesh_group_idx]._buf_faces = mg_buf_faces;
 
         // Contiguous Memory Allocation
         if (buf_vertices.size() > 0) row_v = buf_vertices.size(), col_v = buf_vertices[0].size();
@@ -332,32 +345,51 @@ namespace OBJ_Loader
             }
         }
 
-        if (_f == nullptr)
-        {
-            std::cout << "No face data is found." << std::endl;
-        }
-        else
-        {            
-            for (int i = 0; i < row_f; i++)
-            {
-                std::cout << "f = " << std::flush;
-                for (int j = 0; j<3; j++)
-                {
-                    std::cout << _f[i].IDX_V[j] << "/" << _f[i].IDX_T[j] << "/" << _f[i].IDX_N[j] << " " << std::flush;
-                }
-                std::cout << std::endl;
-            }
-        }
+        // if (_f == nullptr)
+        // {
+        //     std::cout << "No face data is found." << std::endl;
+        // }
+        // else
+        // {            
+        //     for (int i = 0; i < row_f; i++)
+        //     {
+        //         std::cout << "f = " << std::flush;
+        //         for (int j = 0; j<3; j++)
+        //         {
+        //             std::cout << _f[i].IDX_V[j] << "/" << _f[i].IDX_T[j] << "/" << _f[i].IDX_N[j] << " " << std::flush;
+        //         }
+        //         std::cout << "(MeshGroupIdx = " << _f[i].MeshGroupIdx << ")" << std::endl;
+        //     }
+        // }
 
         if (_m == nullptr)
         {
+            std::cout << std::endl;
             std::cout << "No mesh data is found." << std::endl;
         }
         else
-        {            
+        {   
             for (int i = 0; i < row_m; i++)
             {
-                std::cout << _m[i]._name << std::endl;
+                std::cout << std::endl;
+                std::cout << "MeshGroup[" << i << "] = " << _m[i]._name << std::endl;
+                
+                if (_m[i]._buf_faces.size() == 0)
+                {
+                    std::cout << "No face data is found." << std::endl;
+                }
+                else
+                {            
+                    for (int j = 0; j < _m[i]._buf_faces.size(); j++)
+                    {
+                        std::cout << "f = " << std::flush;
+                        for (int k = 0; k<3; k++)
+                        {
+                            std::cout << _m[i]._buf_faces[j].IDX_V[k] << "/" << _m[i]._buf_faces[j].IDX_T[k] << "/" << _m[i]._buf_faces[j].IDX_N[k] << " " << std::flush;
+                        }
+                        std::cout << "(MeshGroupIdx = " << _m[i]._buf_faces[j].MeshGroupIdx << ")" << std::endl;
+                    }
+                }
             }
         }
     }

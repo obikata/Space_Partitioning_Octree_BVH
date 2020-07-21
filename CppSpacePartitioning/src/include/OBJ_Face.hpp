@@ -6,7 +6,7 @@
 
 namespace OBJ_Loader
 {
-    
+    class OBJ_Mesh;
     class OBJ_Face : public OBJ_File
     {
     
@@ -18,14 +18,14 @@ namespace OBJ_Loader
         Math::AABB _aabb;
 
         // OBJ_Material* MATERIAL = OBJ_Material.MAT_DEFAULT;
-        // void* MESH;
+        int MeshGroupIdx; // Mesh group index
         
         // bool FLAG_CHECKED = false;
         
         /**
     	Constructor 
         */
-        OBJ_Face() : IDX_V(new int[3] {-1, -1, -1}), IDX_N(new int[3] {-1, -1, -1}), IDX_T(new int[3] {-1, -1, -1}), MESH(nullptr) {};
+        OBJ_Face() : IDX_V(new int[3] {-1, -1, -1}), IDX_N(new int[3] {-1, -1, -1}), IDX_T(new int[3] {-1, -1, -1}), MeshGroupIdx(0) {};
         
         float* A();
 
