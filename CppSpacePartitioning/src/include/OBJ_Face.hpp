@@ -7,6 +7,7 @@
 namespace OBJ_Loader
 {
     class OBJ_Mesh;
+    class OBJ_Material;
     class OBJ_Face : public OBJ_File
     {
     
@@ -17,7 +18,7 @@ namespace OBJ_Loader
         int* IDX_T; // indices - texture coordinates                
         Math::AABB _aabb;
 
-        // OBJ_Material* MATERIAL = OBJ_Material.MAT_DEFAULT;
+        OBJ_Material* MATERIAL = OBJ_Material.MAT_DEFAULT;
         int MeshGroupIdx; // Mesh group index
         
         // bool FLAG_CHECKED = false;

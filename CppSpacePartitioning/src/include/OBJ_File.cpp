@@ -27,8 +27,7 @@ namespace OBJ_Loader
         std::vector<OBJ_Mesh>           buf_meshes;
         std::vector<OBJ_Face>           mg_buf_faces;
 
-        // OBJ_Material mat_cur = OBJ_Material.MAT_DEFAULT();
-        // OBJ_Mesh mesh_cur    = OBJ_Mesh.MESH_DEFAULT();
+        OBJ_Material mat_cur = OBJ_Material("__DEFAULT__");
         OBJ_Mesh mesh_cur = OBJ_Mesh( "___DEFAULT___");
         int mesh_group_idx = 0;
         buf_meshes.push_back(mesh_cur);

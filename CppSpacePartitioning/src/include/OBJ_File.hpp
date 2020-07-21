@@ -8,7 +8,7 @@ namespace OBJ_Loader
 
     class OBJ_Face;
     class OBJ_Mesh;
-    // class OBJ_Material;
+    class OBJ_Material;
 
     class OBJ_File
     {
@@ -20,7 +20,7 @@ namespace OBJ_Loader
         float** _vn; // vertex-normals
         OBJ_Face* _f; // faces
         OBJ_Mesh* _m; // meshes
-        // OBJ_Material* _materials; // materials
+        OBJ_Material* _materials; // materials
         Math::AABB _aabb; // Axis Aligned Bounding Box
         
         int row_v = 0, col_v = 0;
@@ -28,8 +28,6 @@ namespace OBJ_Loader
         int row_vn = 0, col_vn = 0;
         int row_f = 0;
         int row_m = 0;
-
-        // OBJ_Face query_face;
 
     	/**
     	Constructor 
