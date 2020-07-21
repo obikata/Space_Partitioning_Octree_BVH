@@ -4,13 +4,12 @@
 #include <fstream>
 #include <vector>
 #include <limits>
-
 #include "AABB.hpp"
 #include "HELPER.hpp"
 #include "OBJ_File.hpp"
 #include "OBJ_Face.hpp"
 #include "OBJ_Mesh.hpp"
-// #include "OBJ_Material.hpp"
+#include "OBJ_Material.hpp"
 
 namespace OBJ_Loader
 {

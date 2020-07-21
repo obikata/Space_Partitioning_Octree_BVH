@@ -6,10 +6,11 @@
 #include <string>
 #include <vector>
 #include <sstream>
-#include "HELPER.hpp"
-#include "Vec3.hpp"
 #include <string>
 #include <iostream>
+#include "HELPER.hpp"
+#include "Vec3.hpp"
+#include "OBJ_Material.hpp"
 
 namespace OBJ_Loader
 {
