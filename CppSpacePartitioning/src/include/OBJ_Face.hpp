@@ -6,8 +6,7 @@
 
 namespace OBJ_Loader
 {
-    class OBJ_Mesh;
-    class OBJ_Material;
+
     class OBJ_Face : public OBJ_File
     {
     
@@ -18,15 +17,23 @@ namespace OBJ_Loader
         int* IDX_T; // indices - texture coordinates                
         Math::AABB _aabb;
 
-        OBJ_Material* MATERIAL = OBJ_Material.MAT_DEFAULT;
+        /*
+        The OBJ file references materials by name with the "usemtl" keyword. 
+        All faces that follow are given the attributes of this material 
+        until the next "usemtl" command is encountered.
+        Faces and surfaces can be assigned into named groups with the "g" keyword.
+        */
+        
         int MeshGroupIdx; // Mesh group index
+        int MaterialIdx; // Mesh group material index
         
         // bool FLAG_CHECKED = false;
         
         /**
     	Constructor 
         */
-        OBJ_Face() : IDX_V(new int[3] {-1, -1, -1}), IDX_N(new int[3] {-1, -1, -1}), IDX_T(new int[3] {-1, -1, -1}), MeshGroupIdx(0) {};
+        // OBJ_Face() : IDX_V(new int[3] {-1, -1, -1}), IDX_N(new int[3] {-1, -1, -1}), IDX_T(new int[3] {-1, -1, -1}), MeshGroupIdx(0) {};
+        OBJ_Face() : IDX_V(new int[3] {-1, -1, -1}), IDX_N(new int[3] {-1, -1, -1}), IDX_T(new int[3] {-1, -1, -1}), MeshGroupIdx(0), MaterialIdx(0) {};
         
         float* A();
 

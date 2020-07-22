@@ -4,6 +4,8 @@
 #include <fstream>
 #include <vector>
 #include <limits>
+#include <stdio.h>
+#include <string.h>
 #include "AABB.hpp"
 #include "HELPER.hpp"
 #include "OBJ_File.hpp"
@@ -14,10 +16,10 @@
 namespace OBJ_Loader
 {
 
-    void OBJ_File::read_file(const char *filename)
+    void OBJ_File::read_file(std::string path, std::string filename)
     {
 
-        std::vector<std::string> lines = Utils::HELPER::readASCIIfile(filename);
+        std::vector<std::string> lines = Utils::HELPER::readASCIIfile((path + filename).c_str());
 
         // dynamic data buffers
         std::vector<std::vector<float>> buf_vertices;
@@ -27,10 +29,15 @@ namespace OBJ_Loader
         std::vector<OBJ_Mesh>           buf_meshes;
         std::vector<OBJ_Face>           mg_buf_faces;
 
-        OBJ_Material mat_cur = OBJ_Material("__DEFAULT__");
+        std::vector<OBJ_Material>       materials; // list of materials loaded from *.mtl file
+        std::vector<OBJ_Material>       buf_materials; // list of materials used in *.obj file
+
         OBJ_Mesh mesh_cur = OBJ_Mesh( "___DEFAULT___");
         int mesh_group_idx = 0;
         buf_meshes.push_back(mesh_cur);
+        OBJ_Material mat_cur = OBJ_Material::mat_default();
+        int mat_idx = 0;
+        buf_materials.push_back(mat_cur);
         
         for (int i=0; i < lines.size(); i++)
         {
@@ -49,53 +56,45 @@ namespace OBJ_Loader
             int ws_pos = line.find(' ');
             std::string token(line, 0, ws_pos);
 
-            // // load materials from file
-            // if( token == "mtllib")
-            // {parent_obj_file
-            //     std::istringstream stoken(line);
-            //     std::string element;
-            //     while (std::getlineEAST to the Satellite whenever you are ready.
+            // load materials from file
+            if( token == "mtllib")
+            {
+                std::istringstream stoken(line);
+                std::string element;
+                while (std::getline(stoken, element, ' '))
+                {
+                    if (element != "mtllib")
+                    {
+                        if(element.size() > 0)
+                        {
+                            materials = OBJ_Material::loadFromFile(path, element);
+                        }
+                    }
+                }
+            }
 
-            //             if(element.size() > 0)
-            //             {
-            //                 materials = OBJ_Material.loadFromFile(filename, element);
-            //             }
-            //         }
-            //     }
-            // }
-
-            // // use material
-            // if (token == "usemtl")
-            // {
-            //     std::istringstream stoken(line);
-            //     std::string element;
-            //     while (std::getline(stoken, element, ' '))
-            //     {
-            //         if (element != "usemtl")
-            //         {
-            //             if(element.size() > 0)
-            //             {
-            //                 OBJ_Material mat_tmp = OBJ_Material.getByteName(materials, element);
-            //                 mat_cur = (mat_tmp != NULL) ? mat_tmp ; mat_cur;
-            //             }EAST to the Satellite whenever you are ready.
-
-            // // new mesh
-            // if (token == "g")
-            // {
-            //     std::istringstream stoken(line);
-            //     std::string element;
-            //     while (std::getline(stoken, element, ' '))
-            //     {
-            //         if (element != "g")
-            //         {
-            //             if(element.size() > 0)
-            //             {
-            //                 mesh_cur = new.OBJ_Mesh(this, element);
-            //                 tmp_m.push_back(mesh_cur);
-            //             }
-            //         }
-            //     }
-            // }
+            // use material
+            if (token == "usemtl")
+            {
+                std::istringstream stoken(line);
+                std::string element;
+                while (std::getline(stoken, element, ' '))
+                {
+                    if (element != "usemtl")
+                    {
+                        if(element.size() > 0)
+                        {
+                            OBJ_Material mat_tmp = OBJ_Material::getByName(materials, element);
+                            if (mat_tmp._name != "mat_default")
+                            {
+                                mat_idx += 1;
+                                mat_cur = mat_tmp;
+                                buf_materials.push_back(mat_cur);
+                            }
+                        }
+                    }
+                }
+            }
 
             // new mesh
             if (token == "g")
@@ -211,9 +210,9 @@ namespace OBJ_Loader
                     }
                 }
                 face.MeshGroupIdx = mesh_group_idx;
+                face.MaterialIdx = mat_idx;
                 buf_faces.push_back(face);
                 mg_buf_faces.push_back(face);
-                // face.MATERIAL = mat_cur;
             }
         }
         
@@ -225,11 +224,13 @@ namespace OBJ_Loader
         if (buf_normals.size() > 0) row_vn = buf_normals.size(), col_vn = buf_normals[0].size();
         if (buf_faces.size() > 0) row_f = buf_faces.size();
         if (buf_meshes.size() > 0) row_m = buf_meshes.size();
+        if (buf_materials.size() > 0) row_mat = buf_materials.size();
         if (row_v  > 0)  _v = (float**)malloc2d(sizeof(float), row_v, col_v);
         if (row_vt > 0) _vt = (float**)malloc2d(sizeof(float), row_vt, col_vt);
         if (row_vn > 0) _vn = (float**)malloc2d(sizeof(float), row_vn, col_vn);
         if (row_f  > 0)  _f = (OBJ_Face*)malloc(row_f * sizeof(OBJ_Face));
         if (row_m  > 0)  _m = (OBJ_Mesh*)malloc(row_m * sizeof(OBJ_Mesh));
+        if (row_mat > 0) _mat =  (OBJ_Material*)malloc(row_mat * sizeof(OBJ_Material));
 
         for (int i=0; i < row_v; i++)
         {
@@ -265,6 +266,11 @@ namespace OBJ_Loader
             _m[i] = buf_meshes[i];
         }
 
+        for (int i=0; i < row_mat; i++)
+        {
+            _mat[i] = buf_materials[i];
+        }
+        
     }
 
     void* OBJ_File::malloc2d(size_t size, int row, int col)
@@ -385,7 +391,7 @@ namespace OBJ_Loader
                         {
                             std::cout << _m[i]._buf_faces[j].IDX_V[k] << "/" << _m[i]._buf_faces[j].IDX_T[k] << "/" << _m[i]._buf_faces[j].IDX_N[k] << " " << std::flush;
                         }
-                        std::cout << "(MeshGroupIdx = " << _m[i]._buf_faces[j].MeshGroupIdx << ")" << std::endl;
+                        std::cout << "(MeshGroupIdx = " << _m[i]._buf_faces[j].MeshGroupIdx << ", MaterialIdx = " << _m[i]._buf_faces[j].MaterialIdx  << ")" << std::endl;
                     }
                 }
             }

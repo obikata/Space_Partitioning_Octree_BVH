@@ -20,21 +20,24 @@ namespace OBJ_Loader
         float** _vn; // vertex-normals
         OBJ_Face* _f; // faces
         OBJ_Mesh* _m; // meshes
-        OBJ_Material* _materials; // materials
-        Math::AABB _aabb; // Axis Aligned Bounding Box
+        OBJ_Material* _mat; // materials
         
         int row_v = 0, col_v = 0;
         int row_vt = 0, col_vt = 0;
         int row_vn = 0, col_vn = 0;
         int row_f = 0;
         int row_m = 0;
+        int row_mat = 0;
+
+        Math::AABB _aabb; // Axis Aligned Bounding Box
 
     	/**
     	Constructor 
         */
-        OBJ_File() : _v(nullptr), _vt(nullptr), _vn(nullptr), _f(nullptr) {};
+        // OBJ_File() : _v(nullptr), _vt(nullptr), _vn(nullptr), _f(nullptr), _m(nullptr) {};
+        OBJ_File() : _v(nullptr), _vt(nullptr), _vn(nullptr), _f(nullptr), _m(nullptr), _mat(nullptr) {};
         
-        void read_file(const char *filename);
+        void read_file(std::string path, std::string filename);
 
         void* malloc2d(size_t size, int row, int col);
 
