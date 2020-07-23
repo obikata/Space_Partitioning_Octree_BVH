@@ -35,6 +35,7 @@ namespace OBJ_Loader
         OBJ_Mesh mesh_cur = OBJ_Mesh( "___DEFAULT___");
         int mesh_group_idx = 0;
         buf_meshes.push_back(mesh_cur);
+
         OBJ_Material mat_cur = OBJ_Material::mat_default();
         int mat_idx = 0;
         buf_materials.push_back(mat_cur);
@@ -204,6 +205,7 @@ namespace OBJ_Loader
                             face.IDX_V[cnt] = Utils::HELPER::string2integer(vFace[0]) -1;
                             if( vFace[1]!="") face.IDX_T[cnt] = Utils::HELPER::string2integer(vFace[1]) - 1;
                             if( vFace[2]!="") face.IDX_N[cnt] = Utils::HELPER::string2integer(vFace[2]) - 1;
+                            std::cout << Utils::HELPER::string2integer(vFace[2]) - 1 << std::endl;
                             vFace.clear();
                             cnt++;                            
                         }
@@ -349,22 +351,22 @@ namespace OBJ_Loader
             }
         }
 
-        // if (_f == nullptr)
-        // {
-        //     std::cout << "No face data is found." << std::endl;
-        // }
-        // else
-        // {            
-        //     for (int i = 0; i < row_f; i++)
-        //     {
-        //         std::cout << "f = " << std::flush;
-        //         for (int j = 0; j<3; j++)
-        //         {
-        //             std::cout << _f[i].IDX_V[j] << "/" << _f[i].IDX_T[j] << "/" << _f[i].IDX_N[j] << " " << std::flush;
-        //         }
-        //         std::cout << "(MeshGroupIdx = " << _f[i].MeshGroupIdx << ")" << std::endl;
-        //     }
-        // }
+        if (_f == nullptr)
+        {
+            std::cout << "No face data is found." << std::endl;
+        }
+        else
+        {            
+            for (int i = 0; i < row_f; i++)
+            {
+                std::cout << "f = " << std::flush;
+                for (int j = 0; j<3; j++)
+                {
+                    std::cout << _f[i].IDX_V[j] << "/" << _f[i].IDX_T[j] << "/" << _f[i].IDX_N[j] << " " << std::flush;
+                }
+                std::cout << "(MeshGroupIdx = " << _f[i].MeshGroupIdx << ")" << std::endl;
+            }
+        }
 
         if (_m == nullptr)
         {

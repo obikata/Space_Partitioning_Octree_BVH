@@ -39,14 +39,14 @@ namespace OBJ_Loader
         
         void printMaterial();
 
+        // callable functions without generating an object
         static std::vector<OBJ_Material> loadFromFile(std::string path, std::string filename);
   
         static OBJ_Material getByName(std::vector<OBJ_Material> materials, std::string name);
 
         static OBJ_Material mat_default();
 
-    private:
-        static void addToList(std::vector<OBJ_Material> material_list, OBJ_Material mat)
+        static void addToList(OBJ_Material mat)
         {
         //    mat.Ks[0] *= 0.1f;
         //    mat.Ks[1] *= 0.1f;
@@ -61,7 +61,6 @@ namespace OBJ_Loader
             mat._Ke[0] *= 10;
             mat._Ke[1] *= 10;
             mat._Ke[2] *= 10;
-            material_list.push_back(mat);
         }
 
     };

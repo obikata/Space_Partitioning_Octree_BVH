@@ -53,8 +53,10 @@ namespace OBJ_Loader
 
                 if ( mat_cur._name != "mat_default" )
                 {
-                    std::cout << mat_cur._name << std::endl;
-                    addToList(material_list, mat_cur);
+                    addToList(mat_cur);
+                    material_list.push_back(mat_cur);
+                    // std::cout << mat_cur._name << std::endl;
+                    // std::cout << material_list.size() << std::endl;
                 }
 
                 std::istringstream stoken(line);
@@ -247,10 +249,12 @@ namespace OBJ_Loader
 
         if ( mat_cur._name != "mat_default" )
         {
-            addToList(material_list, mat_cur);
+            addToList(mat_cur);
+            material_list.push_back(mat_cur);
+            // std::cout << mat_cur._name << std::endl;
+            // std::cout << material_list.size() << std::endl;
         }
         
-        std::cout << material_list.size() << std::endl;
         for( OBJ_Material m : material_list )
         {
             m.printMaterial();
