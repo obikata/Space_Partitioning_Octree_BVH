@@ -205,7 +205,6 @@ namespace OBJ_Loader
                             face.IDX_V[cnt] = Utils::HELPER::string2integer(vFace[0]) -1;
                             if( vFace[1]!="") face.IDX_T[cnt] = Utils::HELPER::string2integer(vFace[1]) - 1;
                             if( vFace[2]!="") face.IDX_N[cnt] = Utils::HELPER::string2integer(vFace[2]) - 1;
-                            std::cout << Utils::HELPER::string2integer(vFace[2]) - 1 << std::endl;
                             vFace.clear();
                             cnt++;                            
                         }

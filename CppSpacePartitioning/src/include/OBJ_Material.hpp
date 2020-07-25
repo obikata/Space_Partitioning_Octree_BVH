@@ -18,7 +18,6 @@ namespace OBJ_Loader
     {
 
     public:
-        Math::Vec3 vector3;
         std::string _name; // material name
         float _Ns; // coeff specular [0,100] ... glossiness
         float _Ni; // index of refraction
@@ -46,6 +45,8 @@ namespace OBJ_Loader
 
         static OBJ_Material mat_default();
 
+    private:
+        Math::Vec3 vector3;
         static void addToList(OBJ_Material mat)
         {
         //    mat.Ks[0] *= 0.1f;
