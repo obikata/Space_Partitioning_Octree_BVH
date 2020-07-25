@@ -50,9 +50,9 @@ namespace Utils
         {
           //http://insanecoding.blogspot.com/2011/11/how-to-read-in-file-in-c.html
           std::ifstream in(filename, std::ios::in | std::ios::binary);
+          std::vector<std::string> lines;
           if (in)
           {
-              std::vector<std::string> lines;
               std::string line;
               while (std::getline(in, line, '\n'))
               {
@@ -61,9 +61,9 @@ namespace Utils
                       lines.push_back(line);                
                   }
               }
-              return(lines);
           }
-          throw(errno);
+          return(lines);
+        //   throw(errno);
         }
 
         static const float string2float(const std::string s)

@@ -29,7 +29,7 @@ int main(int argc, char **argv)
     std::cout << "Read OBJ file." << std::endl;
     OBJ_Loader::OBJ_File obj;
     std::string path = "";
-    std::string filename = "text.obj";
+    std::string filename = "bunny.obj";
     obj.read_file(path, filename);
 
     // Debug: Check OBJ_Loader functionality
