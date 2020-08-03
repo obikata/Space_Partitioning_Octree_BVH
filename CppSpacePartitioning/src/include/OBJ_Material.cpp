@@ -151,7 +151,9 @@ namespace OBJ_Loader
                         }
                     }
                 }
-                mat_cur._Tf = tmp;
+                mat_cur._Tf[0] = tmp[0];
+                mat_cur._Tf[1] = tmp[1];
+                mat_cur._Tf[2] = tmp[2];
             }
             else if(token == "Ka")
             {
@@ -170,7 +172,9 @@ namespace OBJ_Loader
                         }
                     }
                 }
-                mat_cur._Ka = tmp;
+                mat_cur._Ka[0] = tmp[0];
+                mat_cur._Ka[1] = tmp[1];
+                mat_cur._Ka[2] = tmp[2];
             }
             else if(token == "Kd")
             {
@@ -189,7 +193,9 @@ namespace OBJ_Loader
                         }
                     }
                 }
-                mat_cur._Kd = tmp;
+                mat_cur._Kd[0] = tmp[0];
+                mat_cur._Kd[0] = tmp[1];
+                mat_cur._Kd[0] = tmp[2];
             }
             else if(token == "Ks")
             {
@@ -208,7 +214,9 @@ namespace OBJ_Loader
                         }
                     }
                 }
-                mat_cur._Ks = tmp;
+                mat_cur._Ks[0] = tmp[0];
+                mat_cur._Ks[1] = tmp[1];
+                mat_cur._Ks[2] = tmp[2];
             }
             else if(token == "Ke")
             {
@@ -227,7 +235,9 @@ namespace OBJ_Loader
                         }
                     }
                 }
-                mat_cur._Ke = tmp;
+                mat_cur._Ke[0] = tmp[0];
+                mat_cur._Ke[1] = tmp[1];
+                mat_cur._Ke[2] = tmp[2];
             }
             else if(token == "illum")
             {
@@ -279,7 +289,24 @@ namespace OBJ_Loader
         }
         return OBJ_Material::mat_default(); // No matching
     }
-    
+
+    bool OBJ_Material::checkByName(std::vector<OBJ_Material> materials, std::string name)
+    {
+        if( materials.size() == 0) // No materials
+        {
+            return false;
+        }
+        for(int i = 0; i < materials.size(); i++ )
+        {
+            OBJ_Material mat_tmp = materials[i];
+            if( name == mat_tmp._name )
+            {
+                return true;
+            }
+        }
+        return false; // No matching
+    }
+
     OBJ_Material OBJ_Material::mat_default()
     {
         OBJ_Material MAT_DEFAULT = OBJ_Material("mat_default");

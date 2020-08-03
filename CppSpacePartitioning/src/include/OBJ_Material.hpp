@@ -18,23 +18,26 @@ namespace OBJ_Loader
     {
 
     public:
+        Math::Vec3 vector3;
         std::string _name; // material name
-        float _Ns; // coeff specular [0,100] ... glossiness
-        float _Ni; // index of refraction
-        float _d; // transparency or dissolved [0,1] = 1-Tr
-        float _Tr; // transparency [0, 1]
-        float* _Tf; // color transparency
+        float _Ns = 0.0f; // coeff specular [0,100] ... glossiness
+        float _Ni = 0.0f; // index of refraction
+        float _d = 0.0f; // transparency or dissolved [0,1] = 1-Tr
+        float _Tr = 0.0f; // transparency [0, 1]
+        float _Tf[3] = {0.0f, 0.0f, 0.0f}; // color transparency
+        // float* _Tf; // color transparency
         float _illum; // illumination model
-        float* _Ka; // color ambient 3x[0,1]
-        float* _Kd; // color diffuse 3x[0,1]
-        float* _Ks; // color specular 3x[0,10] ... specular*specular-level (3dsmax)
-        float* _Ke; // color self emitting
-        float _reflectivity;
-        bool _is_reflective;
-        bool _is_emissive;
-        bool _is_glossy;
+        float _Ka[3] = {0.0f, 0.0f, 0.0f}; // color ambient 3x[0,1]
+        float _Kd[3] = {0.0f, 0.0f, 0.0f}; // color diffuse 3x[0,1]
+        float _Ks[3] = {0.0f, 0.0f, 0.0f}; // color specular 3x[0,10] ... specular*specular-level (3dsmax)
+        float _Ke[3] = {0.0f, 0.0f, 0.0f}; // color self emitting
+        float _reflectivity = 0.0f;
+        bool _is_reflective = false;
+        bool _is_emissive = false;
+        bool _is_glossy = false;
 
-        OBJ_Material(std::string name) : _name(name), _Ns(0.0), _Ni(0.0), _d(0.0), _Tr(0.0), _Tf(new float[3] {0.0, 0.0, 0.0}), _illum(0.0), _Ka(new float[3] {0.0, 0.0, 0.0}), _Kd(new float[3] {0.0, 0.0, 0.0}), _Ks(new float[3] {0.0, 0.0, 0.0}), _Ke(new float[3] {0.0, 0.0, 0.0}), _reflectivity(0.0), _is_reflective(false), _is_emissive(false), _is_glossy(false) {};
+        // OBJ_Material() {};
+        OBJ_Material(std::string name) : _name(name) {};
         
         void printMaterial();
 
@@ -43,10 +46,11 @@ namespace OBJ_Loader
   
         static OBJ_Material getByName(std::vector<OBJ_Material> materials, std::string name);
 
+        static bool checkByName(std::vector<OBJ_Material> materials, std::string name);
+
         static OBJ_Material mat_default();
 
     private:
-        Math::Vec3 vector3;
         static void addToList(OBJ_Material mat)
         {
         //    mat.Ks[0] *= 0.1f;
@@ -56,12 +60,12 @@ namespace OBJ_Loader
             mat._reflectivity  = mat._Ka[0];
             // mat.printMaterial();
             
-            mat._is_reflective = (mat._Ka[0] > 0.0);
-            mat._is_emissive   = (mat._Ke[0] > 0.0) || (mat._Ke[1] > 0.0) || (mat._Ke[2] > 0.0);
-            mat._is_glossy     = (mat._Ks[0] > 0.0) || (mat._Ks[1] > 0.0) || (mat._Ks[2] > 0.0);
-            mat._Ke[0] *= 10;
-            mat._Ke[1] *= 10;
-            mat._Ke[2] *= 10;
+            mat._is_reflective = (mat._Ka[0] > 0.0f);
+            mat._is_emissive   = (mat._Ke[0] > 0.0f) || (mat._Ke[1] > 0.0f) || (mat._Ke[2] > 0.0f);
+            mat._is_glossy     = (mat._Ks[0] > 0.0f) || (mat._Ks[1] > 0.0f) || (mat._Ks[2] > 0.0f);
+            mat._Ke[0] *= 10.0f;
+            mat._Ke[1] *= 10.0f;
+            mat._Ke[2] *= 10.0f;
         }
 
     };

@@ -34,11 +34,10 @@ namespace OBJ_Loader
 
         OBJ_Mesh mesh_cur = OBJ_Mesh( "___DEFAULT___");
         int mesh_group_idx = 0;
-        buf_meshes.push_back(mesh_cur);
+        // buf_meshes.push_back(mesh_cur);
 
-        OBJ_Material mat_cur = OBJ_Material::mat_default();
         int mat_idx = 0;
-        buf_materials.push_back(mat_cur);
+        // buf_materials.push_back(mat_cur);
         
         for (int i=0; i < lines.size(); i++)
         {
@@ -74,29 +73,6 @@ namespace OBJ_Loader
                 }
             }
 
-            // use material
-            if (token == "usemtl")
-            {
-                std::istringstream stoken(line);
-                std::string element;
-                while (std::getline(stoken, element, ' '))
-                {
-                    if (element != "usemtl")
-                    {
-                        if(element.size() > 0)
-                        {
-                            OBJ_Material mat_tmp = OBJ_Material::getByName(materials, element);
-                            if (mat_tmp._name != "mat_default")
-                            {
-                                mat_idx += 1;
-                                mat_cur = mat_tmp;
-                                buf_materials.push_back(mat_cur);
-                            }
-                        }
-                    }
-                }
-            }
-
             // new mesh
             if (token == "g")
             {
@@ -109,16 +85,49 @@ namespace OBJ_Loader
                     {
                         if(element.size() > 0)
                         {
+                            if (mesh_cur._name == "___DEFAULT___")
+                            {
+                                mesh_cur._name = element;
+                                OBJ_Material mat_cur = OBJ_Material::mat_default();
+                            }
+                            else
+                            {
+                                // Store previous mesh group faces and clear
+                                buf_meshes.push_back(mesh_cur);
+                                buf_meshes[mesh_group_idx]._buf_faces = mg_buf_faces;
+                                mg_buf_faces.clear();
 
-                            // Store previous mesh group faces and clear
-                            buf_meshes[mesh_group_idx]._buf_faces = mg_buf_faces;
-                            mg_buf_faces.clear();
-
-                            // Store current mesh group index and name
-                            mesh_group_idx += 1;
-                            mesh_cur = OBJ_Mesh(element);
-                            buf_meshes.push_back(mesh_cur);
-
+                                // Store current mesh group index and name
+                                if (buf_meshes.size() > 0) mesh_group_idx += 1;
+                                mesh_cur = OBJ_Mesh(element);
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // use material
+            if (token == "usemtl")
+            {
+                std::istringstream stoken(line);
+                std::string element;
+                while (std::getline(stoken, element, ' '))
+                {
+                    if (element != "usemtl")
+                    {
+                        if(element.size() > 0)
+                        {
+                            OBJ_Material mat_tmp = OBJ_Material::getByName(materials, element);
+                            bool isListed = OBJ_Material::checkByName(buf_materials, element);
+                            if (isListed == false)
+                            {
+                                if (mat_tmp._name != "mat_default")
+                                {
+                                    // mat_cur = mat_tmp;
+                                    if (buf_materials.size() > 0) mat_idx += 1;
+                                    buf_materials.push_back(mat_tmp);
+                                }
+                            }
                         }
                     }
                 }
@@ -217,8 +226,11 @@ namespace OBJ_Loader
             }
         }
         
+        buf_meshes.push_back(mesh_cur);
         buf_meshes[mesh_group_idx]._buf_faces = mg_buf_faces;
-
+        mg_buf_faces.clear();
+        // if (buf_materials.size() > 0) mat_idx += 1;
+        
         // Contiguous Memory Allocation
         if (buf_vertices.size() > 0) row_v = buf_vertices.size(), col_v = buf_vertices[0].size();
         if (buf_textures.size() > 0) row_vt = buf_textures.size(), col_vt = buf_textures[0].size();
@@ -269,6 +281,7 @@ namespace OBJ_Loader
 
         for (int i=0; i < row_mat; i++)
         {
+            std::cout << buf_materials[i]._name << std::endl;
             _mat[i] = buf_materials[i];
         }
         
