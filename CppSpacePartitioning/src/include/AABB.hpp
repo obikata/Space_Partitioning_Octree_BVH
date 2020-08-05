@@ -6,20 +6,23 @@
 // #include <limits>
 #include "Vec3.hpp"
 
+#define NUM_MIN std::numeric_limits<float>::max()
+#define NUM_MAX - std::numeric_limits<float>::max()
+
 namespace Math
 {
     class AABB
     {
 
     protected:
+
+    public:
         float* _min;
         float* _max;
 
-    public:
-
         Math::Vec3 vector3;
 
-        AABB() : _min(nullptr), _max(nullptr) {};
+        AABB() : _min(new float[3] {NUM_MIN,NUM_MIN, NUM_MIN}), _max(new float[3] {NUM_MAX,NUM_MAX, NUM_MAX}) {};
         
         AABB(float* min, float* max) : _min(min), _max(max) {};
 
@@ -37,8 +40,12 @@ namespace Math
                 vector3.maxComponent(A[1], B[1], C[1]),
                 vector3.maxComponent(A[2], B[2], C[2])
             };
-            this->_min = min;
-            this->_max = max;
+            _min[0] = min[0];
+            _min[1] = min[1];
+            _min[2] = min[2];
+            _max[0] = max[0];
+            _max[1] = max[1];
+            _max[2] = max[2];
         }
 
         static AABB init()
@@ -47,7 +54,7 @@ namespace Math
             float numeric_limits_max = std::numeric_limits<float>::max();
             float min[3] {numeric_limits_min, numeric_limits_min, numeric_limits_min};
             float max[3] {numeric_limits_max, numeric_limits_max, numeric_limits_max};
-            return AABB(min, max);
+            return AABB((float*)min, (float*)max);
         }
 
         AABB copy()

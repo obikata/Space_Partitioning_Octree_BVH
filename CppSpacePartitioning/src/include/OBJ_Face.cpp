@@ -40,6 +40,7 @@ namespace OBJ_Loader
 
     void OBJ_Face::computeAABB()
     {
+        Math::AABB _aabb = Math::AABB::init();
         _aabb = Math::AABB(A(), B(), C());
     }
     

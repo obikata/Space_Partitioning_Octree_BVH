@@ -7,7 +7,7 @@
 #include <string>
 #include <iostream>
 #include "HELPER.hpp"
-#include "Vec3.hpp"
+// #include "Vec3.hpp"
 #include "OBJ_Material.hpp"
 
 namespace OBJ_Loader
@@ -265,10 +265,10 @@ namespace OBJ_Loader
             // std::cout << material_list.size() << std::endl;
         }
         
-        for( OBJ_Material m : material_list )
-        {
-            m.printMaterial();
-        }
+        // for( OBJ_Material m : material_list )
+        // {
+        //     m.printMaterial();
+        // }
         return material_list;
 
     }

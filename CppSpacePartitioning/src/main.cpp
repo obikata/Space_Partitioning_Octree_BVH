@@ -1,4 +1,6 @@
 #include "include/OBJ_File.hpp"
+#include "include/OBJ_Face.hpp"
+#include "include/Octree.hpp"
 #include <iostream>
 #include <chrono>
 #include <sstream>
@@ -34,7 +36,40 @@ int main(int argc, char **argv)
     obj.read_file(path, filename);
 
     // Debug: Check OBJ_Loader functionality
-    obj.display();
+    // obj.display();
+
+    // Compute AABB
+    float scale = 0.0f; // Bunny
+    for(int i = 0; i < obj.row_v; i++)
+    {
+        Math::Vec3::scale_ref_slf(obj._v[i], scale);
+    }
+    for(int i = 0; i < obj.row_f; i++)
+    {
+        obj.computeAABB(i);
+    }
+
+    // Check AABB
+    for (int i = 0; i < 3; i++)
+    {
+        std::cout << "AABB_MIN = " << obj._aabb._min[i] << std::endl;
+    }
+    for (int i = 0; i < 3; i++)
+    {
+        std::cout << "AABB_MAX = " << obj._aabb._max[i] << std::endl;
+    }
+
+    obj.computeAABB();
+
+    // Check AABB
+    for (int i = 0; i < 3; i++)
+    {
+        std::cout << "AABB_MIN = " << obj._aabb._min[i] << std::endl;
+    }
+    for (int i = 0; i < 3; i++)
+    {
+        std::cout << "AABB_MAX = " << obj._aabb._max[i] << std::endl;
+    }
 
     //----------------------------------------------------------------------------
     // Generate octree
@@ -45,7 +80,7 @@ int main(int argc, char **argv)
     {
         std::cout << "\n-------------------------------< generating Octree >-------------------------------\n" << std::endl;
         start = std::chrono::system_clock::now();
-    //     octree = new Octree(obj, true); // instantiate Octree
+        Octree::Octree octree(obj, true);
     //     octree.oct_builder.MIN_DEPTH_FILL_RATIO = 1.2f; // 
     //     octree.oct_builder.MAX_DEPTH            = 11; // 
     //     octree.BUILD_defaultRoutine(); // build 

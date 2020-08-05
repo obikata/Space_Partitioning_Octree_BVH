@@ -29,7 +29,8 @@ namespace OBJ_Loader
         int row_m = 0;
         int row_mat = 0;
 
-        Math::AABB _aabb; // Axis Aligned Bounding Box
+        Math::AABB _aabb = Math::AABB(); // Axis Aligned Bounding Box
+        Math::Vec3 vector3;
 
     	/**
     	Constructor 
@@ -44,6 +45,8 @@ namespace OBJ_Loader
         void display();
 
         void computeAABB();
+
+        void computeAABB(int face_id);
 
     };
 

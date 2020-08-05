@@ -281,7 +281,7 @@ namespace OBJ_Loader
 
         for (int i=0; i < row_mat; i++)
         {
-            std::cout << buf_materials[i]._name << std::endl;
+            // std::cout << buf_materials[i]._name << std::endl;
             _mat[i] = buf_materials[i];
         }
         
@@ -414,13 +414,55 @@ namespace OBJ_Loader
 
     void OBJ_File::computeAABB()
     {
-        _aabb = Math::AABB::init();
-        for(int i=0; i<row_m; i++)
+
+        for (int i = 0; i < row_f; i++)
         {
-            OBJ_Mesh mesh = _m[i];
-            mesh.computeAABB();
-            _aabb.grow(mesh._aabb);
+            _aabb.grow(_f[i]._aabb);
         }
+
+        // for(int i=0; i<row_m; i++)
+        // {
+        //     OBJ_Mesh mesh = _m[i];
+        //     mesh.computeAABB();
+        //     _aabb.grow(mesh._aabb);
+        // }
+    }
+
+    void OBJ_File::computeAABB(int face_id)
+    {
+
+        float A[3] = {_v[_f[face_id].IDX_V[0]][0],
+                      _v[_f[face_id].IDX_V[0]][1],
+                      _v[_f[face_id].IDX_V[0]][2]};
+
+        float B[3] = {_v[_f[face_id].IDX_V[1]][0],
+                      _v[_f[face_id].IDX_V[1]][1],
+                      _v[_f[face_id].IDX_V[1]][2]};
+
+        float C[3] = {_v[_f[face_id].IDX_V[2]][0],
+                      _v[_f[face_id].IDX_V[2]][1],
+                      _v[_f[face_id].IDX_V[2]][2]};
+        
+        float min[3]
+        {
+            vector3.minComponent(A[0], B[0], C[0]),
+            vector3.minComponent(A[1], B[1], C[1]),
+            vector3.minComponent(A[2], B[2], C[2])
+        };
+        float max[3]
+        {
+            vector3.maxComponent(A[0], B[0], C[0]),
+            vector3.maxComponent(A[1], B[1], C[1]),
+            vector3.maxComponent(A[2], B[2], C[2])
+        };
+        _f[face_id]._aabb = Math::AABB::init();
+        _f[face_id]._aabb._min[0] = min[0];
+        _f[face_id]._aabb._min[1] = min[1];
+        _f[face_id]._aabb._min[2] = min[2];
+        _f[face_id]._aabb._max[0] = max[0];
+        _f[face_id]._aabb._max[1] = max[1];
+        _f[face_id]._aabb._max[2] = max[2];
+
     }
 
 }
