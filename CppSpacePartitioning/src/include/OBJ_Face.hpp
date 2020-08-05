@@ -15,7 +15,7 @@ namespace OBJ_Loader
         int* IDX_V; // indices - vertices
         int* IDX_N; // indices - normals
         int* IDX_T; // indices - texture coordinates                
-        Math::AABB _aabb;
+        Math::AABB& _aabb;
 
         /*
         The OBJ file references materials by name with the "usemtl" keyword. 

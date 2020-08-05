@@ -415,6 +415,10 @@ namespace OBJ_Loader
     void OBJ_File::computeAABB()
     {
 
+        std::cout << "Debuging here" << std::endl;
+        std::cout << _f[0]._aabb._min[0] << std::endl;
+        std::cout << _f[0]._aabb._min[1] << std::endl;
+        std::cout << _f[0]._aabb._min[2] << std::endl;
         for (int i = 0; i < row_f; i++)
         {
             _aabb.grow(_f[i]._aabb);

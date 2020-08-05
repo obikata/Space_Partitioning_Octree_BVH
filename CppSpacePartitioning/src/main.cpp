@@ -49,15 +49,15 @@ int main(int argc, char **argv)
         obj.computeAABB(i);
     }
 
-    // Check AABB
-    for (int i = 0; i < 3; i++)
-    {
-        std::cout << "AABB_MIN = " << obj._aabb._min[i] << std::endl;
-    }
-    for (int i = 0; i < 3; i++)
-    {
-        std::cout << "AABB_MAX = " << obj._aabb._max[i] << std::endl;
-    }
+    // // Check AABB (WORKING AS EXPECTED)
+    // for (int i = 0; i < 3; i++)
+    // {
+    //     std::cout << "AABB_MIN = " << obj._aabb._min[i] << std::endl;
+    // }
+    // for (int i = 0; i < 3; i++)
+    // {
+    //     std::cout << "AABB_MAX = " << obj._aabb._max[i] << std::endl;
+    // }
 
     obj.computeAABB();
 

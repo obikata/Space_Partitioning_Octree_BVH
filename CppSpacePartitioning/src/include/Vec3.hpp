@@ -53,7 +53,8 @@ namespace Math
 
         static float* copy_new(float* a)
         {
-            static float dst[3] {a[0], a[1], a[2]};
+            float* dst;
+            dst = new float[3] {a[0], a[1], a[2]};
             return dst;
         }
 
