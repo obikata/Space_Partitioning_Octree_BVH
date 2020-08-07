@@ -1,8 +1,4 @@
-#include "AABB.hpp"
-#include "Vec3.hpp"
-#include "Ray3D.hpp"
-#include "OBJ_Face.hpp"
-#include "OBJ_File.hpp"
+#include "OctreeTraversal.hpp"
 
 namespace OCT
 {

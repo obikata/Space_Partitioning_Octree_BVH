@@ -1,6 +1,6 @@
 #include "OctreeNode.hpp"
 
-namespace Octree
+namespace OCT
 {
     
     //////////////////////////////////////////////////////////////////////////////
@@ -31,7 +31,8 @@ namespace Octree
     void OctreeNode::getNodes_recursive(std::vector<OctreeNode> nodes)
     {
         nodes.push_back(*this);
-        if(OctreeNode::isLeaf())
+        if(this->isLeaf())
+        // if(OctreeNode::isLeaf())
         {
             return;
         }

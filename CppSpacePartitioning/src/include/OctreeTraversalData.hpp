@@ -1,7 +1,7 @@
 #include "Vec3.hpp"
 #include "OctreeNode.hpp"
 
-namespace Octree
+namespace OCT
 {
     class OctreeTraversalData
     {

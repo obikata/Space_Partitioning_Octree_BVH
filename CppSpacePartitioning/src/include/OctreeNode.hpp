@@ -3,7 +3,7 @@
 
 #include "AABB.hpp"
 
-namespace Octree
+namespace OCT
 {
 
     //////////////////////////////////////////////////////////////////////////////
@@ -20,6 +20,8 @@ namespace Octree
         std::vector<int> IDX_triangles;
         std::vector<OctreeNode> childs;
 
+        OctreeNode() {};
+
         OctreeNode(int depth, Math::AABB aabb) : _depth(depth), _aabb(aabb) {};
         
         bool isLeaf();
@@ -30,8 +32,6 @@ namespace Octree
 
         int itemCount();
   
-        void getNodes_linkedList(std::vector<OctreeNode> nodes);
-
         void getNodes_recursive(std::vector<OctreeNode> nodes);
 
     };

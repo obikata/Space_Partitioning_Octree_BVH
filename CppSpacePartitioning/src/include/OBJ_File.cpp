@@ -415,10 +415,6 @@ namespace OBJ_Loader
     void OBJ_File::computeAABB()
     {
 
-        std::cout << "Debuging here" << std::endl;
-        std::cout << _f[0]._aabb._min[0] << std::endl;
-        std::cout << _f[0]._aabb._min[1] << std::endl;
-        std::cout << _f[0]._aabb._min[2] << std::endl;
         for (int i = 0; i < row_f; i++)
         {
             _aabb.grow(_f[i]._aabb);
@@ -430,6 +426,7 @@ namespace OBJ_Loader
         //     mesh.computeAABB();
         //     _aabb.grow(mesh._aabb);
         // }
+        
     }
 
     void OBJ_File::computeAABB(int face_id)
@@ -459,7 +456,7 @@ namespace OBJ_Loader
             vector3.maxComponent(A[1], B[1], C[1]),
             vector3.maxComponent(A[2], B[2], C[2])
         };
-        _f[face_id]._aabb = Math::AABB::init();
+        _f[face_id]._aabb.init();
         _f[face_id]._aabb._min[0] = min[0];
         _f[face_id]._aabb._min[1] = min[1];
         _f[face_id]._aabb._min[2] = min[2];

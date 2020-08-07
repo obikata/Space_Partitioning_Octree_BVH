@@ -1,9 +1,5 @@
-// #include "AABB.hpp"
-// #include "Vec3.hpp"
 #include "Octree.hpp"
-#include "OBJ_File.hpp"
-// #include "OctreeBuilder.hpp"
-// #include "OctreeTraversal.hpp"
+
 /*
 //Octree: Octants numbering
 //
@@ -40,43 +36,43 @@
 //
 */
 
-namespace Octree
+namespace OCT
 {
 
-    // int Octree::getSubdivisionPlane(Math::AABB aabb)
-    // {
-    //     float* s = aabb.getSize();
-    //     float max = vector3.maxComponent(s);
-    //     if( s[0] == max )
-    //     {
-    //         return 0; // x-extent is max
-    //     }
-    //     else if( s[1] == max )
-    //     {
-    //         return 1; // y-extent is max
-    //     }
-    //     else
-    //     {
-    //         return 2; // z-extent is max
-    //     }
-    // }
+    int Octree::getSubdivisionPlane(Math::AABB aabb)
+    {
+        float* s = aabb.getSize();
+        float max = vector3.maxComponent(s);
+        if( s[0] == max )
+        {
+            return 0; // x-extent is max
+        }
+        else if( s[1] == max )
+        {
+            return 1; // y-extent is max
+        }
+        else
+        {
+            return 2; // z-extent is max
+        }
+    }
  
     // // void Octree::BUILD_defaultRoutine()
     // // {
     // //     _oct_builder.BUILD_defaultRoutine();
     // // }
 
-    // int Octree::getNumberOfNodes()
-    // {
-    //     return Octree::getNodes().size();
-    // }
+    int Octree::getNumberOfNodes()
+    {
+        return Octree::getNodes().size();
+    }
 
-    // std::vector<OctreeNode> Octree::getNodes()
-    // {
-    //     std::vector<OctreeNode> nodes = std::vector<OctreeNode>();
-    //     _root.getNodes_recursive(nodes);
-    //     return nodes;
-    // }
+    std::vector<OctreeNode> Octree::getNodes()
+    {
+        std::vector<OctreeNode> nodes = std::vector<OctreeNode>();
+        _root.getNodes_recursive(nodes);
+        return nodes;
+    }
 
     // OctreeNode Octree::getNodeWithMaxItems()
     // {
@@ -99,22 +95,22 @@ namespace Octree
     //     return max;
     // }
            
-    // int Octree::getNumberOfStoredItems()
-    // {
-    //     return Octree::getNumberOfStoredItems( Octree::getNodes() );
-    // }
+    int Octree::getNumberOfStoredItems()
+    {
+        return Octree::getNumberOfStoredItems( Octree::getNodes() );
+    }
 
-    // int Octree::getNumberOfStoredItems(std::vector<OctreeNode> nodes)
-    // {
-    //     int count = 0;
-    //     for(OctreeNode n : nodes)
-    //     {
-    // //      if( n.isLeaf() ){
-    //         count += n.itemCount();
-    // //      }
-    //     }
-    //     return count;
-    // }
+    int Octree::getNumberOfStoredItems(std::vector<OctreeNode> nodes)
+    {
+        int count = 0;
+        for(OctreeNode n : nodes)
+        {
+    //      if( n.isLeaf() ){
+            count += n.itemCount();
+    //      }
+        }
+        return count;
+    }
         
     // int Octree::getNumberOfLeafes()
     // {

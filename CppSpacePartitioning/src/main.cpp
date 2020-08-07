@@ -39,7 +39,7 @@ int main(int argc, char **argv)
     // obj.display();
 
     // Compute AABB
-    float scale = 0.0f; // Bunny
+    float scale = 1000.0f; // Bunny
     for(int i = 0; i < obj.row_v; i++)
     {
         Math::Vec3::scale_ref_slf(obj._v[i], scale);
@@ -49,7 +49,7 @@ int main(int argc, char **argv)
         obj.computeAABB(i);
     }
 
-    // // Check AABB (WORKING AS EXPECTED)
+    // // Check AABB
     // for (int i = 0; i < 3; i++)
     // {
     //     std::cout << "AABB_MIN = " << obj._aabb._min[i] << std::endl;
@@ -61,15 +61,15 @@ int main(int argc, char **argv)
 
     obj.computeAABB();
 
-    // Check AABB
-    for (int i = 0; i < 3; i++)
-    {
-        std::cout << "AABB_MIN = " << obj._aabb._min[i] << std::endl;
-    }
-    for (int i = 0; i < 3; i++)
-    {
-        std::cout << "AABB_MAX = " << obj._aabb._max[i] << std::endl;
-    }
+    // // Check AABB
+    // for (int i = 0; i < 3; i++)
+    // {
+    //     std::cout << "AABB_MIN = " << obj._aabb._min[i] << std::endl;
+    // }
+    // for (int i = 0; i < 3; i++)
+    // {
+    //     std::cout << "AABB_MAX = " << obj._aabb._max[i] << std::endl;
+    // }
 
     //----------------------------------------------------------------------------
     // Generate octree
@@ -80,7 +80,7 @@ int main(int argc, char **argv)
     {
         std::cout << "\n-------------------------------< generating Octree >-------------------------------\n" << std::endl;
         start = std::chrono::system_clock::now();
-        Octree::Octree octree(obj, true);
+        OCT::Octree octree(&obj, true);
     //     octree.oct_builder.MIN_DEPTH_FILL_RATIO = 1.2f; // 
     //     octree.oct_builder.MAX_DEPTH            = 11; // 
     //     octree.BUILD_defaultRoutine(); // build 
