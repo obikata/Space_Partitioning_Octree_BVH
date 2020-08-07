@@ -9,11 +9,11 @@
 #include "AABB.hpp"
 #include "Vec3.hpp"
 #include "OBJ_File.hpp"
-// #include "OBJ_Face.hpp"
+#include "OBJ_Face.hpp"
 #include "OctreeNode.hpp"
 // #include "OctreeBuilder.hpp"
 // #include "OctreeTraversal.hpp"
-// #include "Intersect_AABB_TRIANGLE.hpp"
+#include "Intersect_AABB_TRIANGLE.hpp"
 
 /*
 //Octree: Octants numbering
@@ -54,21 +54,23 @@
 namespace OCT
 {
 
+    class OctreeBuilder;
+
     class Octree
     {
-
+    
     public:
         Math::Vec3 vector3;
-        OBJ_Loader::OBJ_File* _obj;
+        OBJ_Loader::OBJ_File _obj;
         OctreeNode _root;
-        // OctreeBuilder* _oct_builder;
+        OctreeBuilder* _octree_builder;
         // Octree::OctreeTraversal _oct_traversal;
 
         Octree() {};
         
-        Octree(OBJ_Loader::OBJ_File* obj, bool cubic) : _obj(obj)
+        Octree(OBJ_Loader::OBJ_File obj, bool cubic) : _obj(obj)
         {
-            Math::AABB aabb = _obj->_aabb.deep_copy();
+            Math::AABB aabb = _obj._aabb.deep_copy();
             if(cubic)
             {
                 float* center  = aabb.getCenter();
@@ -78,14 +80,13 @@ namespace OCT
                 vector3.add_ref(center, vector3.init(+hs[pl]), aabb._max);
             }
             _root = OctreeNode(0, aabb);
-            // this->_oct_builder = &OctreeBuilder(this);
             // this->_oct_traversal = OctreeTraversal(this);
         };
 
+        void initOctreeBuilder();
+
         int getSubdivisionPlane(Math::AABB aabb);
  
-        // void BUILD_defaultRoutine();
-
         int getNumberOfNodes();
 
         std::vector<OctreeNode> getNodes();

@@ -1,4 +1,5 @@
 #include "Octree.hpp"
+#include "OctreeBuilder.hpp"
 
 /*
 //Octree: Octants numbering
@@ -56,11 +57,6 @@ namespace OCT
             return 2; // z-extent is max
         }
     }
- 
-    // // void Octree::BUILD_defaultRoutine()
-    // // {
-    // //     _oct_builder.BUILD_defaultRoutine();
-    // // }
 
     int Octree::getNumberOfNodes()
     {
@@ -69,7 +65,7 @@ namespace OCT
 
     std::vector<OctreeNode> Octree::getNodes()
     {
-        std::vector<OctreeNode> nodes = std::vector<OctreeNode>();
+        std::vector<OctreeNode> nodes;
         _root.getNodes_recursive(nodes);
         return nodes;
     }

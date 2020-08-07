@@ -1,6 +1,7 @@
 #include "include/OBJ_File.hpp"
 #include "include/OBJ_Face.hpp"
 #include "include/Octree.hpp"
+#include "include/OctreeBuilder.hpp"
 #include <iostream>
 #include <chrono>
 #include <sstream>
@@ -80,10 +81,10 @@ int main(int argc, char **argv)
     {
         std::cout << "\n-------------------------------< generating Octree >-------------------------------\n" << std::endl;
         start = std::chrono::system_clock::now();
-        OCT::Octree octree(&obj, true);
-    //     octree.oct_builder.MIN_DEPTH_FILL_RATIO = 1.2f; // 
-    //     octree.oct_builder.MAX_DEPTH            = 11; // 
-    //     octree.BUILD_defaultRoutine(); // build 
+        OCT::Octree octree(obj, true);
+        octree._octree_builder->MIN_DEPTH_FILL_RATIO = 1.2f; // 
+        octree._octree_builder->MAX_DEPTH = 11; //
+        octree._octree_builder->BUILD_defaultRoutine(); // build 
         timer = std::chrono::system_clock::now();
         elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(timer-start).count();
         std::cout << "    building time          = " + toStr(elapsed, 3) + "ms " << std::endl;
