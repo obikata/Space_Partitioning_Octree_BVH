@@ -81,7 +81,8 @@ int main(int argc, char **argv)
     {
         std::cout << "\n-------------------------------< generating Octree >-------------------------------\n" << std::endl;
         start = std::chrono::system_clock::now();
-        OCT::Octree octree(obj, true);
+        OCT::Octree octree(&obj, true);
+        octree._octree_builder->initOctreeBuilder(&obj);
         octree._octree_builder->MIN_DEPTH_FILL_RATIO = 1.2f; // 
         octree._octree_builder->MAX_DEPTH = 11; //
         octree._octree_builder->BUILD_defaultRoutine(); // build 
