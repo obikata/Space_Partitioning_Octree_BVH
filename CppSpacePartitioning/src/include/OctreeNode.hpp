@@ -12,7 +12,7 @@ namespace OCT
 
     class OctreeNode
     {
-
+        
     public:
 
         int _depth;

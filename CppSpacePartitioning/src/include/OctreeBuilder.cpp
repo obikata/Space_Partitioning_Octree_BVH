@@ -44,10 +44,9 @@ namespace OCT
             {
                 continue;
             }
-            std::cout << _root.itemCount() << std::endl;
             storeAtFirstFit(&_root, i);
         }
-        // std::cout << _root.itemCount() << std::endl;
+        std::cout << _root.itemCount() << std::endl;
 
         timer = std::chrono::system_clock::now();
         elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(timer-start).count();

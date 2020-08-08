@@ -7,35 +7,35 @@
 
 namespace OBJ_Loader
 {
-        
+
     float* OBJ_Face::A()
     {
-        return _v[this->IDX_V[0]];
+        return ptr_obj->_v[this->IDX_V[0]];
     }
     
     float* OBJ_Face::B()
     {
-        return _v[this->IDX_V[1]];
+        return ptr_obj->_v[this->IDX_V[1]];
     }
     
     float* OBJ_Face::C()
     {
-        return _v[this->IDX_V[2]];
+        return ptr_obj->_v[this->IDX_V[2]];
     }
                     
     float* OBJ_Face::An()
     {
-        return _vn[this->IDX_N[0]];
+        return ptr_obj->_vn[this->IDX_N[0]];
     }
     
     float* OBJ_Face::Bn()
     {
-        return _vn[this->IDX_N[1]];
+        return ptr_obj->_vn[this->IDX_N[1]];
     }
     
     float* OBJ_Face::Cn()
     {
-        return _vn[this->IDX_N[2]];
+        return ptr_obj->_vn[this->IDX_N[2]];
     }
 
     void OBJ_Face::computeAABB()
@@ -61,9 +61,10 @@ namespace OBJ_Loader
     
     float* OBJ_Face::getNormalUnormalized()
     {
-        std::cout << "test" << std::endl;
-        float* E1 = Math::Vec3::sub_new(B(), A());
-        float* E2 = Math::Vec3::sub_new(C(), A());
+        float E1[3];
+        float E2[3];
+        Math::Vec3::sub_ref(B(), A(), E1);
+        Math::Vec3::sub_ref(C(), A(), E2);
         return Math::Vec3::cross_new(E1, E2);
     }
     

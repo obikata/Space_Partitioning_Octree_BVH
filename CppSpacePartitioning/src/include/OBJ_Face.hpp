@@ -6,9 +6,14 @@
 
 namespace OBJ_Loader
 {
+    class OBJ_File;
 
     class OBJ_Face : public OBJ_File
     {
+
+    private:
+
+        OBJ_File* ptr_obj;
     
     public:
 
@@ -33,7 +38,8 @@ namespace OBJ_Loader
     	Constructor 
         */
         // OBJ_Face() : IDX_V(new int[3] {-1, -1, -1}), IDX_N(new int[3] {-1, -1, -1}), IDX_T(new int[3] {-1, -1, -1}), MeshGroupIdx(0) {};
-        OBJ_Face() : IDX_V(new int[3] {-1, -1, -1}), IDX_N(new int[3] {-1, -1, -1}), IDX_T(new int[3] {-1, -1, -1}), MeshGroupIdx(0), MaterialIdx(0) {};
+        OBJ_Face(OBJ_File* obj) : ptr_obj(obj), IDX_V(new int[3] {-1, -1, -1}), IDX_N(new int[3] {-1, -1, -1}), IDX_T(new int[3] {-1, -1, -1}), MeshGroupIdx(0), MaterialIdx(0) {};
+        // OBJ_Face() : IDX_V(new int[3] {-1, -1, -1}), IDX_N(new int[3] {-1, -1, -1}), IDX_T(new int[3] {-1, -1, -1}), MeshGroupIdx(0), MaterialIdx(0) {};
         
         float* A();
 

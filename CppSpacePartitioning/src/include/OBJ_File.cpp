@@ -195,7 +195,7 @@ namespace OBJ_Loader
             {
                 std::istringstream stoken(line);
                 std::string element;
-                OBJ_Face face;
+                OBJ_Face face = OBJ_Face(this);
                 int cnt = 0;
 
                 while (std::getline(stoken, element, ' '))
