@@ -81,6 +81,7 @@ namespace OCT
         // 1) if we reached the max depth, save the triangle and return
         if( ot._depth >= MAX_DEPTH )
         {
+            std::cout << "1" << std::endl;
             saveTriangleToNode(ot, idx);
             return true;
         }
@@ -88,6 +89,7 @@ namespace OCT
         // 2) generate childs, if not possible, this node is a leaf, so save the item here
         if(!assureChilds(ot, MAX_DEPTH) )
         {
+            std::cout << "2" << std::endl;
             saveTriangleToNode(ot, idx);
             return true;
         }
@@ -95,6 +97,9 @@ namespace OCT
         // 3)) check if one child fully contains the triangle. if so, step down to the child
         for(OctreeNode child : ot.childs)
         {
+            float dst[3];
+            child._aabb.getHalfSizeRef(dst);
+            std::cout << dst[0] << " " << dst[1] << " " << dst[2] << std::endl; 
             if( fullyContains(child, _oct->_obj._f[idx]) )
             {
                 if(storeAtFirstFit(child, idx))
