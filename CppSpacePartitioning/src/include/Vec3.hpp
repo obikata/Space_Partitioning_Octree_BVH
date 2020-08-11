@@ -17,7 +17,7 @@ namespace Math
             static float dst[3] {v,v,v};
             return dst;
         }
-        
+
         static float* nullvector()
         {
             static float dst[3] {0.0f, 0.0f, 0.0f};

@@ -37,7 +37,7 @@ int main(int argc, char **argv)
     obj.read_file(path, filename);
 
     // Debug: Check OBJ_Loader functionality
-    // obj.display();
+    obj.display();
 
     // Compute AABB
     float scale = 1000.0f; // Bunny
@@ -62,7 +62,7 @@ int main(int argc, char **argv)
 
     obj.computeAABB();
 
-    // // Check AABB
+    // Check AABB
     // for (int i = 0; i < 3; i++)
     // {
     //     std::cout << "AABB_MIN = " << obj._aabb._min[i] << std::endl;
@@ -71,7 +71,7 @@ int main(int argc, char **argv)
     // {
     //     std::cout << "AABB_MAX = " << obj._aabb._max[i] << std::endl;
     // }
-
+    
     //----------------------------------------------------------------------------
     // Generate octree
     //----------------------------------------------------------------------------
@@ -81,11 +81,10 @@ int main(int argc, char **argv)
     {
         std::cout << "\n-------------------------------< generating Octree >-------------------------------\n" << std::endl;
         start = std::chrono::system_clock::now();
-        OCT::Octree octree(&obj, true);
-        octree._octree_builder->initOctreeBuilder(&obj);
-        octree._octree_builder->MIN_DEPTH_FILL_RATIO = 1.2f; // 
-        octree._octree_builder->MAX_DEPTH = 11; //
-        octree._octree_builder->BUILD_defaultRoutine(); // build 
+        OCT::Octree octree(obj, true);
+        octree._octree_builder.MIN_DEPTH_FILL_RATIO = 1.2f; // 
+        octree._octree_builder.MAX_DEPTH = 11; //
+        octree._octree_builder.BUILD_defaultRoutine(); // build 
         timer = std::chrono::system_clock::now();
         elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(timer-start).count();
         std::cout << "    building time          = " + toStr(elapsed, 3) + "ms " << std::endl;

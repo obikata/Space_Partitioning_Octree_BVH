@@ -20,7 +20,7 @@ namespace OCT
         std::vector<int> IDX_triangles;
         std::vector<OctreeNode> childs;
 
-        OctreeNode() : _aabb(_aabb) {};
+        OctreeNode() {};
 
         OctreeNode(int depth, Math::AABB& aabb) : _depth(depth), _aabb(aabb) {};
         

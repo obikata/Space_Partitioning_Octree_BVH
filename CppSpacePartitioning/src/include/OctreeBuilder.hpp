@@ -1,12 +1,26 @@
 #ifndef __OCTREEBUILDER_HPP__
 #define __OCTREEBUILDER_HPP__
 
-#include "Octree.hpp"
+// #include "Octree.hpp"
+// #include "OctreeNode.hpp"
+#include <iostream>
+#include <chrono>
+#include <string>
+#include <algorithm>    // std::find
+#include <iterator>     // std::distance
+#include <bitset>
+#include "AABB.hpp"
+#include "Vec3.hpp"
+#include "OBJ_Face.hpp"
+#include "Intersect_AABB_TRIANGLE.hpp"
 
 namespace OCT
 {
 
-    class OctreeBuilder: public Octree {
+    class Octree;
+    class OctreeNode;
+
+    class OctreeBuilder {
 
     //  public static float OCTANT_POS[][] =
     //  {
@@ -22,20 +36,19 @@ namespace OCT
     //    { 1, 1, 1 },    // [7] - 111
     //  };
 
+    private:
+        Octree* _oct;
+
     public:
 
         // most important value, small values makes deep trees, especially for big scenes!!
+        Math::Vec3 vector3;
         float MIN_DEPTH_FILL_RATIO = 1.5f;
         int MAX_DEPTH = 10;
-        OBJ_Loader::OBJ_File* __obj;
 
         OctreeBuilder() {};
 
-        void initOctreeBuilder(OBJ_Loader::OBJ_File* obj)
-        {
-            this->__obj = obj;
-            _octree_builder = this;
-        }
+        OctreeBuilder(Octree* oct) : _oct(oct) {};
 
         static std::string toStr(double a, int prec);
 
@@ -59,51 +72,13 @@ namespace OCT
     
         bool cleanUp(OctreeNode& ot);
 
-        bool fullyContains(OctreeNode& ot, OBJ_Loader::OBJ_Face f);
+        bool fullyContains(OctreeNode& ot, OBJ_Loader::OBJ_Face& f);
 
-        bool overlapsWithTriangle(OctreeNode& ot, OBJ_Loader::OBJ_Face f);
+        bool overlapsWithTriangle(OctreeNode& ot, OBJ_Loader::OBJ_Face& f);
 
-    private:
-        Math::Vec3 vector3;
-
-        bool assureChilds(OctreeNode& ot, int max_depth)
-        {
-            if( ot._depth >= max_depth)
-            {
-                return false;
-            }
-
-            if( ot.isLeaf() )
-            {
-            
-                ot.childs = std::vector<OctreeNode>(8);
-                float* half_size = ot._aabb.getHalfSize();
-                int child_depth = ot._depth+1;
-
-                for(int i = 0; i < ot.childs.size(); i++)
-                {
-                    float ch_bb_min[3] = { ot._aabb._min[0] + ( ( i&4 > 0 ) ? half_size[0] : 0 ) ,
-                                           ot._aabb._min[1] + ( ( i&2 > 0 ) ? half_size[1] : 0 ) ,
-                                           ot._aabb._min[2] + ( ( i&1 > 0 ) ? half_size[2] : 0 ) };
-
-                    static float* ch_bb_max = vector3.add_new(ch_bb_min, half_size);
-                    Math::AABB aabb = Math::AABB(ch_bb_min, ch_bb_max);
-                    ot.childs[i] = OctreeNode(child_depth, aabb);
-                }
-            }
-            return true;
-        }
+        bool assureChilds(OctreeNode& ot, int max_depth);
     
-        bool saveTriangleToNode(OctreeNode& ot, int idx)
-        {   
-            std::vector<int>::iterator itr = std::find(ot.IDX_triangles.begin(), ot.IDX_triangles.end(), idx);
-            int index = std::distance( ot.IDX_triangles.begin(), itr);
-            if( ot.IDX_triangles[index] == idx )
-            { // just in case
-                ot.IDX_triangles.push_back(idx);
-            }
-            return true;
-        }
+        bool saveTriangleToNode(OctreeNode& ot, int idx);
 
     };
 }

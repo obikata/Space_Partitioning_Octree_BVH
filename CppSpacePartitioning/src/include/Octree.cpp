@@ -1,5 +1,4 @@
 #include "Octree.hpp"
-#include "OctreeBuilder.hpp"
 
 /*
 //Octree: Octants numbering
@@ -40,7 +39,7 @@
 namespace OCT
 {
 
-    int Octree::getSubdivisionPlane(Math::AABB aabb)
+    int Octree::getSubdivisionPlane(Math::AABB& aabb)
     {
         float* s = aabb.getSize();
         float max = vector3.maxComponent(s);

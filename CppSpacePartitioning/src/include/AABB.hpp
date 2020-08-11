@@ -112,12 +112,25 @@ namespace Math
 
         float* getHalfSize()
         {
-            return vector3.scale_new(getSize(), 0.5f);
+            // return vector3.scale_new(getSize(), 0.5f);
+            float* dst = new float[3];
+            vector3.scale_ref(getSize(), 0.5f, dst);
+            return dst;
+        }
+
+        void getHalfSizeRef(float* dst)
+        {
+            dst[0] = (_max[0] - _min[0]) * 0.5f;
+            dst[1] = (_max[1] - _min[1]) * 0.5f;
+            dst[2] = (_max[2] - _min[2]) * 0.5f;
         }
 
         float* getCenter()
         {
-            return vector3.scale_new(vector3.add_new(_max, _min), 0.5f);
+            // return vector3.scale_new(vector3.add_new(_max, _min), 0.5f);
+            float* dst = new float[3];
+            vector3.scale_ref(vector3.add_new(_max, _min), 0.5f, dst);
+            return dst;
         }
 
         float** getCorners()

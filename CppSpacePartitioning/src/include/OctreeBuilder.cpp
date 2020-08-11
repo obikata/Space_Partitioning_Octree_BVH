@@ -1,4 +1,5 @@
 #include "OctreeBuilder.hpp"
+#include "Octree.hpp"
 
 namespace OCT
 {
@@ -37,35 +38,35 @@ namespace OCT
 
         start = std::chrono::system_clock::now();
 
-        for(int i = 0; i < __obj->row_f; i++)
+        for(int i = 0; i < _oct->_obj.row_f; i++)
         {
-            if( __obj->_f[i].isDegenerate())
+            if( _oct->_obj._f[i].isDegenerate())
             {
                 continue;
             }
-            storeAtFirstFit(_root, i);
+            // std::cout << _oct->_root._aabb._min[0] << " " << _oct->_root._aabb._min[1] << " " << _oct->_root._aabb._min[2] << std::endl;
+            // std::cout << _oct->_root._aabb._max[0] << " " << _oct->_root._aabb._max[1] << " " << _oct->_root._aabb._max[2] << std::endl;
+            storeAtFirstFit(_oct->_root, i);
         }
-        std::cout << _root.itemCount() << std::endl;
 
         timer = std::chrono::system_clock::now();
         elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(timer-start).count();
-        std::cout << Octree::getNumberOfStoredItems() << std::endl;
-        std::cout << "       1) storeAtFirstFit   (" + toStr(elapsed, 3) + ")   stored items: " << Octree::getNumberOfStoredItems() << std::endl;
+        std::cout << "       1) storeAtFirstFit   (" + toStr(elapsed, 3) + ")   stored items: " << _oct->getNumberOfStoredItems() << std::endl;
 
-        pushToLeafes(_root);
+        pushToLeafes(_oct->_root);
         timer = std::chrono::system_clock::now();
         elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(timer-start).count();
-        std::cout << "       2) pushToLeafes      (" + toStr(elapsed, 3) + ")   stored items: " << Octree::getNumberOfStoredItems() << std::endl;
+        std::cout << "       2) pushToLeafes      (" + toStr(elapsed, 3) + ")   stored items: " << _oct->getNumberOfStoredItems() << std::endl;
     
-        optimizeSpaceCost(_root);
+        optimizeSpaceCost(_oct->_root);
         timer = std::chrono::system_clock::now();
         elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(timer-start).count();
-        std::cout << "       3) optimizeSpaceCost (" + toStr(elapsed, 3) + ")   stored items: " << Octree::getNumberOfStoredItems() << std::endl;
+        std::cout << "       3) optimizeSpaceCost (" + toStr(elapsed, 3) + ")   stored items: " << _oct->getNumberOfStoredItems() << std::endl;
 
         // timer = std::chrono::system_clock::now();
         // optimizeMaxItemsPerNode(octree, obj);
         // std::cout < "  ____ octree.getNumberOfStoredItems() = " + octree.getNumberOfStoredItems() + "     optimizeMaxItemsPerNode" < std::endl;
-        cleanUp(_root);
+        cleanUp(_oct->_root);
         std::cout << "    > finished building" << std::endl;
 
     }
@@ -77,7 +78,6 @@ namespace OCT
     // save in smallest nodes, that fully contains the triangle
     bool OctreeBuilder::storeAtFirstFit(OctreeNode& ot, int idx)
     {
-        std::cout << ot._depth << std::endl;
         // 1) if we reached the max depth, save the triangle and return
         if( ot._depth >= MAX_DEPTH )
         {
@@ -86,7 +86,6 @@ namespace OCT
         }
         
         // 2) generate childs, if not possible, this node is a leaf, so save the item here
-        std::cout << "DEBUG HERE" << std::endl;
         if(!assureChilds(ot, MAX_DEPTH) )
         {
             saveTriangleToNode(ot, idx);
@@ -96,7 +95,7 @@ namespace OCT
         // 3)) check if one child fully contains the triangle. if so, step down to the child
         for(OctreeNode child : ot.childs)
         {
-            if( fullyContains(child, __obj->_f[idx]) )
+            if( fullyContains(child, _oct->_obj._f[idx]) )
             {
                 if(storeAtFirstFit(child, idx))
                 {
@@ -145,7 +144,7 @@ namespace OCT
     void OctreeBuilder::storeInLeafes(OctreeNode& ot, int idx)
     {
         // if there's no overlap between the current node and the triangle, return
-        if(!overlapsWithTriangle(ot, __obj->_f[idx]))
+        if(!overlapsWithTriangle(ot, _oct->_obj._f[idx]))
         {
             return;
         }
@@ -236,14 +235,56 @@ namespace OCT
 
     }
 
-    bool OctreeBuilder::fullyContains(OctreeNode& ot, OBJ_Loader::OBJ_Face f)
+    bool OctreeBuilder::fullyContains(OctreeNode& ot, OBJ_Loader::OBJ_Face& f)
     {
         return ot._aabb.isInside(f.A(), f.B(), f.C());
     }
 
-    bool OctreeBuilder::overlapsWithTriangle(OctreeNode& ot, OBJ_Loader::OBJ_Face f)
+    bool OctreeBuilder::overlapsWithTriangle(OctreeNode& ot, OBJ_Loader::OBJ_Face& f)
     {
         return Intersect_AABB_TRIANGLE::overlaps(ot._aabb._min, ot._aabb._max, f.A(), f.B(), f.C());
+    }
+
+    bool OctreeBuilder::assureChilds(OctreeNode& ot, int max_depth)
+    {
+        if( ot._depth >= max_depth )
+        {
+            return false;
+        }
+
+        if( ot.isLeaf() )
+        {
+        
+            ot.childs = std::vector<OctreeNode>(8);
+            // float* half_size = ot._aabb.getHalfSize();
+            float half_size[3];
+            ot._aabb.getHalfSizeRef(half_size);
+            int child_depth = ot._depth + 1;
+            for(int i = 0; i < ot.childs.size(); i++)
+            {
+                // std::cout << std::bitset<3>((int)(i&4)) << " " << std::bitset<3>((int)(i&2)) << " " << std::bitset<3>((int)(i&1)) << std::endl;
+                float ch_bb_min[3] = { ot._aabb._min[0] + ( ( (int)(i&4) > 0 ) ? half_size[0] : 0 ) ,
+                                       ot._aabb._min[1] + ( ( (int)(i&2) > 0 ) ? half_size[1] : 0 ) ,
+                                       ot._aabb._min[2] + ( ( (int)(i&1) > 0 ) ? half_size[2] : 0 ) };
+
+                static float* ch_bb_max = vector3.add_new(ch_bb_min, half_size);
+                Math::AABB aabb = Math::AABB(ch_bb_min, ch_bb_max);
+                ot.childs[i] = OctreeNode(child_depth, aabb);
+                // std::cout << ot.childs[i]._aabb._min[0] << " " << ot.childs[i]._aabb._min[1] << " " << ot.childs[i]._aabb._min[2] << std::endl;
+            }
+        }
+        return true;
+    }
+
+    bool OctreeBuilder::saveTriangleToNode(OctreeNode& ot, int idx)
+    {   
+        std::vector<int>::iterator itr = std::find(ot.IDX_triangles.begin(), ot.IDX_triangles.end(), idx);
+        int index = std::distance( ot.IDX_triangles.begin(), itr);
+        if( ot.IDX_triangles[index] == idx )
+        { // just in case
+            ot.IDX_triangles.push_back(idx);
+        }
+        return true;
     }
 
 }

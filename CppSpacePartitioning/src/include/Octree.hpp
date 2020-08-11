@@ -9,11 +9,9 @@
 #include "AABB.hpp"
 #include "Vec3.hpp"
 #include "OBJ_File.hpp"
-#include "OBJ_Face.hpp"
 #include "OctreeNode.hpp"
-// #include "OctreeBuilder.hpp"
+#include "OctreeBuilder.hpp"
 // #include "OctreeTraversal.hpp"
-#include "Intersect_AABB_TRIANGLE.hpp"
 
 /*
 //Octree: Octants numbering
@@ -54,36 +52,56 @@
 namespace OCT
 {
 
-    class OctreeBuilder;
-
     class Octree
     {
     
     public:
+        // OBJ_Loader::OBJ_File _obj;
+        OBJ_Loader::OBJ_File _obj;
         Math::Vec3 vector3;
-        OBJ_Loader::OBJ_File* _obj;
         OctreeNode _root;
-        OctreeBuilder* _octree_builder;
+        OctreeBuilder _octree_builder;
         // Octree::OctreeTraversal _oct_traversal;
 
-        Octree() {};
+        // Octree() {};
         
-        Octree(OBJ_Loader::OBJ_File *obj, bool cubic) : _obj(obj)
+        Octree(OBJ_Loader::OBJ_File& obj, bool cubic) : _obj(obj)
         {
-            Math::AABB aabb = _obj->_aabb.deep_copy();
+            // std::cout << _obj._aabb._min[0] << " " << _obj._aabb._min[1] << " " << _obj._aabb._min[2] << std::endl;
+            // std::cout << _obj._aabb._max[0] << " " << _obj._aabb._max[1] << " " << _obj._aabb._max[2] << std::endl;
             if(cubic)
             {
-                float* center  = aabb.getCenter();
-                float* hs      = aabb.getHalfSize();
-                int pl         = getSubdivisionPlane(aabb);
-                vector3.add_ref(center, vector3.init(-hs[pl]), aabb._min);
-                vector3.add_ref(center, vector3.init(+hs[pl]), aabb._max);
+                float* center = _obj._aabb.getCenter();
+                // std::cout << center[0] << " " << center[1] << " " << center[2] << std::endl;
+                // float* hs = _obj._aabb.getHalfSize();
+                float hs[3];
+                _obj._aabb.getHalfSizeRef(hs);
+                // std::cout << hs[0] << " " << hs[1] << " " << hs[2] << std::endl;
+                int pl         = getSubdivisionPlane(_obj._aabb);
+                // std::cout << pl << std::endl;
+                // std::cout << _obj._aabb._min[0] << " " << _obj._aabb._min[1] << " " << _obj._aabb._min[2] << std::endl;
+                // std::cout << _obj._aabb._max[0] << " " << _obj._aabb._max[1] << " " << _obj._aabb._max[2] << std::endl;
+                // float* hspl_min, hspl_max; 
+                float hspl_min[3] {-hs[pl], -hs[pl], -hs[pl]};
+                float hspl_max[3] {hs[pl], hs[pl], hs[pl]};
+                vector3.add_ref(center, hspl_min, _obj._aabb._min);
+                vector3.add_ref(center, hspl_max, _obj._aabb._max);
+                // std::cout << _obj._aabb._max[0]-_obj._aabb._min[0] << " " << _obj._aabb._max[1]-_obj._aabb._min[1] << " " << _obj._aabb._max[2]-_obj._aabb._min[2] << std::endl;
             }
+            // std::cout << _obj._aabb._min[0] << " " << _obj._aabb._min[1] << " " << _obj._aabb._min[2] << std::endl;
+            // std::cout << _obj._aabb._max[0] << " " << _obj._aabb._max[1] << " " << _obj._aabb._max[2] << std::endl;
+            float min[3] {_obj._aabb._min[0], _obj._aabb._min[1], _obj._aabb._min[2]};
+            float max[3] {_obj._aabb._max[0], _obj._aabb._max[1], _obj._aabb._max[2]};
+            Math::AABB aabb = Math::AABB(min, max);
             _root = OctreeNode(0, aabb);
+            // std::cout << _root._aabb._min[0] << " " << _root._aabb._min[1] << " " << _root._aabb._min[2] << std::endl;
+            // std::cout << _root._aabb._max[0] << " " << _root._aabb._max[1] << " " << _root._aabb._max[2] << std::endl;
+
+            _octree_builder = OctreeBuilder(this);
             // this->_oct_traversal = OctreeTraversal(this);
         };
 
-        int getSubdivisionPlane(Math::AABB aabb);
+        int getSubdivisionPlane(Math::AABB& aabb);
  
         int getNumberOfNodes();
 
