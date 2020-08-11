@@ -95,7 +95,7 @@ namespace OCT
            
         int getNumberOfStoredItems();
 
-        int getNumberOfStoredItems(std::vector<OctreeNode> nodes);
+        int getNumberOfStoredItemsWithGetNodes(const std::vector<OctreeNode>& nodes);
         
         // int getNumberOfLeafes();
 

@@ -28,9 +28,9 @@ namespace OCT
         return IDX_triangles.size();
     }
 
-    void OctreeNode::getNodes_recursive(std::vector<OctreeNode> nodes)
+    void OctreeNode::getNodes_recursive(std::vector<OctreeNode>& nodes)
     {
-        nodes.push_back(*this);
+        nodes.push_back(OctreeNode(this->_depth, this->_aabb));
         if(this->isLeaf())
         // if(OctreeNode::isLeaf())
         {

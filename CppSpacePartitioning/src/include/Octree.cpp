@@ -93,10 +93,10 @@ namespace OCT
            
     int Octree::getNumberOfStoredItems()
     {
-        return Octree::getNumberOfStoredItems( Octree::getNodes() );
+        return Octree::getNumberOfStoredItemsWithGetNodes( Octree::getNodes() );
     }
 
-    int Octree::getNumberOfStoredItems(std::vector<OctreeNode> nodes)
+    int Octree::getNumberOfStoredItemsWithGetNodes(const std::vector<OctreeNode>& nodes)
     {
         int count = 0;
         for(OctreeNode n : nodes)

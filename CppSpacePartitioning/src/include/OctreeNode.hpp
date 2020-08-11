@@ -20,9 +20,9 @@ namespace OCT
         std::vector<int> IDX_triangles;
         std::vector<OctreeNode> childs;
 
-        OctreeNode() {};
+        OctreeNode() : _aabb(_aabb) {};
 
-        OctreeNode(int depth, Math::AABB aabb) : _depth(depth), _aabb(aabb) {};
+        OctreeNode(int depth, Math::AABB& aabb) : _depth(depth), _aabb(aabb) {};
         
         bool isLeaf();
         
@@ -32,7 +32,7 @@ namespace OCT
 
         int itemCount();
   
-        void getNodes_recursive(std::vector<OctreeNode> nodes);
+        void getNodes_recursive(std::vector<OctreeNode>& nodes);
 
     };
 
