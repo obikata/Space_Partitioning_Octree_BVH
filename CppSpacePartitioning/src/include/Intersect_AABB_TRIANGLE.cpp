@@ -116,6 +116,7 @@ bool Intersect_AABB_TRIANGLE::overlaps_( float* center, float* halfsize, float* 
   float d = -vector3.dot(normal, v0);  // plane eq: normal.x+d=0
   if(!planeBoxOverlap(normal, d, hs)) return false;
   
+  std::cout << "overlaps" << std::endl;
   return true; // box and triangle overlaps
 };
 

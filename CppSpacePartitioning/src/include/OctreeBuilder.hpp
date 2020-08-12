@@ -37,14 +37,14 @@ namespace OCT
     //  };
 
     private:
-        Octree* _oct;
 
     public:
 
         // most important value, small values makes deep trees, especially for big scenes!!
+        Octree* _oct;
         Math::Vec3 vector3;
-        float MIN_DEPTH_FILL_RATIO = 1.5f;
-        int MAX_DEPTH = 10;
+        float MIN_DEPTH_FILL_RATIO = 1.2f;
+        int MAX_DEPTH = 11;
 
         OctreeBuilder() {};
 
@@ -59,26 +59,26 @@ namespace OCT
         //////////////////////////////////////////////////////////////////////////////
 
         // save in smallest nodes, that fully contains the triangle
-        bool storeAtFirstFit(OctreeNode& ot, int idx);
+        bool storeAtFirstFit(OctreeNode* ot, int idx);
         
         // make sure all triangles are in leaves
-        void pushToLeafes(OctreeNode& ot);
+        void pushToLeaves(OctreeNode* ot);
         
-        void storeInLeafes(OctreeNode& ot, int idx);
+        void storeInLeaves(OctreeNode* ot, int idx);
     
-        void optimizeSpaceCost(OctreeNode& ot);
+        void optimizeSpaceCost(OctreeNode* ot);
     
-        bool positiveFillRatio(OctreeNode& ot);
+        bool positiveFillRatio(OctreeNode* ot);
     
-        bool cleanUp(OctreeNode& ot);
+        bool cleanUp(OctreeNode* ot);
 
-        bool fullyContains(OctreeNode& ot, OBJ_Loader::OBJ_Face& f);
+        bool fullyContains(OctreeNode* ot, OBJ_Loader::OBJ_Face& f);
 
-        bool overlapsWithTriangle(OctreeNode& ot, OBJ_Loader::OBJ_Face& f);
+        bool overlapsWithTriangle(OctreeNode* ot, OBJ_Loader::OBJ_Face& f);
 
-        bool assureChilds(OctreeNode& ot, int max_depth);
+        bool assureChilds(OctreeNode* ot, int max_depth);
     
-        bool saveTriangleToNode(OctreeNode& ot, int idx);
+        bool saveTriangleToNode(OctreeNode* ot, int idx);
 
     };
 }

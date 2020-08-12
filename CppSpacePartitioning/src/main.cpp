@@ -37,7 +37,7 @@ int main(int argc, char **argv)
     obj.read_file(path, filename);
 
     // Debug: Check OBJ_Loader functionality
-    obj.display();
+    // obj.display();
 
     // Compute AABB
     float scale = 1000.0f; // Bunny

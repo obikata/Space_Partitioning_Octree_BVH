@@ -62,10 +62,10 @@ namespace OCT
         return Octree::getNodes().size();
     }
 
-    std::vector<OctreeNode> Octree::getNodes()
+    std::vector<OctreeNode*> Octree::getNodes()
     {
-        std::vector<OctreeNode> nodes;
-        _root.getNodes_recursive(nodes);
+        std::vector<OctreeNode*> nodes;
+        _root->getNodes_recursive(nodes);
         return nodes;
     }
 
@@ -90,21 +90,23 @@ namespace OCT
     //     return max;
     // }
            
-    int Octree::getNumberOfStoredItems()
+    void Octree::getNumberOfStoredItems()
     {
-        return Octree::getNumberOfStoredItemsWithGetNodes( Octree::getNodes() );
+        _NUM_ITEMS = 0;
+        // std::cout << "Before: " << _NUM_ITEMS << std::endl;
+        Octree::getNumberOfStoredItemsWithGetNodes(Octree::getNodes() );
     }
 
-    int Octree::getNumberOfStoredItemsWithGetNodes(const std::vector<OctreeNode>& nodes)
+    void Octree::getNumberOfStoredItemsWithGetNodes(const std::vector<OctreeNode*>& nodes)
     {
-        int count = 0;
-        for(OctreeNode n : nodes)
+        for(OctreeNode* n : nodes)
         {
     //      if( n.isLeaf() ){
-            count += n.itemCount();
+            // std::cout << "ROOT_AABB_MIN: " << n->_aabb->_min[0] << " " << n->_aabb->_min[1] << " " << n->_aabb->_min[2] << " " << std::endl;
+            _NUM_ITEMS += n->itemCount();
     //      }
         }
-        return count;
+        // std::cout << "After: " << _NUM_ITEMS << std::endl;
     }
         
     // int Octree::getNumberOfLeafes()

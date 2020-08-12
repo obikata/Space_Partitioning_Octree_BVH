@@ -16,13 +16,13 @@ namespace OCT
     public:
 
         int _depth;
-        Math::AABB _aabb;
-        std::vector<int> IDX_triangles;
-        std::vector<OctreeNode> childs;
+        Math::AABB* _aabb;
+        std::vector<int> IDX_triangles = std::vector<int>();
+        std::vector<OctreeNode*> childs = std::vector<OctreeNode*>();
 
         OctreeNode() {};
 
-        OctreeNode(int depth, Math::AABB& aabb) : _depth(depth), _aabb(aabb) {};
+        OctreeNode(int depth, Math::AABB* aabb) : _depth(depth), _aabb(aabb) {};
         
         bool isLeaf();
         
@@ -32,7 +32,7 @@ namespace OCT
 
         int itemCount();
   
-        void getNodes_recursive(std::vector<OctreeNode>& nodes);
+        void getNodes_recursive(std::vector<OctreeNode*>& nodes);
 
     };
 

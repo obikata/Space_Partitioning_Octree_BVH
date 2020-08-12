@@ -28,19 +28,19 @@ namespace OCT
         return IDX_triangles.size();
     }
 
-    void OctreeNode::getNodes_recursive(std::vector<OctreeNode>& nodes)
+    void OctreeNode::getNodes_recursive(std::vector<OctreeNode*>& nodes)
     {
-        nodes.push_back(OctreeNode(this->_depth, this->_aabb));
+        nodes.push_back(this);
         if(this->isLeaf())
         // if(OctreeNode::isLeaf())
         {
             return;
         }
-        for(OctreeNode child : childs)
+        for(OctreeNode* child : childs)
         {
-            if( &child != nullptr)
+            if( child != nullptr)
             {
-                child.getNodes_recursive(nodes);
+                child->getNodes_recursive(nodes);
             }
         }
     }

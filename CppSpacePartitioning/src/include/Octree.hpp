@@ -57,9 +57,10 @@ namespace OCT
     
     public:
         // OBJ_Loader::OBJ_File _obj;
+        int _NUM_ITEMS = 0;
         OBJ_Loader::OBJ_File _obj;
         Math::Vec3 vector3;
-        OctreeNode _root;
+        OctreeNode* _root;
         OctreeBuilder _octree_builder;
         // Octree::OctreeTraversal _oct_traversal;
 
@@ -92,8 +93,8 @@ namespace OCT
             // std::cout << _obj._aabb._max[0] << " " << _obj._aabb._max[1] << " " << _obj._aabb._max[2] << std::endl;
             float min[3] {_obj._aabb._min[0], _obj._aabb._min[1], _obj._aabb._min[2]};
             float max[3] {_obj._aabb._max[0], _obj._aabb._max[1], _obj._aabb._max[2]};
-            Math::AABB aabb = Math::AABB(min, max);
-            _root = OctreeNode(0, aabb);
+            Math::AABB* aabb = new Math::AABB(min, max);
+            _root = new OctreeNode(0, aabb);
             // std::cout << _root._aabb._min[0] << " " << _root._aabb._min[1] << " " << _root._aabb._min[2] << std::endl;
             // std::cout << _root._aabb._max[0] << " " << _root._aabb._max[1] << " " << _root._aabb._max[2] << std::endl;
 
@@ -105,15 +106,15 @@ namespace OCT
  
         int getNumberOfNodes();
 
-        std::vector<OctreeNode> getNodes();
+        std::vector<OctreeNode*> getNodes();
         
         // OctreeNode getNodeWithMaxItems();
         
         // OctreeNode getNodeWithMaxItems(std::vector<OctreeNode> nodes);
            
-        int getNumberOfStoredItems();
+        void getNumberOfStoredItems();
 
-        int getNumberOfStoredItemsWithGetNodes(const std::vector<OctreeNode>& nodes);
+        void getNumberOfStoredItemsWithGetNodes(const std::vector<OctreeNode*>& nodes);
         
         // int getNumberOfLeafes();
 

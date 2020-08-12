@@ -44,24 +44,30 @@ namespace OCT
             {
                 continue;
             }
-            // std::cout << _oct->_root._aabb._min[0] << " " << _oct->_root._aabb._min[1] << " " << _oct->_root._aabb._min[2] << std::endl;
-            // std::cout << _oct->_root._aabb._max[0] << " " << _oct->_root._aabb._max[1] << " " << _oct->_root._aabb._max[2] << std::endl;
+            // std::cout << _oct->_root->_aabb->_min[0] << " " << _oct->_root->_aabb->_min[1] << " " << _oct->_root->_aabb->_min[2] << std::endl;
+            // std::cout << _oct->_root->_aabb->_max[0] << " " << _oct->_root->_aabb->_max[1] << " " << _oct->_root->_aabb->_max[2] << std::endl;
             storeAtFirstFit(_oct->_root, i);
         }
+        // std::cout << "ROOT_IDX_TRI: " <<  _oct->_root->IDX_triangles.size() << std::endl;
+        // std::cout << "ROOT_AABB_MIN: " << _oct->_root->_aabb->_min[0] << " " << _oct->_root->_aabb->_min[1] << " " << _oct->_root->_aabb->_min[2] << std::endl;
+        // std::cout << "ROOT_AABB_MAX: " << _oct->_root->_aabb->_max[0] << " " << _oct->_root->_aabb->_max[1] << " " << _oct->_root->_aabb->_max[2] << std::endl;
 
         timer = std::chrono::system_clock::now();
         elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(timer-start).count();
-        std::cout << "       1) storeAtFirstFit   (" + toStr(elapsed, 3) + ")   stored items: " << _oct->getNumberOfStoredItems() << std::endl;
+        _oct->getNumberOfStoredItems();
+        std::cout << "       1) storeAtFirstFit   (" + toStr(elapsed, 3) + ")   stored items: " << _oct->_NUM_ITEMS << std::endl;
 
-        pushToLeafes(_oct->_root);
+        pushToLeaves(_oct->_root);
         timer = std::chrono::system_clock::now();
         elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(timer-start).count();
-        std::cout << "       2) pushToLeafes      (" + toStr(elapsed, 3) + ")   stored items: " << _oct->getNumberOfStoredItems() << std::endl;
+        _oct->getNumberOfStoredItems();
+        std::cout << "       2) pushToLeaves      (" + toStr(elapsed, 3) + ")   stored items: " << _oct->_NUM_ITEMS << std::endl;
     
         optimizeSpaceCost(_oct->_root);
         timer = std::chrono::system_clock::now();
         elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(timer-start).count();
-        std::cout << "       3) optimizeSpaceCost (" + toStr(elapsed, 3) + ")   stored items: " << _oct->getNumberOfStoredItems() << std::endl;
+        _oct->getNumberOfStoredItems();
+        std::cout << "       3) optimizeSpaceCost (" + toStr(elapsed, 3) + ")   stored items: " << _oct->_NUM_ITEMS << std::endl;
 
         // timer = std::chrono::system_clock::now();
         // optimizeMaxItemsPerNode(octree, obj);
@@ -76,10 +82,10 @@ namespace OCT
     //////////////////////////////////////////////////////////////////////////////
 
     // save in smallest nodes, that fully contains the triangle
-    bool OctreeBuilder::storeAtFirstFit(OctreeNode& ot, int idx)
+    bool OctreeBuilder::storeAtFirstFit(OctreeNode* ot, int idx)
     {
         // 1) if we reached the max depth, save the triangle and return
-        if( ot._depth >= MAX_DEPTH )
+        if( ot->_depth >= MAX_DEPTH )
         {
             std::cout << "1" << std::endl;
             saveTriangleToNode(ot, idx);
@@ -95,11 +101,8 @@ namespace OCT
         }
         
         // 3)) check if one child fully contains the triangle. if so, step down to the child
-        for(OctreeNode child : ot.childs)
+        for(OctreeNode* child : ot->childs)
         {
-            float dst[3];
-            child._aabb.getHalfSizeRef(dst);
-            std::cout << dst[0] << " " << dst[1] << " " << dst[2] << std::endl; 
             if( fullyContains(child, _oct->_obj._f[idx]) )
             {
                 if(storeAtFirstFit(child, idx))
@@ -109,129 +112,129 @@ namespace OCT
             }
         }
         
-        // 4) no child fully contains the triangle. so push it to the leafes
-        for(OctreeNode child : ot.childs)
+        // 4) no child fully contains the triangle. so push it to the leaves
+        for(OctreeNode* child : ot->childs)
         {
-            storeInLeafes(child, idx);
+            storeInLeaves(child, idx);
         }
         // saveTriangleToNode(ot, idx);
         return true;
     }
     
     // make sure all triangles are in leaves
-    void OctreeBuilder::pushToLeafes(OctreeNode& ot)
+    void OctreeBuilder::pushToLeaves(OctreeNode* ot)
     {
-        if(ot.isLeaf())
+        if(ot->isLeaf())
         {
             return;
         }
         
         // since current node is no leaf, if it isn't empty either, then move its items down it childs
-        if( !ot.isEmpty() )
+        if( !ot->isEmpty() )
         {
-            for( int idx: ot.IDX_triangles)
+            for( int idx: ot->IDX_triangles)
             {
-                for(OctreeNode child : ot.childs)
+                for(OctreeNode* child : ot->childs)
                 {
-                    storeInLeafes(child, idx);
+                    storeInLeaves(child, idx);
                 }
             }
-            ot.IDX_triangles.clear();
+            ot->IDX_triangles.clear();
         }
 
         // repeat routine for all childs
-        for(OctreeNode child : ot.childs)
+        for(OctreeNode* child : ot->childs)
         {
-            pushToLeafes(child);
+            pushToLeaves(child);
         }
     }
     
-    void OctreeBuilder::storeInLeafes(OctreeNode& ot, int idx)
+    void OctreeBuilder::storeInLeaves(OctreeNode* ot, int idx)
     {
         // if there's no overlap between the current node and the triangle, return
-        if(!overlapsWithTriangle(ot, _oct->_obj._f[idx]))
-        {
-            return;
-        }
+        // if(!overlapsWithTriangle(ot, _oct->_obj._f[idx]))
+        // {
+        //     return;
+        // }
         
         // current node is leaf, and overlaps with the triangle, so save it here
-        if(ot.isLeaf())
+        if(ot->isLeaf())
         {
             saveTriangleToNode(ot, idx);
             return;
         }
         
         // if the current node is no leaf, so step down the childs
-        for(OctreeNode child : ot.childs)
+        for(OctreeNode* child : ot->childs)
         {
-            storeInLeafes(child, idx);
+            storeInLeaves(child, idx);
         }
     }
 
-    void OctreeBuilder::optimizeSpaceCost(OctreeNode& ot)
+    void OctreeBuilder::optimizeSpaceCost(OctreeNode* ot)
     {
 
-        if( !ot.isEmpty())
+        if( !ot->isEmpty())
         {
             if( !positiveFillRatio(ot))
             {
                 assureChilds(ot, MAX_DEPTH);
-                pushToLeafes(ot);
+                pushToLeaves(ot);
             }
         }
 
-        if(ot.isLeaf())
+        if(ot->isLeaf())
         {
             return;
         }
         
-        for(OctreeNode child : ot.childs)
+        for(OctreeNode* child : ot->childs)
         {
             optimizeSpaceCost(child);
         }
     }
 
-    bool OctreeBuilder::positiveFillRatio(OctreeNode& ot)
+    bool OctreeBuilder::positiveFillRatio(OctreeNode* ot)
     {
-        float ratio_items_depth = ot.itemCount() / (float) (ot._depth);
+        float ratio_items_depth = ot->itemCount() / (float) (ot->_depth);
         return ratio_items_depth < MIN_DEPTH_FILL_RATIO;
     }
 
-    bool OctreeBuilder::cleanUp(OctreeNode& ot)
+    bool OctreeBuilder::cleanUp(OctreeNode* ot)
     {
 
-        if(ot.isLeaf())
+        if(ot->isLeaf())
         {
-            return ot.isEmpty(); // True if the node is an empty leaf
+            return ot->isEmpty(); // True if the node is an empty leaf
         }
     
         bool delete_all_childs = true;
 
-        // for(int i = 0; i < ot.childs.size(); i++)
+        // for(int i = 0; i < ot->childs.size(); i++)
         // {
-        //     if(ot.childs[i]==nullptr)
+        //     if(ot->childs[i]==nullptr)
         //     {
         //         continue;
         //     }
-        //     if(cleanUp(ot.childs[i]))
+        //     if(cleanUp(ot->childs[i]))
         //     {
-        //         ot.childs[i]=null;
+        //         ot->childs[i]=null;
         //     }
         //     else
         //     {
         //         delete_all_childs = false; 
         //     }
         // }
-        if (ot.childs.size() == 0)
+        if (ot->childs.size() == 0)
         {
             delete_all_childs = false; // Already clean
         }
         
         if( delete_all_childs )
         {
-            // ot.childs = null;
-            ot.childs.empty();
-            return ot.isEmpty();
+            // ot->childs = null;
+            ot->childs.empty();
+            return ot->isEmpty();
         }
         else
         {
@@ -240,55 +243,59 @@ namespace OCT
 
     }
 
-    bool OctreeBuilder::fullyContains(OctreeNode& ot, OBJ_Loader::OBJ_Face& f)
+    bool OctreeBuilder::fullyContains(OctreeNode* ot, OBJ_Loader::OBJ_Face& f)
     {
-        return ot._aabb.isInside(f.A(), f.B(), f.C());
+        return ot->_aabb->isInside(f.A(), f.B(), f.C());
     }
 
-    bool OctreeBuilder::overlapsWithTriangle(OctreeNode& ot, OBJ_Loader::OBJ_Face& f)
+    bool OctreeBuilder::overlapsWithTriangle(OctreeNode* ot, OBJ_Loader::OBJ_Face& f)
     {
-        return Intersect_AABB_TRIANGLE::overlaps(ot._aabb._min, ot._aabb._max, f.A(), f.B(), f.C());
+        return Intersect_AABB_TRIANGLE::overlaps(ot->_aabb->_min, ot->_aabb->_max, f.A(), f.B(), f.C());
     }
 
-    bool OctreeBuilder::assureChilds(OctreeNode& ot, int max_depth)
+    bool OctreeBuilder::assureChilds(OctreeNode* ot, int max_depth)
     {
-        if( ot._depth >= max_depth )
+        if( ot->_depth >= max_depth )
         {
             return false;
         }
 
-        if( ot.isLeaf() )
+        if( ot->isLeaf() )
         {
         
-            ot.childs = std::vector<OctreeNode>(8);
-            // float* half_size = ot._aabb.getHalfSize();
+            // float* half_size = ot->_aabb->getHalfSize();
             float half_size[3];
-            ot._aabb.getHalfSizeRef(half_size);
-            int child_depth = ot._depth + 1;
-            for(int i = 0; i < ot.childs.size(); i++)
+            ot->_aabb->getHalfSizeRef(half_size);
+            int child_depth = ot->_depth + 1;
+            for(int i = 0; i < 8; i++)
             {
                 // std::cout << std::bitset<3>((int)(i&4)) << " " << std::bitset<3>((int)(i&2)) << " " << std::bitset<3>((int)(i&1)) << std::endl;
-                float ch_bb_min[3] = { ot._aabb._min[0] + ( ( (int)(i&4) > 0 ) ? half_size[0] : 0 ) ,
-                                       ot._aabb._min[1] + ( ( (int)(i&2) > 0 ) ? half_size[1] : 0 ) ,
-                                       ot._aabb._min[2] + ( ( (int)(i&1) > 0 ) ? half_size[2] : 0 ) };
+                float* ch_bb_min = new float[3];
+                ch_bb_min[0] = ot->_aabb->_min[0] + ( ( (int)(i&4) > 0 ) ? half_size[0] : 0 );
+                ch_bb_min[1] = ot->_aabb->_min[1] + ( ( (int)(i&2) > 0 ) ? half_size[1] : 0 );
+                ch_bb_min[2] = ot->_aabb->_min[2] + ( ( (int)(i&1) > 0 ) ? half_size[2] : 0 );
 
-                static float* ch_bb_max = vector3.add_new(ch_bb_min, half_size);
-                Math::AABB aabb = Math::AABB(ch_bb_min, ch_bb_max);
-                ot.childs[i] = OctreeNode(child_depth, aabb);
-                // std::cout << ot.childs[i]._aabb._min[0] << " " << ot.childs[i]._aabb._min[1] << " " << ot.childs[i]._aabb._min[2] << std::endl;
+                float* ch_bb_max = new float[3];
+                vector3.add_ref(ch_bb_min, half_size, ch_bb_max);
+                Math::AABB* aabb = new Math::AABB(ch_bb_min, ch_bb_max);
+                ot->childs.push_back(new OctreeNode(child_depth, aabb));
+                // std::cout << ot->childs[i]->_aabb->_max[0]-ot->childs[i]->_aabb->_min[0] << " " << ot->childs[i]->_aabb->_max[1]-ot->childs[i]->_aabb->_min[1] << " " << ot->childs[i]->_aabb->_max[2]-ot->childs[i]->_aabb->_min[2] << std::endl;
             }
         }
+        // std::cout << ot->childs[0]->_aabb->_max[0]-ot->childs[0]->_aabb->_min[0] << std::endl;
+
         return true;
     }
 
-    bool OctreeBuilder::saveTriangleToNode(OctreeNode& ot, int idx)
+    bool OctreeBuilder::saveTriangleToNode(OctreeNode* ot, int idx)
     {   
-        std::vector<int>::iterator itr = std::find(ot.IDX_triangles.begin(), ot.IDX_triangles.end(), idx);
-        int index = std::distance( ot.IDX_triangles.begin(), itr);
-        if( ot.IDX_triangles[index] == idx )
-        { // just in case
-            ot.IDX_triangles.push_back(idx);
-        }
+        // std::vector<int>::iterator itr = std::find(ot->IDX_triangles.begin(), ot->IDX_triangles.end(), idx);
+        // int index = std::distance( ot->IDX_triangles.begin(), itr);
+        // if( ot->IDX_triangles[index] == idx )
+        // { // just in case
+        ot->IDX_triangles.push_back(idx);
+        // std::cout << ot->IDX_triangles.size() << std::endl;
+        // }
         return true;
     }
 
