@@ -55,20 +55,24 @@ bool Intersect_AABB_TRIANGLE::overlaps_( float* center, float* halfsize, float* 
   
   // Move everything so that the boxcenter is in (0,0,0).
   float* hs = halfsize;
-  float* v0 = vector3.sub_new(A, center);
-  float* v1 = vector3.sub_new(B, center);
-  float* v2 = vector3.sub_new(C, center);
-  
+  float v0[3];
+  float v1[3];
+  float v2[3];
+  vector3.sub_ref(A, center, v0);
+  vector3.sub_ref(B, center, v1);
+  vector3.sub_ref(C, center, v2);
+
   // Bullet 3:
   //   Test the 9 tests first (this was faster).
   
-  float* ea   = new float[3];
-  float* e_v0 = new float[3];
-  float* e_v1 = new float[3];
-  float* e_v2 = new float[3];
+  float ea[3];
+  float e_v0[3];
+  float e_v1[3];
+  float e_v2[3];
   
   // EDGE 0
-  float* e0 = vector3.sub_new(v1,v0);
+  float e0[3];
+  vector3.sub_ref(v1, v0, e0);
   vector3.abs_ref  (e0, ea);
   vector3.cross_ref(e0, v0, e_v0);
   vector3.cross_ref(e0, v1, e_v1);
@@ -77,9 +81,10 @@ bool Intersect_AABB_TRIANGLE::overlaps_( float* center, float* halfsize, float* 
   if( AXISTEST(ea[2]*hs[1] + ea[1]*hs[2],  e_v0[0], e_v2[0]) ) return false; // X
   if( AXISTEST(ea[2]*hs[0] + ea[0]*hs[2],  e_v0[1], e_v2[1]) ) return false; // Y
   if( AXISTEST(ea[1]*hs[0] + ea[0]*hs[1],  e_v1[2], e_v2[2]) ) return false; // Z 
-  
+
   // EDGE 1
-  float* e1 = vector3.sub_new(v2,v1);
+  float e1[3];
+  vector3.sub_ref(v2, v1, e1);
   vector3.abs_ref  (e1, ea);
   vector3.cross_ref(e1, v0, e_v0);
   vector3.cross_ref(e1, v1, e_v1);
@@ -88,9 +93,10 @@ bool Intersect_AABB_TRIANGLE::overlaps_( float* center, float* halfsize, float* 
   if( AXISTEST(ea[2]*hs[1] + ea[1]*hs[2],  e_v0[0], e_v2[0]) ) return false;   
   if( AXISTEST(ea[2]*hs[0] + ea[0]*hs[2],  e_v0[1], e_v2[1]) ) return false;   
   if( AXISTEST(ea[1]*hs[0] + ea[0]*hs[1],  e_v0[2], e_v1[2]) ) return false; 
-  
+    
   // EDGE 2
-  float* e2 = vector3.sub_new(v0,v2);
+  float e2[3];
+  vector3.sub_ref(v0, v2, e2);
   vector3.abs_ref  (e2, ea);
   vector3.cross_ref(e2, v0, e_v0);
   vector3.cross_ref(e2, v1, e_v1);
@@ -99,7 +105,6 @@ bool Intersect_AABB_TRIANGLE::overlaps_( float* center, float* halfsize, float* 
   if( AXISTEST(ea[2]*hs[1] + ea[1]*hs[2],  e_v0[0], e_v1[0]) ) return false;   
   if( AXISTEST(ea[2]*hs[0] + ea[0]*hs[2],  e_v0[1], e_v1[1]) ) return false;   
   if( AXISTEST(ea[1]*hs[0] + ea[0]*hs[1],  e_v1[2], e_v2[2]) ) return false;   
-  
 
   // Bullet 1:
   //   First test overlap in the {x,y,z}-directions.
@@ -109,19 +114,25 @@ bool Intersect_AABB_TRIANGLE::overlaps_( float* center, float* halfsize, float* 
   if(directionTest(v0[1], v1[1], v2[1], hs[1]) ) return false; // Test in Y-direction.
   if(directionTest(v0[2], v1[2], v2[2], hs[2]) ) return false; // Test in Z-direction.
   
-  
+
   // Bullet 2:
   //   Test if the box intersects the plane of the triangle. Compute plane equation of triangle: normal*x+d=0.
   float* normal = vector3.cross_new(e0, e1);
   float d = -vector3.dot(normal, v0);  // plane eq: normal.x+d=0
   if(!planeBoxOverlap(normal, d, hs)) return false;
   
-  std::cout << "overlaps" << std::endl;
+  // std::cout << "overlaps" << std::endl;
   return true; // box and triangle overlaps
 };
 
-bool Intersect_AABB_TRIANGLE::overlaps( float* aabb_min, float* aabb_max, float* A, float* B, float* C) {
-  float* hs     = vector3.scale_new(vector3.sub_new(aabb_max, aabb_min), 0.5f);
-  float* center = vector3.add_new(aabb_min, hs);
+bool Intersect_AABB_TRIANGLE::overlaps(Math::AABB* aabb, float* A, float* B, float* C) {
+  float hs[3];
+  aabb->getHalfSizeRef(hs);
+  float center[3];
+  vector3.add_ref(aabb->_min, hs, center);
   return overlaps_(center, hs, A, B, C);
+};
+
+bool Intersect_AABB_TRIANGLE::directionTest(float a, float b, float c, float hs) {
+  return (vector3.minComponent(a,b,c) > hs || vector3.maxComponent(a,b,c) < -hs); 
 };

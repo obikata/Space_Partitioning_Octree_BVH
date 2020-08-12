@@ -24,7 +24,7 @@
  */
 
 #include "Vec3.hpp"
-
+#include "AABB.hpp"
 // adapted from:
 // http://fileadmin.cs.lth.se/cs/personal/tomas_akenine-moller/pubs/tribox.pdf
 // http://fileadmin.cs.lth.se/cs/Personal/Tomas_Akenine-Moller/code/tribox3.txt
@@ -44,18 +44,16 @@ class Intersect_AABB_TRIANGLE
     static bool AXISTEST(float rad, float p0, float p1){
       return (std::min(p0,p1) > rad || std::max(p0,p1)< -rad);
     }
-    
-    static bool directionTest(float a, float b, float c, float hs){
-      return (vector3.minComponent(a,b,c) > hs ||vector3.maxComponent(a,b,c) < -hs); 
-    }
-  
+      
   public:
     static bool planeBoxOverlap(float* normal, float d, float* hs);  
           
     // modified version, ... better refer to original version!
     static bool overlaps_( float* center, float* halfsize, float* A, float* B, float* C);
 
-    static bool overlaps( float* aabb_min, float* aabb_max, float* A, float* B, float* C);
+    static bool overlaps( Math::AABB* aabb, float* A, float* B, float* C);
+
+    static bool directionTest(float a, float b, float c, float hs);
 
 };
 

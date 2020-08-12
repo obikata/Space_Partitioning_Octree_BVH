@@ -17,8 +17,8 @@ namespace OCT
 
         int _depth;
         Math::AABB* _aabb;
-        std::vector<int> IDX_triangles = std::vector<int>();
-        std::vector<OctreeNode*> childs = std::vector<OctreeNode*>();
+        std::vector<int> IDX_triangles;
+        std::vector<OctreeNode*> childs;
 
         OctreeNode() {};
 

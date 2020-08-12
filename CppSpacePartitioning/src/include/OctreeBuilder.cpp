@@ -87,7 +87,6 @@ namespace OCT
         // 1) if we reached the max depth, save the triangle and return
         if( ot->_depth >= MAX_DEPTH )
         {
-            std::cout << "1" << std::endl;
             saveTriangleToNode(ot, idx);
             return true;
         }
@@ -95,7 +94,6 @@ namespace OCT
         // 2) generate childs, if not possible, this node is a leaf, so save the item here
         if(!assureChilds(ot, MAX_DEPTH) )
         {
-            std::cout << "2" << std::endl;
             saveTriangleToNode(ot, idx);
             return true;
         }
@@ -152,10 +150,10 @@ namespace OCT
     void OctreeBuilder::storeInLeaves(OctreeNode* ot, int idx)
     {
         // if there's no overlap between the current node and the triangle, return
-        // if(!overlapsWithTriangle(ot, _oct->_obj._f[idx]))
-        // {
-        //     return;
-        // }
+        if(!overlapsWithTriangle(ot, _oct->_obj._f[idx]))
+        {
+            return;
+        }
         
         // current node is leaf, and overlaps with the triangle, so save it here
         if(ot->isLeaf())
@@ -250,7 +248,7 @@ namespace OCT
 
     bool OctreeBuilder::overlapsWithTriangle(OctreeNode* ot, OBJ_Loader::OBJ_Face& f)
     {
-        return Intersect_AABB_TRIANGLE::overlaps(ot->_aabb->_min, ot->_aabb->_max, f.A(), f.B(), f.C());
+        return Intersect_AABB_TRIANGLE::overlaps(ot->_aabb, f.A(), f.B(), f.C());
     }
 
     bool OctreeBuilder::assureChilds(OctreeNode* ot, int max_depth)
@@ -289,13 +287,21 @@ namespace OCT
 
     bool OctreeBuilder::saveTriangleToNode(OctreeNode* ot, int idx)
     {   
-        // std::vector<int>::iterator itr = std::find(ot->IDX_triangles.begin(), ot->IDX_triangles.end(), idx);
-        // int index = std::distance( ot->IDX_triangles.begin(), itr);
-        // if( ot->IDX_triangles[index] == idx )
-        // { // just in case
-        ot->IDX_triangles.push_back(idx);
-        // std::cout << ot->IDX_triangles.size() << std::endl;
+        
+        // Debug
+        // std::vector<int> myvec;
+        // for (int j=0; j<3; j++) myvec.push_back(j);
+        // for (int i=0; i<6; i++){
+        //     auto itr = std::find(myvec.begin(), myvec.end(), i);
+        //     std::cout << (int)(itr == myvec.end()) << std::endl;
         // }
+        // std::cout << std::endl;
+
+        auto itr = std::find(ot->IDX_triangles.begin(), ot->IDX_triangles.end(), idx);
+        if (itr == ot->IDX_triangles.end())
+        {
+            ot->IDX_triangles.push_back(idx);            
+        }
         return true;
     }
 
