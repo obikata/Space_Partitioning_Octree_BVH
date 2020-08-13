@@ -195,10 +195,10 @@ namespace OCT
         return true;
     }
             
-    void Octree::traverse(OctreeHitResult* hit)
-    {
-        _oct_traversal.traverseRayTopDown(hit);
-    }
+    // void Octree::traverse(OctreeHitResult* hit)
+    // {
+    //     _octree_traversal.traverseRayTopDown(hit);
+    // }
         
     void Octree::printStatistics()
     {

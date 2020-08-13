@@ -19,12 +19,12 @@ namespace OCT
         OBJ_Loader::OBJ_File _obj;
         Math::Vec3 vector3;
         OctreeNode* _root;
-        OctreeBuilder _octree_builder;
-        OctreeTraversal _oct_traversal;
+        OctreeBuilder* _octree_builder;
+        OctreeTraversal* _octree_traversal;
 
-        // Octree() {};
+        Octree() {};
         
-        Octree(OBJ_Loader::OBJ_File& obj, bool cubic) : _obj(obj)
+        Octree(OBJ_Loader::OBJ_File& obj, bool cubic) : _obj(obj), _root(nullptr), _octree_builder(nullptr), _octree_traversal(nullptr)
         {
 
             if(cubic)
@@ -44,8 +44,8 @@ namespace OCT
             float max[3] {_obj._aabb._max[0], _obj._aabb._max[1], _obj._aabb._max[2]};
             Math::AABB* aabb = new Math::AABB(min, max);
             _root = new OctreeNode(0, aabb);
-            _octree_builder = OctreeBuilder(this);
-            _oct_traversal = OctreeTraversal(this);
+            _octree_builder = new OctreeBuilder(this);
+            _octree_traversal = new OctreeTraversal(this);
 
         };
 
@@ -87,7 +87,7 @@ namespace OCT
         
         bool isValid(const std::vector<OctreeNode*>& nodes);
 
-        void traverse(OctreeHitResult* hit);
+        // void traverse(OctreeHitResult* hit);
         
         void printStatistics();
               

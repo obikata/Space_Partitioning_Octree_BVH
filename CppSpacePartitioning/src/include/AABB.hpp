@@ -17,7 +17,7 @@ namespace Math
         Math::Vec3 vector3;
 
         // Default Constructor without arguments
-        AABB() {};
+        AABB() : _min(new float[3]), _max(new float[3]) {};
 
         // Constructor with pointers to min and max
         AABB(float* min, float* max) : _min(min), _max(max) {};

@@ -15,11 +15,15 @@ namespace OCT
         }
 
         IDX_SHFT = 0;
-        Math::Ray3D* ray_mod = new Math::Ray3D (hit_result->_ray->copy());  // copy ray
-
+        Math::Ray3D* ray_mod = hit_result->_ray->copy();  // copy ray
+        std::cout << "RAY_DIR = " << ray_mod->d[0] << " " << ray_mod->d[1] << " " << ray_mod->d[2] << std::endl;
+        std::cout << "RAY_ORIGIN = " << ray_mod->o[0] << " " << ray_mod->o[1] << " " << ray_mod->o[2] << std::endl;
+        std::cout << _oct->_root->_aabb->_min[0] << std::endl;
         if(mirrorComponent(_oct->_root->_aabb, ray_mod, 0)) IDX_SHFT |= 4;
         if(mirrorComponent(_oct->_root->_aabb, ray_mod, 1)) IDX_SHFT |= 2;
         if(mirrorComponent(_oct->_root->_aabb, ray_mod, 2)) IDX_SHFT |= 1;
+        std::cout << "RAY_DIR = " << ray_mod->d[0] << " " << ray_mod->d[1] << " " << ray_mod->d[2] << std::endl;
+        std::cout << "RAY_ORIGIN = " << ray_mod->o[0] << " " << ray_mod->o[1] << " " << ray_mod->o[2] << std::endl;
 
         // get intersection intervals
         float* t0 = Math::Vec3::multiply_new(Math::Vec3::sub_new(_oct->_root->_aabb->_min, ray_mod->o), ray_mod->d_rec);

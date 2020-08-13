@@ -21,9 +21,12 @@ namespace OCT
     private:
 
         int IDX_SHFT = 0;
+        float* ptr_hit_backface = new float[1];
+        float* tuv = new float[3];
 
         bool mirrorComponent(Math::AABB* aabb, Math::Ray3D* ray, int id)
         {
+            std::cout << aabb->_min[0] << std::endl;
             if(ray->d[id] > 0.0) //TODO: handle special case: (ray->d[x] == 0.0)
             {
                 return false;
@@ -105,9 +108,6 @@ namespace OCT
             return false;
         }
       
-        float* ptr_hit_backface = new float[1];
-        float* tuv = new float[3];
-
         // // traverse the octree (linkedListversion)
         // void traverseOctree(OctreeTraversalData* OTD, OctreeHitResult* hit_result)
         // {

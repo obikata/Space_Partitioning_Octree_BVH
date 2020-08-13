@@ -27,9 +27,9 @@ namespace Math
         
         Ray3D() {}
         
-        Ray3D copy()
+        Ray3D* copy()
         {
-        return Ray3D(Math::Vec3::copy_new(o), Math::Vec3::copy_new(d));
+        return new Ray3D(Math::Vec3::copy_new(o), Math::Vec3::copy_new(d));
         }
 
         void normalize()

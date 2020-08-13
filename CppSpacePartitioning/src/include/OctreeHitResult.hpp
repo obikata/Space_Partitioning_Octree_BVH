@@ -28,7 +28,7 @@ namespace OCT
         int COUNT_node_traversal_steps        = 0;    
         std::vector<OctreeTraversalData*> _traversal_history;
 
-        OctreeHitResult(Math::Ray3D* ray, float t_min, float t_max) : _ray(ray), _t_min(t_min), _t_max(t_max), _t(t_max), _item_idx(-1), _hit_backface(1.0f), _got_hit(false), _traversal_history(std::vector<OctreeTraversalData*>()) {}; 
+        OctreeHitResult(Math::Ray3D* ray, float t_min, float t_max) : _ray(ray), _t_min(t_min), _t_max(t_max), _t(t_max), _item_idx(-1), _hit_backface(1.0f), _got_hit(false) {}; 
     
         bool checkIfCloser(float t_new, int item_idx, OctreeNode* node, float hit_backface, float u, float v);
     

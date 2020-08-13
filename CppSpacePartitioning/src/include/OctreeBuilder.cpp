@@ -24,7 +24,9 @@ namespace OCT
 
     void OctreeBuilder::BUILD_defaultRoutine()
     {
-        
+
+        std::cout << _oct->_root->_aabb->_min[0] << std::endl;
+
         std::chrono::system_clock::time_point start, timer;
         // auto start, end;
         double elapsed;
@@ -43,6 +45,8 @@ namespace OCT
             storeAtFirstFit(_oct->_root, i);
         }
 
+        std::cout << _oct->_root->_aabb->_min[0] << std::endl;
+
         timer = std::chrono::system_clock::now();
         elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(timer-start).count();
         _oct->getNumberOfStoredItems();
@@ -53,15 +57,15 @@ namespace OCT
         elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(timer-start).count();
         _oct->getNumberOfStoredItems();
         std::cout << "       2) pushToLeaves      (" + toStr(elapsed, 3) + ")   stored items: " << _oct->_NUM_ITEMS << std::endl;
-    
         optimizeSpaceCost(_oct->_root);
         timer = std::chrono::system_clock::now();
         elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(timer-start).count();
         _oct->getNumberOfStoredItems();
         std::cout << "       3) optimizeSpaceCost (" + toStr(elapsed, 3) + ")   stored items: " << _oct->_NUM_ITEMS << std::endl;
-
         cleanUp(_oct->_root);
         std::cout << "    > finished building" << std::endl;
+
+        std::cout << _oct->_root->_aabb->_min[0] << std::endl;
 
     }
 
