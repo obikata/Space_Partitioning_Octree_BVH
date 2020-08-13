@@ -92,7 +92,6 @@ namespace OCT
            
     void Octree::getNumberOfStoredItems()
     {
-        _NUM_ITEMS = 0;
         Octree::getNumberOfStoredItems(Octree::getNodes() );
     }
 
@@ -101,9 +100,7 @@ namespace OCT
         int count = 0;
         for(OctreeNode* n : nodes)
         {
-    //      if( n.isLeaf() ){
             count += n->itemCount();
-    //      }
         }
         _NUM_ITEMS = count;
         return count;
@@ -198,10 +195,10 @@ namespace OCT
         return true;
     }
             
-    // void Octree::traverse(OctreeHitResult hit)
-    // {
-    //     _oct_traversal.traverseRayTopDown(hit);
-    // }
+    void Octree::traverse(OctreeHitResult* hit)
+    {
+        _oct_traversal.traverseRayTopDown(hit);
+    }
         
     void Octree::printStatistics()
     {

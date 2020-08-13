@@ -32,7 +32,6 @@ namespace OCT
     {
         nodes.push_back(this);
         if(this->isLeaf())
-        // if(OctreeNode::isLeaf())
         {
             return;
         }

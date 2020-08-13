@@ -1,3 +1,6 @@
+#ifndef __OCTREEHITRESULT_HPP__
+#define __OCTREEHITRESULT_HPP__
+
 #include "Ray3D.hpp"
 #include "OctreeNode.hpp"
 #include "OctreeTraversalData.hpp"
@@ -10,100 +13,37 @@ namespace OCT
     {
     public:
 
-        Math::Ray3D ray;
-        float t_max;
-        float t_min;
-        float t;
-        OctreeNode node;
-        int item_idx = -1;
-        bool two_sided_check = true;
-        float hit_backface = 1.0f;
-        float u, v;
-        bool got_hit = false;
+        Math::Ray3D* _ray;
+        float _t_max;
+        float _t_min;
+        float _t;
+        OctreeNode* _node;
+        int _item_idx = -1;
+        bool _two_sided_check = true;
+        float _hit_backface = 1.0f;
+        float _u, _v;
+        bool _got_hit = false;
         int COUNT_triangle_intersection_tests = 0;
         int COUNT_node_intersection_tests     = 0;
-        int COUNT_node_traversal_steps        = 0;
-        
-    
-        std::vector<OctreeTraversalData> traversal_history;
-    
-        OctreeHitResult(Math::Ray3D ray, float t_min, float t_max)
-        {
-            set(ray, t_min, t_max);
-        }
-    
-        OctreeHitResult set(Math::Ray3D ray, float t_min, float t_max)
-        {
-            this->ray = ray;
-            this->t_min = t_min;
-            this->t_max = t_max;
-            this->t = t_max;
-            this->item_idx = -1;
-            this->hit_backface = 1.0f;
-            this->got_hit = false;
-            this->traversal_history.clear();
-            return *this;
-        }
-    
-        bool checkIfCloser(float t_new, int item_idx, OctreeNode node, float hit_backface, float u, float v)
-        {
-            if( t_min < t_new && t_new < t)
-            {
-                this->t            = t_new;
-                this->u            = u;
-                this->v            = v;
-                this->item_idx     = item_idx;
-                this->node         = node;
-                this->hit_backface = hit_backface;
-                this->got_hit      = true;
-                return true;
-            }
-            return false;
-        }
-    
-        bool checkIfCloser(float* tuv, int item_idx, OctreeNode node, float hit_backface)
-        {
-            if( t_min < tuv[0] && tuv[0] < t)
-            {
-                this->t            = tuv[0];
-                this->u            = tuv[1];
-                this->v            = tuv[2];
-                this->item_idx     = item_idx;
-                this->node         = node;
-                this->hit_backface = hit_backface;
-                this->got_hit      = true;
-                return true;
-            }
-            return false;
-        }
+        int COUNT_node_traversal_steps        = 0;    
+        std::vector<OctreeTraversalData*> _traversal_history;
 
-        bool gotHit()
-        {
-            return got_hit;
-        }
+        OctreeHitResult(Math::Ray3D* ray, float t_min, float t_max) : _ray(ray), _t_min(t_min), _t_max(t_max), _t(t_max), _item_idx(-1), _hit_backface(1.0f), _got_hit(false), _traversal_history(std::vector<OctreeTraversalData*>()) {}; 
     
-        float* getHitPoint()
-        {
-            return ray.getPoint(t);
-        }
+        bool checkIfCloser(float t_new, int item_idx, OctreeNode* node, float hit_backface, float u, float v);
     
-        void resetCounters()
-        {
-            COUNT_triangle_intersection_tests = 0;
-            COUNT_node_intersection_tests     = 0;
-            COUNT_node_traversal_steps        = 0;
-        }
+        bool checkIfCloser(float* tuv, int item_idx, OctreeNode* node, float hit_backface);
 
+        bool gotHit();
     
-        void printCounters()
-        {
-            std::cout < "---< HitResult: stats >---" << std::endl;
-            std::cout < "   COUNT_triangle_intersection_tests = "+COUNT_triangle_intersection_tests < std::endl;
-            std::cout < "   COUNT_node_intersection_tests     = "+COUNT_node_intersection_tests < std::endl;
-            std::cout < "   COUNT_node_traversal_steps        = "+COUNT_node_traversal_steps < std::endl;
-            std::cout < "---</ HitResult: stats >---" < std::endl;
-        }
-  
+        float* getHitPoint();
+    
+        void resetCounters();
+    
+        void printCounters();
+
   };
 
 }
+
+#endif

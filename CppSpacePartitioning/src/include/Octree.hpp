@@ -6,7 +6,7 @@
 #include "OBJ_File.hpp"
 #include "OctreeNode.hpp"
 #include "OctreeBuilder.hpp"
-// #include "OctreeTraversal.hpp"
+#include "OctreeTraversal.hpp"
 
 namespace OCT
 {
@@ -15,13 +15,12 @@ namespace OCT
     {
     
     public:
-        // OBJ_Loader::OBJ_File _obj;
         int _NUM_ITEMS = 0;
         OBJ_Loader::OBJ_File _obj;
         Math::Vec3 vector3;
         OctreeNode* _root;
         OctreeBuilder _octree_builder;
-        // Octree::OctreeTraversal _oct_traversal;
+        OctreeTraversal _oct_traversal;
 
         // Octree() {};
         
@@ -46,7 +45,7 @@ namespace OCT
             Math::AABB* aabb = new Math::AABB(min, max);
             _root = new OctreeNode(0, aabb);
             _octree_builder = OctreeBuilder(this);
-            // _oct_traversal = OctreeTraversal(this);
+            _oct_traversal = OctreeTraversal(this);
 
         };
 
@@ -88,7 +87,7 @@ namespace OCT
         
         bool isValid(const std::vector<OctreeNode*>& nodes);
 
-        // // void traverse(OctreeHitResult hit);
+        void traverse(OctreeHitResult* hit);
         
         void printStatistics();
               

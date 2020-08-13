@@ -32,7 +32,7 @@ namespace OBJ_Loader
         int MeshGroupIdx; // Mesh group index
         int MaterialIdx; // Mesh group material index
         
-        // bool FLAG_CHECKED = false;
+        bool FLAG_CHECKED = false;
         
         /**
     	Constructor 

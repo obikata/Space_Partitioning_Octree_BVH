@@ -344,25 +344,24 @@ namespace Math
 
         static void normalize_ref(float* a, float* dst)
         {
-            float x = a[0], y = a[1], z = a[2];
-            float len = (float) std::sqrt(x * x + y * y + z * z);
+            float len = std::sqrt(a[0] * a[0] + a[1] * a[1] + a[2] * a[2]);
             if (len == 0.0f)
             {
-                dst[0] = 0;
-                dst[1] = 0;
-                dst[2] = 0;
+                dst[0] = 0.0f;
+                dst[1] = 0.0f;
+                dst[2] = 0.0f;
             } 
             else if (len == 1.0f)
             {
-                dst[0] = x;
-                dst[1] = y;
-                dst[2] = z;
+                dst[0] = a[0];
+                dst[1] = a[1];
+                dst[2] = a[2];
             } 
             else 
             {
-                dst[0] = x / len;
-                dst[1] = y / len;
-                dst[2] = z / len;
+                dst[0] = a[0] / len;
+                dst[1] = a[1] / len;
+                dst[2] = a[2] / len;
             }
         }
 
