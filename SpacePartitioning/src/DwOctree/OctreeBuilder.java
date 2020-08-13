@@ -290,7 +290,7 @@ public class OctreeBuilder {
 //          if(Intersect_AABB_TRIANGLE.overlaps(aabb.min, aabb.max, f.A(), f.B(), f.C())) count++;
 //        }
 //        float ratio = count/(float) (ot.itemCount()); // prozent der triangles die diesen node schneiden
-//        if( ratio < 0.4 )child_count++; // wenn weniger als 20 % den node schneiden, erhöhe den counter
+//        if( ratio < 0.4 )child_count++; // wenn weniger als 20 % den node schneiden, erhï¿½he den counter
 //      }
 //      if( child_count >= 4 ) return true;
 //    }

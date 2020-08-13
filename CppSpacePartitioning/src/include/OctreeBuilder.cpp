@@ -193,30 +193,24 @@ namespace OCT
     
         bool delete_all_childs = true;
 
-        // for(int i = 0; i < ot->childs.size(); i++)
-        // {
-        //     if(ot->childs[i]==nullptr)
-        //     {
-        //         continue;
-        //     }
-        //     if(cleanUp(ot->childs[i]))
-        //     {
-        //         ot->childs[i]=null;
-        //     }
-        //     else
-        //     {
-        //         delete_all_childs = false; 
-        //     }
-        // }
-
-        // if (ot->childs.size() == 0)
-        // {
-        //     delete_all_childs = false; // Already clean
-        // }
-        
+        for(int i = 0; i < ot->childs.size(); i++)
+        {
+            if( ot->childs[i] == nullptr )
+            {
+                continue;
+            }
+            if( cleanUp(ot->childs[i]) )
+            {
+                ot->childs[i] = nullptr;
+            }
+            else
+            {
+                delete_all_childs = false;
+            }
+        }
+                
         if( delete_all_childs )
         {
-            // ot->childs = null;
             ot->childs.clear();
             ot->childs.shrink_to_fit();
             return ot->isEmpty();

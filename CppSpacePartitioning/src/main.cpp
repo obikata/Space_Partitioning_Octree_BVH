@@ -62,7 +62,7 @@ int main(int argc, char **argv)
         timer = std::chrono::system_clock::now();
         elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(timer-start).count();
         std::cout << "    building time          = " + toStr(elapsed, 3) + "ms " << std::endl;
-        // octree.printStatistics();
+        octree.printStatistics();
         std::cout << "\n-------------------------------<  finished Octree  >-------------------------------" << std::endl;
     }
 

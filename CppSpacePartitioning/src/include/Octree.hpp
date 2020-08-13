@@ -56,41 +56,41 @@ namespace OCT
 
         std::vector<OctreeNode*> getNodes();
         
-        // OctreeNode getNodeWithMaxItems();
+        OctreeNode* getNodeWithMaxItems();
         
-        // OctreeNode getNodeWithMaxItems(std::vector<OctreeNode> nodes);
+        OctreeNode* getNodeWithMaxItems(const std::vector<OctreeNode*>& nodes);
            
         void getNumberOfStoredItems();
 
-        void getNumberOfStoredItemsWithGetNodes(const std::vector<OctreeNode*>& nodes);
+        int getNumberOfStoredItems(const std::vector<OctreeNode*>& nodes);
         
-        // int getNumberOfLeafes();
+        int getNumberOfLeaves();
 
-        // int getNumberOfLeafes(std::vector<OctreeNode> nodes);
+        int getNumberOfLeaves(const std::vector<OctreeNode*>& nodes);
                 
-        // int sumUpLeafDepth();
+        int sumUpLeafDepth();
 
-        // int sumUpLeafDepth(std::vector<OctreeNode> nodes);
+        int sumUpLeafDepth(const std::vector<OctreeNode*>& nodes);
         
-        // int getMaxDepth();
+        int getMaxDepth();
         
-        // int getMaxDepth(std::vector<OctreeNode> nodes);
+        int getMaxDepth(const std::vector<OctreeNode*>& nodes);
         
-        // float getAverageLeafDepth();
+        float getAverageLeafDepth();
         
-        // float getAverageLeafDepth(std::vector<OctreeNode> nodes);
+        float getAverageLeafDepth(const std::vector<OctreeNode*>& nodes);
         
-        // float getAverageLeafItems();
+        float getAverageLeafItems();
 
-        // float getAverageLeafItems(std::vector<OctreeNode> nodes);
+        float getAverageLeafItems(const std::vector<OctreeNode*>& nodes);
         
-        // bool isValid();
+        bool isValid();
         
-        // bool isValid(std::vector<OctreeNode> nodes);
+        bool isValid(const std::vector<OctreeNode*>& nodes);
 
         // // void traverse(OctreeHitResult hit);
         
-        // void printStatistics();
+        void printStatistics();
               
     };
 }
