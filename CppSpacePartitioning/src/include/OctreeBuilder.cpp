@@ -18,13 +18,9 @@ namespace OCT
     //    { 1, 1, 1 },    // [7] - 111
     //  };
 
-    std::string OctreeBuilder::toStr(double a, int prec) 
-    {
-        std::ostringstream text;
-        text.precision(prec);
-        text << std::fixed << a;
-        return text.str();
-    }
+    //////////////////////////////////////////////////////////////////////////////
+    // BUILD OCTREE
+    //////////////////////////////////////////////////////////////////////////////
 
     void OctreeBuilder::BUILD_defaultRoutine()
     {
@@ -44,13 +40,8 @@ namespace OCT
             {
                 continue;
             }
-            // std::cout << _oct->_root->_aabb->_min[0] << " " << _oct->_root->_aabb->_min[1] << " " << _oct->_root->_aabb->_min[2] << std::endl;
-            // std::cout << _oct->_root->_aabb->_max[0] << " " << _oct->_root->_aabb->_max[1] << " " << _oct->_root->_aabb->_max[2] << std::endl;
             storeAtFirstFit(_oct->_root, i);
         }
-        // std::cout << "ROOT_IDX_TRI: " <<  _oct->_root->IDX_triangles.size() << std::endl;
-        // std::cout << "ROOT_AABB_MIN: " << _oct->_root->_aabb->_min[0] << " " << _oct->_root->_aabb->_min[1] << " " << _oct->_root->_aabb->_min[2] << std::endl;
-        // std::cout << "ROOT_AABB_MAX: " << _oct->_root->_aabb->_max[0] << " " << _oct->_root->_aabb->_max[1] << " " << _oct->_root->_aabb->_max[2] << std::endl;
 
         timer = std::chrono::system_clock::now();
         elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(timer-start).count();
@@ -69,17 +60,10 @@ namespace OCT
         _oct->getNumberOfStoredItems();
         std::cout << "       3) optimizeSpaceCost (" + toStr(elapsed, 3) + ")   stored items: " << _oct->_NUM_ITEMS << std::endl;
 
-        // timer = std::chrono::system_clock::now();
-        // optimizeMaxItemsPerNode(octree, obj);
-        // std::cout < "  ____ octree.getNumberOfStoredItems() = " + octree.getNumberOfStoredItems() + "     optimizeMaxItemsPerNode" < std::endl;
         cleanUp(_oct->_root);
         std::cout << "    > finished building" << std::endl;
 
     }
-
-    //////////////////////////////////////////////////////////////////////////////
-    // BUILD OCTREE
-    //////////////////////////////////////////////////////////////////////////////
 
     // save in smallest nodes, that fully contains the triangle
     bool OctreeBuilder::storeAtFirstFit(OctreeNode* ot, int idx)
@@ -264,13 +248,11 @@ namespace OCT
         if( ot->isLeaf() )
         {
         
-            // float* half_size = ot->_aabb->getHalfSize();
             float half_size[3];
             ot->_aabb->getHalfSizeRef(half_size);
             int child_depth = ot->_depth + 1;
             for(int i = 0; i < 8; i++)
             {
-                // std::cout << std::bitset<3>((int)(i&4)) << " " << std::bitset<3>((int)(i&2)) << " " << std::bitset<3>((int)(i&1)) << std::endl;
                 float* ch_bb_min = new float[3];
                 ch_bb_min[0] = ot->_aabb->_min[0] + ( ( (int)(i&4) > 0 ) ? half_size[0] : 0 );
                 ch_bb_min[1] = ot->_aabb->_min[1] + ( ( (int)(i&2) > 0 ) ? half_size[1] : 0 );
@@ -280,26 +262,14 @@ namespace OCT
                 vector3.add_ref(ch_bb_min, half_size, ch_bb_max);
                 Math::AABB* aabb = new Math::AABB(ch_bb_min, ch_bb_max);
                 ot->childs.push_back(new OctreeNode(child_depth, aabb));
-                // std::cout << ot->childs[i]->_aabb->_max[0]-ot->childs[i]->_aabb->_min[0] << " " << ot->childs[i]->_aabb->_max[1]-ot->childs[i]->_aabb->_min[1] << " " << ot->childs[i]->_aabb->_max[2]-ot->childs[i]->_aabb->_min[2] << std::endl;
             }
         }
-        // std::cout << ot->childs[0]->_aabb->_max[0]-ot->childs[0]->_aabb->_min[0] << std::endl;
 
         return true;
     }
 
     bool OctreeBuilder::saveTriangleToNode(OctreeNode* ot, int idx)
     {   
-        
-        // Debug
-        // std::vector<int> myvec;
-        // for (int j=0; j<3; j++) myvec.push_back(j);
-        // for (int i=0; i<6; i++){
-        //     auto itr = std::find(myvec.begin(), myvec.end(), i);
-        //     std::cout << (int)(itr == myvec.end()) << std::endl;
-        // }
-        // std::cout << std::endl;
-
         auto itr = std::find(ot->IDX_triangles.begin(), ot->IDX_triangles.end(), idx);
         if (itr == ot->IDX_triangles.end())
         {
@@ -307,6 +277,6 @@ namespace OCT
         }
         return true;
     }
-
+    
 }
 

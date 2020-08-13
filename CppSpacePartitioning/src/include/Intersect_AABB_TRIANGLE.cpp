@@ -1,38 +1,5 @@
-/**
- * 
- *   author: (c)thomas diewald, http://thomasdiewald.com/
- *   date: 12.09.2012
- *   
- *
- * This source is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- * 
- * This code is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
- * 
- * A copy of the GNU General Public License is available on the World
- * Wide Web at <http://www.gnu.org/copyleft/gpl.html>. You can also
- * obtain it by writing to the Free Software Foundation,
- * Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- */
-
 #include "Intersect_AABB_TRIANGLE.hpp"
 
-// adapted from:
-// http://fileadmin.cs.lth.se/cs/personal/tomas_akenine-moller/pubs/tribox.pdf
-// http://fileadmin.cs.lth.se/cs/Personal/Tomas_Akenine-Moller/code/tribox3.txt
-// http://www.toxicengine.org/developers/reference/triboxoverlap_8cpp-source.html
-// http://www.koders.com/cpp/fid17736F013E5860D198107D9B7D494AF15ABB6A79.aspx?s=ray
-//
-// other: 
-// http://www.geometrictools.com/LibMathematics/Distance/Distance.html
-// http://tog.acm.org/resources/GraphicsGems/gemsiii/triangleCube.c
-// http://clb.demon.fi/MathGeoLib/docs/Triangle.cpp_code.html#459
-  
 bool Intersect_AABB_TRIANGLE::planeBoxOverlap(float* normal, float d, float* hs) {
   float vmin[3] { (normal[0]>0.0)? -hs[0]:+hs[0],
                   (normal[1]>0.0)? -hs[1]:+hs[1],
@@ -44,7 +11,6 @@ bool Intersect_AABB_TRIANGLE::planeBoxOverlap(float* normal, float d, float* hs)
   return false;
 };
 
-      
 // modified version, ... better refer to original version!
 bool Intersect_AABB_TRIANGLE::overlaps_( float* center, float* halfsize, float* A, float* B, float* C) {
   // Use separating axis theorem to test overlap between triangle and box.

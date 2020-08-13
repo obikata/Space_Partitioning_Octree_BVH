@@ -22,9 +22,6 @@ int main(int argc, char **argv)
     //----------------------------------------------------------------------------
     bool BVH_DEMO = false;
     bool OCTREE_DEMO = !BVH_DEMO;
-    // bool FILL = true;
-    // bool VISUALSIZE = !false;
-    // Camera cam;
 
     //----------------------------------------------------------------------------
     // Read object file
@@ -33,10 +30,7 @@ int main(int argc, char **argv)
     OBJ_Loader::OBJ_File obj;
     std::string path = "";
     std::string filename = argv[1];
-    // std::string filename = "buddha.obj";
     obj.read_file(path, filename);
-
-    // Debug: Check OBJ_Loader functionality
     // obj.display();
 
     // Compute AABB
@@ -50,27 +44,7 @@ int main(int argc, char **argv)
         obj.computeAABB(i);
     }
 
-    // // Check AABB
-    // for (int i = 0; i < 3; i++)
-    // {
-    //     std::cout << "AABB_MIN = " << obj._aabb._min[i] << std::endl;
-    // }
-    // for (int i = 0; i < 3; i++)
-    // {
-    //     std::cout << "AABB_MAX = " << obj._aabb._max[i] << std::endl;
-    // }
-
     obj.computeAABB();
-
-    // Check AABB
-    // for (int i = 0; i < 3; i++)
-    // {
-    //     std::cout << "AABB_MIN = " << obj._aabb._min[i] << std::endl;
-    // }
-    // for (int i = 0; i < 3; i++)
-    // {
-    //     std::cout << "AABB_MAX = " << obj._aabb._max[i] << std::endl;
-    // }
     
     //----------------------------------------------------------------------------
     // Generate octree
@@ -82,13 +56,13 @@ int main(int argc, char **argv)
         std::cout << "\n-------------------------------< generating Octree >-------------------------------\n" << std::endl;
         start = std::chrono::system_clock::now();
         OCT::Octree octree(obj, true);
-        octree._octree_builder.MIN_DEPTH_FILL_RATIO = 1.2f; // 
-        octree._octree_builder.MAX_DEPTH = 11; //
+        octree._octree_builder.MIN_DEPTH_FILL_RATIO = 1.5f; // 
+        octree._octree_builder.MAX_DEPTH = 10; //
         octree._octree_builder.BUILD_defaultRoutine(); // build 
         timer = std::chrono::system_clock::now();
         elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(timer-start).count();
         std::cout << "    building time          = " + toStr(elapsed, 3) + "ms " << std::endl;
-    //     octree.printStatistics();
+        // octree.printStatistics();
         std::cout << "\n-------------------------------<  finished Octree  >-------------------------------" << std::endl;
     }
 

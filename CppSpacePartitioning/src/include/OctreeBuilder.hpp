@@ -1,14 +1,10 @@
 #ifndef __OCTREEBUILDER_HPP__
 #define __OCTREEBUILDER_HPP__
 
-// #include "Octree.hpp"
-// #include "OctreeNode.hpp"
-#include <iostream>
+// #include <iostream>
 #include <chrono>
-#include <string>
-#include <algorithm>    // std::find
-#include <iterator>     // std::distance
-#include <bitset>
+#include <algorithm>
+#include <iterator>
 #include "AABB.hpp"
 #include "Vec3.hpp"
 #include "OBJ_Face.hpp"
@@ -22,46 +18,31 @@ namespace OCT
 
     class OctreeBuilder {
 
-    //  public static float OCTANT_POS[][] =
-    //  {
-    //    //i&4, i&2, i&1
-    //    { 0, 0, 0 },    // [0] - 000
-    //    { 0, 0, 1 },    // [1] - 001
-    //    { 0, 1, 0 },    // [2] - 010
-    //    { 0, 1, 1 },    // [3] - 011
-    //    
-    //    { 1, 0, 0 },    // [4] - 100
-    //    { 1, 0, 1 },    // [5] - 101
-    //    { 1, 1, 0 },    // [6] - 110
-    //    { 1, 1, 1 },    // [7] - 111
-    //  };
-
     private:
+
+        static std::string toStr(double a, int prec)
+        {
+        std::ostringstream text;
+        text.precision(prec);
+        text << std::fixed << a;
+        return text.str();
+        }
 
     public:
 
-        // most important value, small values makes deep trees, especially for big scenes!!
         Octree* _oct;
         Math::Vec3 vector3;
-        float MIN_DEPTH_FILL_RATIO = 1.2f;
-        int MAX_DEPTH = 11;
+        float MIN_DEPTH_FILL_RATIO = 1.5f; // most important value, small values makes deep trees, especially for big scenes
+        int MAX_DEPTH = 10;
 
         OctreeBuilder() {};
 
         OctreeBuilder(Octree* oct) : _oct(oct) {};
 
-        static std::string toStr(double a, int prec);
-
         void BUILD_defaultRoutine();
 
-        //////////////////////////////////////////////////////////////////////////////
-        // BUILD OCTREE
-        //////////////////////////////////////////////////////////////////////////////
-
-        // save in smallest nodes, that fully contains the triangle
         bool storeAtFirstFit(OctreeNode* ot, int idx);
         
-        // make sure all triangles are in leaves
         void pushToLeaves(OctreeNode* ot);
         
         void storeInLeaves(OctreeNode* ot, int idx);

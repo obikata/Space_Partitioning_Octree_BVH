@@ -1,9 +1,6 @@
 #ifndef __AABB_HPP__
 #define __AABB_HPP__
 
-// #include <cstddef>
-// #include <iostream>
-// #include <limits>
 #include "Vec3.hpp"
 
 namespace Math
@@ -110,13 +107,19 @@ namespace Math
             return vector3.sub_new(_max, _min);
         }
 
-        float* getHalfSize()
-        {
-            // return vector3.scale_new(getSize(), 0.5f);
-            float* dst = new float[3];
-            vector3.scale_ref(getSize(), 0.5f, dst);
-            return dst;
-        }
+        // float* getHalfSize()
+        // {
+        //     float* dst = new float[3];
+        //     vector3.scale_ref(getSize(), 0.5f, dst);
+        //     return dst;
+        // }
+
+        // float* getCenter()
+        // {
+        //     float* dst = new float[3];
+        //     vector3.scale_ref(vector3.add_new(_max, _min), 0.5f, dst);
+        //     return dst;
+        // }
 
         void getHalfSizeRef(float* dst)
         {
@@ -125,12 +128,9 @@ namespace Math
             dst[2] = (_max[2] - _min[2]) * 0.5f;
         }
 
-        float* getCenter()
+        void getCenterRef(float* dst)
         {
-            // return vector3.scale_new(vector3.add_new(_max, _min), 0.5f);
-            float* dst = new float[3];
             vector3.scale_ref(vector3.add_new(_max, _min), 0.5f, dst);
-            return dst;
         }
 
         float** getCorners()
