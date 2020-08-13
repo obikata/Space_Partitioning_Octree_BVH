@@ -169,6 +169,7 @@ namespace OCT
         }
     }
 
+    // push items down to deeper nodes for better performance
     void OctreeBuilder::optimizeSpaceCost(OctreeNode* ot)
     {
 
@@ -223,15 +224,17 @@ namespace OCT
         //         delete_all_childs = false; 
         //     }
         // }
-        if (ot->childs.size() == 0)
-        {
-            delete_all_childs = false; // Already clean
-        }
+
+        // if (ot->childs.size() == 0)
+        // {
+        //     delete_all_childs = false; // Already clean
+        // }
         
         if( delete_all_childs )
         {
             // ot->childs = null;
-            ot->childs.empty();
+            ot->childs.clear();
+            ot->childs.shrink_to_fit();
             return ot->isEmpty();
         }
         else
