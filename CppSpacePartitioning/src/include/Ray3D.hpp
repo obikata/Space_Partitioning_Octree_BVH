@@ -9,9 +9,9 @@ namespace Math
     class Ray3D 
     {
     public:
-        float* o;
-        float* d;
-        float* d_rec;
+        float* _o;
+        float* _d;
+        float* _d_rec;
 
         Ray3D(float* o, float* d)
         {
@@ -25,44 +25,44 @@ namespace Math
             setDirection(d);
         }
         
-        Ray3D() {}
+        // Ray3D() {}
         
         Ray3D* copy()
         {
-        return new Ray3D(Math::Vec3::copy_new(o), Math::Vec3::copy_new(d));
+        return new Ray3D(Math::Vec3::copy_new(_o), Math::Vec3::copy_new(_d));
         }
 
         void normalize()
         {
-            Math::Vec3::normalize_ref_slf(d);
-            setDirection(d);
+            Math::Vec3::normalize_ref_slf(_d);
+            setDirection(_d);
         }
         
         float* getPoint(float t)
         {
-            return Math::Vec3::add_new(o, Math::Vec3::scale_new(d, t) );
+            return Math::Vec3::add_new(_o, Math::Vec3::scale_new(_d, t) );
         }
         
         void getPoint_ref(float t, float* dst)
         {
-            Math::Vec3::add_ref(o, Math::Vec3::scale_new(d, t), dst);
+            Math::Vec3::add_ref(_o, Math::Vec3::scale_new(_d, t), dst);
         }
         
         void setEndpoint(float* endpoint)
         {
-            d = Math::Vec3::sub_new(endpoint, o);
-            d_rec = new float[3]{1.0f/d[0], 1.0f/d[1], 1.0f/d[2]};
+            _d = Math::Vec3::sub_new(endpoint, _o);
+            float* d_rec = Math::Vec3::set_new(1.0f/_d[0], 1.0f/_d[1], 1.0f/_d[2]);
         }
     
         void setStartpoint(float* startpoint)
         {
-            o = startpoint;
+            _o = startpoint;
         }
 
         void setDirection(float* direction)
         {
-            this->d = direction;
-            this->d_rec = new float[3]{1.0f/d[0], 1.0f/d[1], 1.0f/d[2]};
+            _d = direction;
+            _d_rec = Math::Vec3::set_new(1.0f/_d[0], 1.0f/_d[1], 1.0f/_d[2]);
         }
     };
 }

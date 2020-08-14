@@ -10,28 +10,36 @@
 namespace Math
 {
     class Vec3
-    {        
+    {
+                
     public:
+
         static float* init(float v)
         {
-            static float dst[3] {v,v,v};
+            float* dst = new float[3];
+            dst[0] = v;
+            dst[1] = v;
+            dst[2] = v;
             return dst;
         }
 
         static float* nullvector()
         {
-            static float dst[3] {0.0f, 0.0f, 0.0f};
+            float* dst = new float[3];
+            dst[0] = 0.0f;
+            dst[1] = 0.0f;
+            dst[2] = 0.0f;
             return dst;
         }
 
        static void nullvector_slf(float* dst)
         {
-            dst[0] = 0;
-            dst[1] = 0;
-            dst[2] = 0;
+            dst[0] = 0.0f;
+            dst[1] = 0.0f;
+            dst[2] = 0.0f;
         }
 
-        static void set_Ref(float x, float y, float z, float* dst)
+        static void set_ref(float x, float y, float z, float* dst)
         {
             dst[0] = x;
             dst[1] = y;
@@ -40,7 +48,10 @@ namespace Math
 
         static float* set_new(float x, float y, float z)
         {
-            static float dst[3] {x, y, z};
+            float* dst = new float[3];
+            dst[0] = x;
+            dst[1] = y;
+            dst[2] = z;
             return dst;
         }
 
@@ -53,30 +64,28 @@ namespace Math
 
         static float* copy_new(float* a)
         {
-            float* dst;
-            dst = new float[3] {a[0], a[1], a[2]};
+            float* dst = new float[3];
+            dst[0] = a[0];
+            dst[1] = a[1];
+            dst[2] = a[2];
             return dst;
         }
 
         static float* min_new(float* a, float* b)
         {
-            static float dst[3]
-            {
-                (float)std::min(a[0], b[0]),
-                (float)std::min(a[1], b[1]),
-                (float)std::min(a[2], b[2]),
-            };
+            float* dst = new float[3];
+            dst[0] = std::min(a[0], b[0]);
+            dst[1] = std::min(a[1], b[1]);
+            dst[2] = std::min(a[2], b[2]);
             return dst;
         }
 
         static float* max_new(float* a, float* b)
         {
-            static float dst[3]
-            {
-                (float)std::max(a[0], b[0]),
-                (float)std::max(a[1], b[1]),
-                (float)std::max(a[2], b[2]),
-            };
+            float* dst = new float[3];
+            dst[0] = std::max(a[0], b[0]);
+            dst[1] = std::max(a[1], b[1]);
+            dst[2] = std::max(a[2], b[2]);
             return dst;
         }
 
@@ -115,33 +124,48 @@ namespace Math
 
         static void add_ref_slf(float* a, float* dst)
         {
-            dst[0] += a[0];  dst[1] += a[1];   dst[2] += a[2];
+            dst[0] += a[0];
+            dst[1] += a[1];
+            dst[2] += a[2];
         }
 
         static void add_ref(float* a, float* b, float* dst) 
         {
-            dst[0] = a[0]+b[0];  dst[1] = a[1]+b[1];   dst[2] = a[2]+b[2];
+            dst[0] = a[0]+b[0];
+            dst[1] = a[1]+b[1];
+            dst[2] = a[2]+b[2];
         }
 
         static float* add_new(float* a, float* b)
         {
-            static float dst[3] {(a[0]+b[0]),  (a[1]+b[1]),   (a[2]+b[2])};
+            float* dst = new float[3];
+            dst[0] = a[0]+b[0];
+            dst[1] = a[1]+b[1];
+            dst[2] = a[2]+b[2];
             return dst;
         }
 
         static void sub_ref_slf(float* a, float* dst)
         {
 
-            dst[0] -= a[0];  dst[1] -= a[1];   dst[2] -= a[2];
+            dst[0] -= a[0];
+            dst[1] -= a[1];
+            dst[2] -= a[2];
         }
 
         static void sub_ref(float* a, float* b, float* dst)
         {
-            dst[0] = a[0]-b[0];   dst[1] = a[1]-b[1];  dst[2] = a[2]-b[2];
+            dst[0] = a[0]-b[0];
+            dst[1] = a[1]-b[1];
+            dst[2] = a[2]-b[2];
         }
+
         static float* sub_new(float* a, float* b)
         {
-            static float dst[3] {(a[0]-b[0]),  (a[1]-b[1]),  (a[2]-b[2])};
+            float* dst = new float[3];
+            dst[0] = a[0] - b[0];
+            dst[1] = a[1] - b[1];
+            dst[2] = a[2] - b[2];
             return dst;
         }
 
@@ -154,7 +178,10 @@ namespace Math
 
         static float* line_midpoint_new(float* a, float* b)
         {
-            static float dst[3] {(a[0]+b[0])*0.5f, (a[1]+b[1])*0.5f, (a[2]+b[2])*0.5f};
+            float* dst = new float[3];
+            dst[0] = (a[0]+b[0])*0.5f;
+            dst[1] = (a[1]+b[1])*0.5f;
+            dst[2] = (a[2]+b[2])*0.5f;
             return dst;
         }
 
@@ -169,7 +196,10 @@ namespace Math
         static float* triangle_midpoint_new(float* a, float* b, float* c) 
         {
             float f = 1.0f/3.0f;
-            static float dst[3] {(a[0]+b[0]+c[0]) * f, (a[1]+b[1]+c[1]) * f, (a[2]+b[2]+c[2]) * f};
+            float* dst = new float[3];
+            dst[0] = (a[0]+b[0]+c[0]) * f;
+            dst[1] = (a[1]+b[1]+c[1]) * f;
+            dst[2] = (a[2]+b[2]+c[2]) * f;
             return dst;
         }
 
@@ -182,13 +212,15 @@ namespace Math
 
         static float* sum_new(float* a, float* b, float* c)
         {
-            static float dst[3] {a[0]+b[0]+c[0],  a[1]+b[1]+c[1], a[2]+b[2]+c[2]};
+            float* dst = new float[3];
+            dst[0] = a[0]+b[0]+c[0];
+            dst[1] = a[1]+b[1]+c[1];
+            dst[2] = a[2]+b[2]+c[2];
             return  dst;
         }
 
-        static void sumlist_ref(float** arr, float* dst)
+        static void sumlist_ref(float** arr, float* dst, int len)
         {
-            int len = sizeof(arr) / sizeof(arr[0]);
             for(int i = 0; i < len; i++)
             {
                 dst[0] += arr[i][0];
@@ -197,11 +229,9 @@ namespace Math
             }
         }
 
-        static float* sumlist_new(float** arr)
+        static float* sumlist_new(float** arr, int len)
         {
-            // static float dst[3];
             float* dst = new float[3];
-            int len = sizeof(arr) / sizeof(arr[0]);
             for(int i = 0; i < len; i++)
             {
                 dst[0] += arr[i][0];
@@ -227,7 +257,10 @@ namespace Math
         
         static float* multiply_new(float* a, float* b)
         {
-            static float dst[3] {a[0]*b[0], a[1]*b[1], a[2]*b[2]};
+            float* dst = new float[3];
+            dst[0] = a[0]*b[0];
+            dst[1] = a[1]*b[1];
+            dst[2] = a[2]*b[2];
             return dst;
         }
 
@@ -247,21 +280,28 @@ namespace Math
 
         static float* negate_new(float* a)
         {
-            static float dst[3] {-a[0], -a[1], -a[2]};
+            float* dst = new float[3];
+            dst[0] = -a[0];
+            dst[1] = -a[1];
+            dst[2] = -a[2];
             return dst;
         }
   
         static float* abs_new(float* a)
         {
-            static float dst[3] {std::abs(a[0]), std::abs(a[1]), std::abs(a[2]) };
+            float* dst = new float[3];
+            dst[0] = std::abs(a[0]);
+            dst[1] = std::abs(a[1]);
+            dst[2] = std::abs(a[2]);
             return dst;
         }
+
         static void abs_ref(float* a, float* dst)
         {
             dst[0] = std::abs(a[0]);
             dst[1] = std::abs(a[1]);
             dst[2] = std::abs(a[2]);
-        }  
+        }
         
         static void abs_ref_slf(float* a)
         {
@@ -306,13 +346,19 @@ namespace Math
 
         static float* scale_new(float* a, float val) 
         {
-            static float dst[3] {a[0]*val, a[1]*val, a[2]*val};
+            float* dst = new float[3];
+            dst[0] = a[0]*val;
+            dst[1] = a[1]*val;
+            dst[2] = a[2]*val;
             return dst;
         }
             
         static float* reciprocal_new(float* a)
         {
-            static float dst[3] {1.0f/a[0], 1.0f/a[1], 1.0f/a[2]};
+            float* dst = new float[3];
+            dst[0] = 1.0f/a[0];
+            dst[1] = 1.0f/a[1];
+            dst[2] = 1.0f/a[2];
             return dst;
         }
 
@@ -333,7 +379,7 @@ namespace Math
         static void normalize_ref_slf  (float* a)
         {
             float x = a[0], y = a[1], z = a[2];
-            float len = (float) std::sqrt(x*x + y*y + z*z);
+            float len = std::sqrt(x*x + y*y + z*z);
             if (len != 1.0f)
             {
                 a[0] /= len;
@@ -367,19 +413,24 @@ namespace Math
 
         static float* normalize_new(float* a) 
         {
+
+            float* dst = new float[3];
             float x = a[0], y = a[1], z = a[2];
-            float len = (float) std::sqrt(x * x + y * y + z * z);
+            float len = std::sqrt(x * x + y * y + z * z);
             if (len == 0.0f)
             {
-                return set_new(0.0f, 0.0f, 0.0f);
+                set_ref(0.0f, 0.0f, 0.0f, dst);
+                return dst;
             }
             else if (len == 1.0f)
             {
-                return set_new(x, y, z);
+                set_ref(x, y, z, dst);
+                return dst;
             }
             else 
             {
-                return set_new(x/len, y/len, z/len);
+                set_ref(x/len, y/len, z/len, dst);
+                return dst;
             }
         }
                 
@@ -395,34 +446,35 @@ namespace Math
 
         static float* cross_new(float* a, float* b)
         {
+            float* dst = new float[3];
             float ax = a[0], ay = a[1], az = a[2];
             float bx = b[0], by = b[1], bz = b[2];
-
-            return set_new(ay*bz - az*by, az*bx - ax*bz, ax*by - ay*bx);
+            set_ref(ay*bz - az*by, az*bx - ax*bz, ax*by - ay*bx, dst);
+            return dst;
         }
 
-        static float dot(float* a, float* b) 
+        static float dot(float* a, float* b)
         {
             return a[0]*b[0] + a[1]*b[1] + a[2]*b[2];
         }
 
         static float angleBetween(float* a, float* b)
         {
-            return (float) std::acos( dot(a,b)/(mag(a)*mag(b)) );
+            return std::acos( dot(a,b)/(mag(a)*mag(b)) );
         }
 
         static float angleBetween_unit(float* a, float* b)
         {
-            return (float) std::acos( dot(a,b) );
+            return std::acos( dot(a,b) );
         }
 
         static float mag(float* a) 
         {
             float x = a[0], y = a[1], z = a[2];
-            return (float) std::sqrt(x*x + y*y + z*z);
+            return std::sqrt(x*x + y*y + z*z);
         }
 
-        static float mag_sq (float* a)
+        static float mag_sq(float* a)
         {
             float x = a[0], y = a[1], z = a[2];
             return x*x + y*y + z*z;
@@ -436,11 +488,10 @@ namespace Math
 
         static float* dir_unit_new(float* a, float* b)
         {
-            // static float* dst;
-            // dst = sub_new(a, b);
-            // normalize_ref_slf(dst);
-            // return dst;
-            return normalize_new( sub_new(a, b) );
+            float* dst = new float[3];
+            sub_ref(a, b, dst);
+            normalize_ref_slf(dst);
+            return dst;
         }
 
         static void lerp_ref(float* a, float* b, float val, float* dst) 
@@ -452,7 +503,10 @@ namespace Math
 
         static float* lerp_new(float* a, float* b, float val) 
         {
-            static float dst[3] {a[0]+val*(b[0]-a[0]), a[1]+val*(b[1]-a[1]), a[2]+val*(b[2]-a[2])};
+            float* dst = new float[3];
+            dst[0] = a[0] + val * (b[0] - a[0]);
+            dst[1] = a[1] + val * (b[1] - a[1]);
+            dst[2] = a[2] + val * (b[2] - a[2]);
             return dst;
         }
 
@@ -463,27 +517,26 @@ namespace Math
 
         static float* randF3_new(float size)
         {
-            static float dst[3]
-            {
-                (float) (get_random()-0.5f) * 2.0f * size,
-                (float) (get_random()-0.5f) * 2.0f * size,
-                (float) (get_random()-0.5f) * 2.0f * size
-            };
-
+            float* dst = new float[3];
+            dst[0] = (get_random()-0.5f) * 2.0f * size;
+            dst[1] = (get_random()-0.5f) * 2.0f * size;
+            dst[2] = (get_random()-0.5f) * 2.0f * size;
             return dst;
         }
 
         static void randF3_ref(float* dst, float size)
         {
-            dst[0] = (float) (get_random()-0.5f) * 2.0f * size;
-            dst[1] = (float) (get_random()-0.5f) * 2.0f * size;
-            dst[2] = (float) (get_random()-0.5f) * 2.0f * size;
-        }
-
+            dst[0] = (get_random()-0.5f) * 2.0f * size;
+            dst[1] = (get_random()-0.5f) * 2.0f * size;
+            dst[2] = (get_random()-0.5f) * 2.0f * size;
+        }  
+        
         static float* reflect_new(float* V, float* N)
         {
+            float* dst = new float[3];
             float c = 2.0f * dot(V, N);
-            return set_new(V[0]-c*N[0], V[1]-c*N[1], V[2]-c*N[2]);
+            set_ref(V[0]-c*N[0], V[1]-c*N[1], V[2]-c*N[2], dst);
+            return dst;
         }
 
         static void reflect_ref(float* V, float* N, float* dst)
@@ -508,9 +561,9 @@ namespace Math
             float k = 1.0f - eta*eta*(1.0f - cosNI*cosNI);
             if( k > 0.0 )
             {
-                R[0] = (eta*I[0]) - (eta*cosNI + (float)std::sqrt(k)) * N[0]; 
-                R[1] = (eta*I[1]) - (eta*cosNI + (float)std::sqrt(k)) * N[1]; 
-                R[2] = (eta*I[2]) - (eta*cosNI + (float)std::sqrt(k)) * N[2]; 
+                R[0] = (eta*I[0]) - (eta*cosNI + std::sqrt(k)) * N[0]; 
+                R[1] = (eta*I[1]) - (eta*cosNI + std::sqrt(k)) * N[1]; 
+                R[2] = (eta*I[2]) - (eta*cosNI + std::sqrt(k)) * N[2]; 
                 return true;
             }
             else
@@ -543,7 +596,7 @@ namespace Math
             //https://stackoverflow.com/questions/686353/random-float-number-generation
             static std::default_random_engine e;
             static std::uniform_real_distribution<> dis(0, 1); // rage 0 - 1
-            return dis(e);
+            return (float)dis(e);
         }
 
     };

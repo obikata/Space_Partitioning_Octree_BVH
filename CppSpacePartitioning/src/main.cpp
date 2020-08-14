@@ -17,6 +17,35 @@ static std::string toStr(double a, int prec)
     return text.str();
 }
 
+void* malloc2d(size_t size, int row, int col)
+{
+
+    // http://pukulab.blog.fc2.com/blog-entry-28.html
+    // https://qiita.com/tanabeman/items/bb39e9d1ddb67ddf4233
+
+    char **a, *b;
+    int  t = size * col;
+
+    // インデックスと要素を一気に確保
+    a = (char**)malloc((sizeof(*a) + t) * row);
+    
+    if (a) {
+        // [インデックス, インデックス, ..., 要素, 要素, 要素, ...]
+        // と整列させるため要素の開始位置をずらす
+        b = (char*)(a + row);
+
+        // 各行の先頭アドレスを与える
+        for (int i = 0; i < row; i++) {
+            a[i] = b;
+            b += t; // 要素のサイズ×列の長さの分だけずらす
+        }
+
+        return a;
+    }
+    
+    return nullptr;
+}
+
 int main(int argc, char **argv)
 {
 
@@ -82,27 +111,26 @@ int main(int argc, char **argv)
         {
             int item = -1;
             float* corner = octree->_root->_aabb->getCorners()[i];
-            // for (int i =0; i < 8 ; i++)
-            // {
-            //     corner = octree->_root->_aabb->getCorners()[i];
-            //     std::cout << corner[0] << " " << corner[1] << " " << corner[2] << std::endl;
-            // }
             float* center = octree->_root->_aabb->getCenter();
-            float direction[3];
-            Math::Vec3::sub_ref(corner, center, direction);
-            Math::Vec3::normalize_ref_slf(direction);
-            std::cout << "RAY DIRECTION: " << direction[0] << " " << direction[1] << " " << direction[2] << std::endl;
-            float origin[3];
-            Math::Vec3::add_ref(center,Math::Vec3::scale_new(Math::Vec3::negate_new(direction), 10.0f), origin);
-            std::cout << "RAY ORIGIN: " << origin[0]-center[0] << " " << origin[1]-center[1] << " " << origin[2]-center[2] << std::endl;
+            float* direction(Math::Vec3::normalize_new(Math::Vec3::sub_new(corner, center)));
+            float* origin = Math::Vec3::add_new(center, Math::Vec3::scale_new(Math::Vec3::negate_new(direction), 1000.0f));
+            std::cout << "RAY DIRECTION VECTOR: " << direction[0] << " " << direction[1] << " " << direction[2] << std::endl;
+            std::cout << "RAY ORIGIN VECTOR from ROOT CENTER: " << origin[0]-center[0] << " " << origin[1]-center[1] << " " << origin[2]-center[2] << std::endl;
+
             Math::Ray3D* ray = new Math::Ray3D(origin, direction);
-            // std::cout << "RAY_DIR = " << ray->d[0] << " " << ray->d[1] << " " << ray->d[2] << std::endl;
-            // std::cout << "RAY_ORIGIN = " << ray->o[0] << " " << ray->o[1] << " " << ray->o[2] << std::endl;
-            // std::cout << "OCT_ROOT_CENTER = " << center[0] << " " << center[1] << " " << center[2] << std::endl;
+            
             OCT::OctreeHitResult* hit_result = new OCT::OctreeHitResult(ray, 0.0f, 1.0f);
             octree->_octree_traversal->traverseRayTopDown(hit_result);
             item = hit_result->_item_idx;
-            std::cout << item << std::endl;
+            if (item == -1)
+            {
+                std::cout << "NO HIT" << std::endl;
+            }
+            else
+            {
+                std::cout << "HIT!" << std::endl;
+            }
+
         }
     }
 

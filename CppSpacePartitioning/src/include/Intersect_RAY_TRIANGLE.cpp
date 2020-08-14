@@ -22,7 +22,7 @@ bool Intersect_RAY_TRIANGLE::intersect2(Math::Ray3D* ray, float* A, float* B, fl
     Math::Vec3::sub_ref(B, A, E1); // edge1: v0 -> v1
     Math::Vec3::sub_ref(C, A, E2); // edge2: v0 -> v2
     Math::Vec3::cross_ref(E1, E2, n);     // normal
-    if( Math::Vec3::dot(n, ray->d) > 0.0f)
+    if( Math::Vec3::dot(n, ray->_d) > 0.0f)
     { // angle > 0.0
         ptr_hit_backface[0] = -1.0f;   // if there is any intersection it would be with a backface
         if( two_sided )
@@ -39,17 +39,17 @@ bool Intersect_RAY_TRIANGLE::intersect2(Math::Ray3D* ray, float* A, float* B, fl
         ptr_hit_backface[0]= +1.0f;    // no backface, so normal direction stays the same
     }
 
-    Math::Vec3::cross_ref(ray->d, E2, P); // cross of ray-direction and edge2
+    Math::Vec3::cross_ref(ray->_d, E2, P); // cross of ray-direction and edge2
     det = Math::Vec3::dot(E1, P);        // determinant
     if( std::abs(det) < epsilon ) return false;
     // if( det < epsilon ) return false;
 
-    Math::Vec3::sub_ref(ray->o, A, T);   // vector: v0 -> ray-origin
+    Math::Vec3::sub_ref(ray->_o, A, T);   // vector: v0 -> ray-origin
     u = Math::Vec3::dot(T, P);        // param u, + testing bounds
     if( u < 0.0f || u > det) return false;
 
     Math::Vec3::cross_ref(T, E1, Q); // cross of T and edge2
-    v = Math::Vec3::dot(Q, ray->d);        // param v, + testing bounds
+    v = Math::Vec3::dot(Q, ray->_d);        // param v, + testing bounds
     if( v < 0.0f || (u+v) > det) return false;
 
     det = 1.0f/det;
@@ -69,7 +69,7 @@ bool Intersect_RAY_TRIANGLE::intersect(Math::Ray3D* ray, OBJ_Loader::OBJ_Face& f
     Math::Vec3::sub_ref(C, A, E2); // edge2: v0 -> v2
     
     // Math::Vec3::cross_ref(E1, E2, n);     // normal
-    if( Math::Vec3::dot(n, ray->d) < 0.0f)
+    if( Math::Vec3::dot(n, ray->_d) < 0.0f)
     { // angle > 0.0
         ptr_hit_backface[0] = -1.0f;   // if there is any intersection it would be with a backface
         if( two_sided )
@@ -86,17 +86,17 @@ bool Intersect_RAY_TRIANGLE::intersect(Math::Ray3D* ray, OBJ_Loader::OBJ_Face& f
         ptr_hit_backface[0]= +1.0f;    // no backface, so normal direction stays the same
     }
 
-    Math::Vec3::cross_ref(ray->d, E2, P); // cross of ray-direction and edge2
+    Math::Vec3::cross_ref(ray->_d, E2, P); // cross of ray-direction and edge2
     det = Math::Vec3::dot(E1, P);        // determinant
     if( std::abs(det) < epsilon ) return false;
     // if( det < epsilon ) return false;
 
-    Math::Vec3::sub_ref(ray->o, A, T);   // vector: v0 -> ray-origin
+    Math::Vec3::sub_ref(ray->_o, A, T);   // vector: v0 -> ray-origin
     u = Math::Vec3::dot(T, P);        // param u, + testing bounds
     if( u < 0.0f || u > det) return false;
 
     Math::Vec3::cross_ref(T, E1, Q); // cross of T and edge2
-    v = Math::Vec3::dot(Q, ray->d);        // param v, + testing bounds
+    v = Math::Vec3::dot(Q, ray->_d);        // param v, + testing bounds
     if( v < 0.0f || (u+v) > det) return false;
 
     det = 1.0f/det;
@@ -109,9 +109,9 @@ bool Intersect_RAY_TRIANGLE::intersect(Math::Ray3D* ray, OBJ_Loader::OBJ_Face& f
 bool Intersect_RAY_TRIANGLE::intersect3(Math::Ray3D* ray, float* A, float* B, float* C, bool two_sided, float* ptr_hit_backface, float* tuv)
 {
 
-    float rdx = ray->d[0];
-    float rdy = ray->d[1];
-    float rdz = ray->d[2];
+    float rdx = ray->_d[0];
+    float rdy = ray->_d[1];
+    float rdz = ray->_d[2];
 
     // edge1: v0 -> v1     // edge2: v0 -> v2
     E1x = B[0]-A[0];  E2x = C[0]-A[0];
@@ -150,9 +150,9 @@ bool Intersect_RAY_TRIANGLE::intersect3(Math::Ray3D* ray, float* A, float* B, fl
     // if( det < epsilon ) return std::numeric_limits<float>::max();
     
     // vector: v0 -> ray-origin
-    Tx = ray->o[0] - A[0];
-    Ty = ray->o[1] - A[1];
-    Tz = ray->o[2] - A[2];
+    Tx = ray->_o[0] - A[0];
+    Ty = ray->_o[1] - A[1];
+    Tz = ray->_o[2] - A[2];
     u = Tx*Px + Ty*Py + Tz*Pz; // param u, + testing bounds
     if( u < 0.0f || u > det) return false;
 
@@ -177,7 +177,7 @@ float Intersect_RAY_TRIANGLE::intersect(Math::Ray3D* ray, float* A, float* B, fl
     Math::Vec3::sub_ref(C, A, E2); // edge2: v0 -> v2
     
     Math::Vec3::cross_ref(E1, E2, n);     // normal
-    if( Math::Vec3::dot(n, ray->d) > 0.0f)
+    if( Math::Vec3::dot(n, ray->_d) > 0.0f)
     { // angle > 0.0
         ptr_hit_backface[0] = -1.0f;   // if there is any intersection it would be with a backface
         if( two_sided )
@@ -195,17 +195,17 @@ float Intersect_RAY_TRIANGLE::intersect(Math::Ray3D* ray, float* A, float* B, fl
     }
 
     
-    Math::Vec3::cross_ref(ray->d, E2, P); // cross of ray-direction and edge2
+    Math::Vec3::cross_ref(ray->_d, E2, P); // cross of ray-direction and edge2
     det = Math::Vec3::dot(E1, P);       // determinant
     if( std::abs(det) < epsilon ) return std::numeric_limits<float>::max();
     // if( det < epsilon ) return std::numeric_limits<float>::max();
     
-    Math::Vec3::sub_ref(ray->o, A, T);   // vector: v0 -> ray-origin
+    Math::Vec3::sub_ref(ray->_o, A, T);   // vector: v0 -> ray-origin
     u = Math::Vec3::dot(T, P);        // param u, + testing bounds
     if( u < 0.0f || u > det) return std::numeric_limits<float>::max();
 
     Math::Vec3::cross_ref(T, E1, Q); // cross of T and edge2
-    v = Math::Vec3::dot(Q, ray->d);        // param v, + testing bounds
+    v = Math::Vec3::dot(Q, ray->_d);        // param v, + testing bounds
     if( v < 0.0f || (u+v) > det) return std::numeric_limits<float>::max();
 
     u/=det;

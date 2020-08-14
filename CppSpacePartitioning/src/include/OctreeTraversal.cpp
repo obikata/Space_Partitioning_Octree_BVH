@@ -22,21 +22,16 @@ namespace OCT
         std::cout << IDX_SHFT << std::endl;
 
         // get intersection intervals
-        float* t0 = new float[3];
-        float* t1 = new float[3];
-        float* a0 = new float[3];
-        float* a1 = new float[3];
-        Math::Vec3::sub_ref(_oct->_root->_aabb->_min, ray_mod->o, a0);
-        Math::Vec3::sub_ref(_oct->_root->_aabb->_max, ray_mod->o, a1);
-        Math::Vec3::multiply_ref(a0, ray_mod->d_rec, t0);
-        Math::Vec3::multiply_ref(a1, ray_mod->d_rec, t1);
-
+        float* t0 = Math::Vec3::multiply_new(Math::Vec3::sub_new(_oct->_root->_aabb->_min, ray_mod->_o), ray_mod->_d_rec);
+        float* t1 = Math::Vec3::multiply_new(Math::Vec3::sub_new(_oct->_root->_aabb->_max, ray_mod->_o), ray_mod->_d_rec);
         OctreeTraversalData* otd = new OctreeTraversalData(_oct->_root, t0, t1);
 
         // if ray hits octree (root), traverse childs
-        if( otd->tNear() < otd->tFar() )
+        // if( otd->tNear() < otd->tFar() )
+        if( 1 )
         {
-            // traverseOctree(otd, hit_result);
+            std::cout << otd->tNear() << " " << otd->tFar() << std::endl;
+        
             traverseOctreeRecursive(otd, hit_result);
             for( OctreeTraversalData* td_checked : hit_result->_traversal_history)
             {

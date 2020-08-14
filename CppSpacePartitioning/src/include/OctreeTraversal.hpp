@@ -26,13 +26,13 @@ namespace OCT
 
         bool mirrorComponent(Math::AABB* aabb, Math::Ray3D* ray, int id)
         {
-            if(ray->d[id] > 0.0) //TODO: handle special case: (ray->d[x] == 0.0)
+            if(ray->_d[id] > 0.0) //TODO: handle special case: (ray->d[x] == 0.0)
             {
                 return false;
             }
-            ray->o[id]     = (aabb->_min[id] + aabb->_max[id]) - ray->o[id]; // mirror ray-origin at node-center
-            ray->d[id]     = -ray->d[id];                                // mirror ray-direction
-            ray->d_rec[id] = -ray->d_rec[id];                            // mirror ray-direction
+            ray->_o[id]     = (aabb->_min[id] + aabb->_max[id]) - ray->_o[id]; // mirror ray-origin at node-center
+            ray->_d[id]     = -ray->_d[id];                                // mirror ray-direction
+            ray->_d_rec[id] = -ray->_d_rec[id];                            // mirror ray-direction
             return true;                                           
         }
   
@@ -85,11 +85,12 @@ namespace OCT
             float* t0      = OTD->_t0;
             float* t1      = OTD->_t1;
             float* tm      = OTD->tm();
-            int curr_node   = first_node(t0, tm); 
+            int curr_node   = first_node(t0, tm);
             while(curr_node < 8 )
             { // 8=indication for ray-exit    
+                std::cout << curr_node << " " << IDX_SHFT << std::endl;
                 switch (curr_node)
-                {     
+                {
                     case 0:  OTD = new OctreeTraversalData(node->childs[0^IDX_SHFT], t0[0],t0[1],t0[2], tm[0],tm[1],tm[2]);  curr_node = next_node(OTD->_t1,4,2,1);  break;
                     case 1:  OTD = new OctreeTraversalData(node->childs[1^IDX_SHFT], t0[0],t0[1],tm[2], tm[0],tm[1],t1[2]);  curr_node = next_node(OTD->_t1,5,3,8);  break;
                     case 2:  OTD = new OctreeTraversalData(node->childs[2^IDX_SHFT], t0[0],tm[1],t0[2], tm[0],t1[1],tm[2]);  curr_node = next_node(OTD->_t1,6,8,3);  break;
