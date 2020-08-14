@@ -130,6 +130,7 @@ int main(int argc, char **argv)
             else
             {
                 std::cout << "HIT!" << std::endl;
+                hit_result->printCounters();
             }
             std::cout << std::endl;
 
