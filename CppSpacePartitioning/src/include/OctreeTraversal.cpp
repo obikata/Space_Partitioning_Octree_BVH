@@ -19,7 +19,6 @@ namespace OCT
         if(mirrorComponent(_oct->_root->_aabb, ray_mod, 0)) IDX_SHFT |= 4;
         if(mirrorComponent(_oct->_root->_aabb, ray_mod, 1)) IDX_SHFT |= 2;
         if(mirrorComponent(_oct->_root->_aabb, ray_mod, 2)) IDX_SHFT |= 1;
-        std::cout << IDX_SHFT << std::endl;
 
         // get intersection intervals
         float* t0 = Math::Vec3::multiply_new(Math::Vec3::sub_new(_oct->_root->_aabb->_min, ray_mod->_o), ray_mod->_d_rec);
@@ -27,8 +26,7 @@ namespace OCT
         OctreeTraversalData* otd = new OctreeTraversalData(_oct->_root, t0, t1);
 
         // if ray hits octree (root), traverse childs
-        // if( otd->tNear() < otd->tFar() )
-        if( 1 )
+        if( otd->tNear() < otd->tFar() )
         {
             std::cout << otd->tNear() << " " << otd->tFar() << std::endl;
         
@@ -50,6 +48,7 @@ namespace OCT
         hit_result->_traversal_history.push_back(OTD);
         hit_result->COUNT_node_intersection_tests++;
         
+        std::cout << "Number of IDX_triangles = " << OTD->_node->IDX_triangles.size() << std::endl;
         for(int id : OTD->_node->IDX_triangles)
         {
             OBJ_Loader::OBJ_Face f = _oct->_obj._f[id];
@@ -58,9 +57,12 @@ namespace OCT
                 continue;
             }
             f.FLAG_CHECKED = true;
+
+            std::cout << "IDX_triangle = " << id << std::endl;
             
             if(Intersect_RAY_TRIANGLE::intersect2(hit_result->_ray, f.A(), f.B(), f.C(), hit_result->_two_sided_check, ptr_hit_backface, tuv))
             {
+                std::cout << "Passed intersect2" << std::endl;
                 hit_result->checkIfCloser(tuv, id, OTD->_node, ptr_hit_backface[0]);
                 hit_result->COUNT_triangle_intersection_tests++;
             }

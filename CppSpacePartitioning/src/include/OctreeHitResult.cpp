@@ -21,6 +21,7 @@ namespace OCT
 
     bool OctreeHitResult::checkIfCloser(float* tuv, int item_idx, OctreeNode* node, float hit_backface)
     {
+        std::cout << "_t_min = " << _t_min << ", tuv[0] = " << tuv[0] << ", _t = " << _t << std::endl;
         if( _t_min < tuv[0] && tuv[0] < _t)
         {
             _t            = tuv[0];

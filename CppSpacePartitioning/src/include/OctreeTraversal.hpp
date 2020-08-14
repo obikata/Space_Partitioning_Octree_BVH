@@ -70,16 +70,18 @@ namespace OCT
             { 
         //      System.out.println("Ray origin inside AABB !"); 
                 std::cout << "Ray origin inside AABB !" << std::endl;
-                return false;   
+                return false;
             }
             hit_result->COUNT_node_traversal_steps++;
             
             // if current node is is a leaf, then check the childs for intersection, and return
             if( OTD->_node->isLeaf())
             { // this presumes, that items are only located in leafes!
+                std::cout << "isleaf" << std::endl;
                 // ALSO THE PLACE TO SUBDIVIDE THE OCTREE AT THE CURRENT NODE AND MOVE ON TRAVERSION
                 return intersectRayObjects(OTD, hit_result);
             }
+            std::cout << "is not leaf" << std::endl;
           
             OctreeNode* node = OTD->_node;
             float* t0      = OTD->_t0;
@@ -88,7 +90,6 @@ namespace OCT
             int curr_node   = first_node(t0, tm);
             while(curr_node < 8 )
             { // 8=indication for ray-exit    
-                std::cout << curr_node << " " << IDX_SHFT << std::endl;
                 switch (curr_node)
                 {
                     case 0:  OTD = new OctreeTraversalData(node->childs[0^IDX_SHFT], t0[0],t0[1],t0[2], tm[0],tm[1],tm[2]);  curr_node = next_node(OTD->_t1,4,2,1);  break;
@@ -98,7 +99,7 @@ namespace OCT
                     case 4:  OTD = new OctreeTraversalData(node->childs[4^IDX_SHFT], tm[0],t0[1],t0[2], t1[0],tm[1],tm[2]);  curr_node = next_node(OTD->_t1,8,6,5);  break;
                     case 5:  OTD = new OctreeTraversalData(node->childs[5^IDX_SHFT], tm[0],t0[1],tm[2], t1[0],tm[1],t1[2]);  curr_node = next_node(OTD->_t1,8,7,8);  break;
                     case 6:  OTD = new OctreeTraversalData(node->childs[6^IDX_SHFT], tm[0],tm[1],t0[2], t1[0],t1[1],tm[2]);  curr_node = next_node(OTD->_t1,8,8,7);  break;
-                    case 7:  OTD = new OctreeTraversalData(node->childs[7^IDX_SHFT], tm[0],tm[1],tm[2], t1[0],t1[1],t1[2]);  curr_node = 8;                        break;
+                    case 7:  OTD = new OctreeTraversalData(node->childs[7^IDX_SHFT], tm[0],tm[1],tm[2], t1[0],t1[1],t1[2]);  curr_node = 8;                          break;
                 }
                 if( OTD->_node != nullptr &&  traverseOctreeRecursive(OTD, hit_result))
                 {
