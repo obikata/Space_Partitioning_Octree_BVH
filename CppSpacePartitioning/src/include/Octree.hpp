@@ -24,7 +24,7 @@ namespace OCT
 
         Octree() {};
         
-        Octree(OBJ_Loader::OBJ_File& obj, bool cubic) : _obj(obj), _root(nullptr), _octree_builder(nullptr), _octree_traversal(nullptr)
+        Octree(OBJ_Loader::OBJ_File& obj, bool cubic) : _obj(obj), _octree_builder(nullptr), _octree_traversal(nullptr)
         {
 
             if(cubic)

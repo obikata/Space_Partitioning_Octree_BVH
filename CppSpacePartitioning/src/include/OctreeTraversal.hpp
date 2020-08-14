@@ -26,7 +26,6 @@ namespace OCT
 
         bool mirrorComponent(Math::AABB* aabb, Math::Ray3D* ray, int id)
         {
-            std::cout << aabb->_min[0] << std::endl;
             if(ray->d[id] > 0.0) //TODO: handle special case: (ray->d[x] == 0.0)
             {
                 return false;
@@ -70,12 +69,13 @@ namespace OCT
             if(OTD->_t1[0] < 0.0 || OTD->_t1[0] < 0.0 || OTD->_t1[0] < 0.0)
             { 
         //      System.out.println("Ray origin inside AABB !"); 
+                std::cout << "Ray origin inside AABB !" << std::endl;
                 return false;   
             }
             hit_result->COUNT_node_traversal_steps++;
             
             // if current node is is a leaf, then check the childs for intersection, and return
-            if( OTD->_node->isLeaf() )
+            if( OTD->_node->isLeaf())
             { // this presumes, that items are only located in leafes!
                 // ALSO THE PLACE TO SUBDIVIDE THE OCTREE AT THE CURRENT NODE AND MOVE ON TRAVERSION
                 return intersectRayObjects(OTD, hit_result);
@@ -86,7 +86,6 @@ namespace OCT
             float* t1      = OTD->_t1;
             float* tm      = OTD->tm();
             int curr_node   = first_node(t0, tm); 
-            
             while(curr_node < 8 )
             { // 8=indication for ray-exit    
                 switch (curr_node)
