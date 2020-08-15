@@ -65,10 +65,12 @@ namespace OCT {
                         {
                             for (int i = 0; i < 8; i++)
                             {
-                                octants[counter].child_node_idx[i] = 0; //TODO
+                                if ( nodes[counter]->childs[i] != nullptr)
+                                {
+                                    octants[counter].child_node_idx[i] = nodes[counter]->childs[i]->_nodeIdx; //TODO
+                                }
                             }
-                        }
-                        
+                        }                        
                     }
                     else
                     { // Leaf
@@ -81,7 +83,6 @@ namespace OCT {
                             }
                         }
                     }
-
                 }
 
             }

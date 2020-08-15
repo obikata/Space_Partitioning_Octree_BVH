@@ -17,6 +17,7 @@ namespace OCT
     
     public:
         int _NUM_ITEMS = 0;
+        int _node_count = 0;
         OBJ_Loader::OBJ_File _obj;
         Math::Vec3 vector3;
         OctreeNode* _root;
@@ -35,7 +36,7 @@ namespace OCT
                 _obj._aabb.getCenterRef(center);
                 float hs[3];
                 _obj._aabb.getHalfSizeRef(hs);
-                int pl         = getSubdivisionPlane(_obj._aabb);
+                int pl = getSubdivisionPlane(_obj._aabb);
                 float hspl_min[3] {-hs[pl], -hs[pl], -hs[pl]};
                 float hspl_max[3] {hs[pl], hs[pl], hs[pl]};
                 vector3.add_ref(center, hspl_min, _obj._aabb._min);
@@ -45,7 +46,7 @@ namespace OCT
             float min[3] {_obj._aabb._min[0], _obj._aabb._min[1], _obj._aabb._min[2]};
             float max[3] {_obj._aabb._max[0], _obj._aabb._max[1], _obj._aabb._max[2]};
             Math::AABB* aabb = new Math::AABB(min, max);
-            _root = new OctreeNode(0, aabb);
+            _root = new OctreeNode(_node_count, 0, aabb);
             _octree_builder = new OctreeBuilder(this);
             _octree_traversal = new OctreeTraversal(this);
             _octree_data_structure = new OctreeDataStructure(this);

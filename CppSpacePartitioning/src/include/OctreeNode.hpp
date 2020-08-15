@@ -19,10 +19,11 @@ namespace OCT
         Math::AABB* _aabb;
         std::vector<int> IDX_triangles;
         std::vector<OctreeNode*> childs;
+        int _nodeIdx = 0;
 
         OctreeNode() {};
 
-        OctreeNode(int depth, Math::AABB* aabb) : _depth(depth), _aabb(aabb) {};
+        OctreeNode(int nodeIdx, int depth, Math::AABB* aabb) :  _nodeIdx(nodeIdx), _depth(depth), _aabb(aabb) {};
         
         bool isLeaf();
         
