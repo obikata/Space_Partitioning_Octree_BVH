@@ -7,6 +7,7 @@
 #include "OctreeNode.hpp"
 #include "OctreeBuilder.hpp"
 #include "OctreeTraversal.hpp"
+#include "OctreeDataStructure.hpp"
 
 namespace OCT
 {
@@ -21,6 +22,7 @@ namespace OCT
         OctreeNode* _root;
         OctreeBuilder* _octree_builder;
         OctreeTraversal* _octree_traversal;
+        OctreeDataStructure* _octree_data_structure;
 
         Octree() {};
         
@@ -46,6 +48,7 @@ namespace OCT
             _root = new OctreeNode(0, aabb);
             _octree_builder = new OctreeBuilder(this);
             _octree_traversal = new OctreeTraversal(this);
+            _octree_data_structure = new OctreeDataStructure(this);
 
         };
 

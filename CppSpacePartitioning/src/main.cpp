@@ -3,6 +3,7 @@
 #include "include/Octree.hpp"
 #include "include/OctreeBuilder.hpp"
 #include "include/OctreeHitResult.hpp"
+#include "include/OctreeDataStructure.hpp"
 #include "include/Ray3D.hpp"
 #include "include/AABB.hpp"
 #include <iostream>
@@ -101,7 +102,7 @@ int main(int argc, char **argv)
         //----------------------------------------------------------------------------
         // Save as static octree data structure
         //----------------------------------------------------------------------------
-        
+        octree->_octree_data_structure->Build();
 
         //----------------------------------------------------------------------------
         // Raycasting
