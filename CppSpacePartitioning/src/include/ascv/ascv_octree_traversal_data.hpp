@@ -1,9 +1,9 @@
 #ifndef __ASCV_OCTREE_TRAVERSAL_DATA_HPP__
 #define __ASCV_OCTREE_TRAVERSAL_DATA_HPP__
 
-#include "Vec3.hpp"
+#include "../Vec3.hpp"
+#include "../Ray3D.hpp"
 #include "ascv_octant.hpp"
-#include "Ray3D.hpp"
 
 namespace ascv 
 {

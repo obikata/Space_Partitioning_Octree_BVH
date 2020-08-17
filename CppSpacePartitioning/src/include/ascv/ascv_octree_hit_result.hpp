@@ -2,9 +2,9 @@
 #define __ASCV_OCTREE_HIT_RESULT_DATA_HPP__
 
 
-#include "Vec3.hpp"
+#include "../Vec3.hpp"
+#include "../Ray3D.hpp"
 #include "ascv_octant.hpp"
-#include "Ray3D.hpp"
 
 namespace ascv
 {

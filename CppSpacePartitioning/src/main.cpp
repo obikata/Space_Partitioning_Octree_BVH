@@ -11,7 +11,7 @@
 #include "include/Ray3D.hpp"
 #include "include/AABB.hpp"
 
-#include "include/ascv_octree.hpp"
+#include "include/ascv/ascv_octree.hpp"
 
 static std::string toStr(double a, int prec) 
 {

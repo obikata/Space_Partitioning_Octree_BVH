@@ -7,7 +7,8 @@
 #include "OctreeNode.hpp"
 #include "OctreeBuilder.hpp"
 #include "OctreeTraversal.hpp"
-#include "ascv_octree.hpp"
+
+#include "ascv/ascv_octree.hpp"
 
 namespace oct
 {

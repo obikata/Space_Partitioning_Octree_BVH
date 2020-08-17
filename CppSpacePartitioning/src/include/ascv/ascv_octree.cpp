@@ -1,8 +1,8 @@
 #include <vector>
 
-#include "AABB.hpp"
-#include "Octree.hpp"
-#include "OctreeNode.hpp"
+#include "../AABB.hpp"
+#include "../Octree.hpp"
+#include "../OctreeNode.hpp"
 #include "ascv_octree.hpp"
 
 namespace ascv

@@ -1,7 +1,7 @@
 #ifndef __ASCV_OCTREE_HPP__
 #define __ASCV_OCTREE_HPP__
 
-#include "OctreeNode.hpp"
+#include "../OctreeNode.hpp"
 
 using namespace oct;
 class Octree;
@@ -69,7 +69,7 @@ namespace ascv
                         {
                             if ( nodes[counter]->childs[i] != nullptr)
                             {
-                                octants[counter].child_node_idx[i] = nodes[counter]->childs[i]->_nodeIdx; //TODO
+                                octants[counter].child_node_idx[i] = nodes[counter]->childs[i]->_nodeIdx;
                             }
                         }
                     }                        
