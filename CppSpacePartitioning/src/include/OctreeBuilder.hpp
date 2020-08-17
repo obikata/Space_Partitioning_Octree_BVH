@@ -10,7 +10,7 @@
 #include "OBJ_Face.hpp"
 #include "Intersect_AABB_TRIANGLE.hpp"
 
-namespace OCT
+namespace oct
 {
 
     class Octree;

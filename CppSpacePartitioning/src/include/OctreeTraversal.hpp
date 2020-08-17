@@ -10,7 +10,7 @@
 #include "OctreeHitResult.hpp"
 #include "OctreeTraversalData.hpp"
 
-namespace OCT
+namespace oct
 {
 
     class Octree;

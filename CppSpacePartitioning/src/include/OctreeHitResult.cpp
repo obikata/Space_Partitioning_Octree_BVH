@@ -1,6 +1,6 @@
 #include "OctreeHitResult.hpp"
 
-namespace OCT
+namespace oct
 {
     
     bool OctreeHitResult::checkIfCloser(float t_new, int item_idx, OctreeNode* node, float hit_backface, float u, float v)

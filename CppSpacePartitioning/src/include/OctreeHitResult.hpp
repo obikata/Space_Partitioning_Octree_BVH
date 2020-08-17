@@ -6,7 +6,7 @@
 #include "OctreeTraversalData.hpp"
 #include <string>
 
-namespace OCT
+namespace oct
 {
 
     class OctreeHitResult

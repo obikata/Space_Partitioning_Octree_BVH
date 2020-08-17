@@ -7,13 +7,12 @@
 #include "OctreeNode.hpp"
 #include "OctreeBuilder.hpp"
 #include "OctreeTraversal.hpp"
-#include "OctreeDataStructure.hpp"
+#include "ascv_octree.hpp"
 
-namespace OCT
+namespace oct
 {
 
-    class Octree
-    {
+    class Octree {
     
     public:
         int _NUM_ITEMS = 0;
@@ -22,8 +21,8 @@ namespace OCT
         OctreeNode* _root;
         OctreeBuilder* _octree_builder;
         OctreeTraversal* _octree_traversal;
-        OctreeDataStructure* _octree_data_structure;
-
+        ascv::ascv_octree* _ascv_octree;
+        
         Octree() {};
         
         Octree(OBJ_Loader::OBJ_File& obj, bool cubic) : _obj(obj), _octree_builder(nullptr), _octree_traversal(nullptr)
@@ -48,7 +47,7 @@ namespace OCT
             _root = new OctreeNode(_node_count, 0, aabb);
             _octree_builder = new OctreeBuilder(this);
             _octree_traversal = new OctreeTraversal(this);
-            _octree_data_structure = new OctreeDataStructure(this);
+            _ascv_octree = new ascv::ascv_octree(this);
 
         };
 

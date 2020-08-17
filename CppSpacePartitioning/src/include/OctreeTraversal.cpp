@@ -3,7 +3,7 @@
 #include "OctreeHitResult.hpp"
 #include "Octree.hpp"
 
-namespace OCT
+namespace oct
 {
 
     // traversing preparations

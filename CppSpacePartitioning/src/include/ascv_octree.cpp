@@ -1,14 +1,18 @@
-#include "OctreeDataStructure.hpp"
-#include "Octree.hpp"
+#include <vector>
 
-namespace OCT 
+#include "AABB.hpp"
+#include "Octree.hpp"
+#include "OctreeNode.hpp"
+#include "ascv_octree.hpp"
+
+namespace ascv
 {
 
-    void OctreeDataStructure::Build()
+    void ascv_octree::Build()
     {
 
         // Get nodes recursively to count the total number of nodes 
-        std::vector<OctreeNode*> nodes;
+        std::vector<oct::OctreeNode*> nodes;
         _oct->_root->getNodes_recursive(nodes);
         len_nodes = nodes.size();
 
@@ -19,7 +23,7 @@ namespace OCT
 
     }
 
-    bool OctreeDataStructure::isValid(Octant* octants)
+    bool ascv_octree::isValid(Octant* octants)
     {
         for (int i = 0; i<len_nodes; i++)
         {

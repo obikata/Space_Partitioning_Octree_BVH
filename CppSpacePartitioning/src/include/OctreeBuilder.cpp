@@ -1,7 +1,7 @@
 #include "OctreeBuilder.hpp"
 #include "Octree.hpp"
 
-namespace OCT
+namespace oct
 {
 
     //  public static float OCTANT_POS[][] =

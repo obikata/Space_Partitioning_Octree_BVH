@@ -36,7 +36,7 @@
 //
 */
 
-namespace OCT
+namespace oct
 {
 
     int Octree::getSubdivisionPlane(Math::AABB& aabb)
