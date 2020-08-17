@@ -34,7 +34,7 @@ namespace OCT {
             // float aabb_min[3] {std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), std::numeric_limits<float>::max()};
             // float aabb_max[3] {-std::numeric_limits<float>::max(), -std::numeric_limits<float>::max(), -std::numeric_limits<float>::max()};
 
-            Octant();
+            Octant() ;
     
     };
 
@@ -44,10 +44,10 @@ namespace OCT {
         private:
             Octree* _oct;
 
-            void storeNodeRecursively(std::vector<OctreeNode*>& nodes)
+            void storeNodes_recursive(std::vector<OctreeNode*>& nodes)
             {
 
-                for (int counter = 0; counter<nodes.size(); counter++)
+                for (int counter = 0; counter<len_nodes; counter++)
                 {
 
                     octants[counter].depth = nodes[counter]->_depth;
@@ -79,6 +79,7 @@ namespace OCT {
                             octants[counter].NUM_IDX_triangles = nodes[counter]->IDX_triangles.size();
                             for (int j = 0; j<octants[counter].NUM_IDX_triangles; j++)
                             {
+                                stored_items++;
                                 octants[counter].IDX_triangles[j] = nodes[counter]->IDX_triangles[j]; // Store triangles
                             }
                         }
@@ -90,13 +91,16 @@ namespace OCT {
         public:
 
             Octant* octants; // all octants
-            int no_leaf_count = 0;
+            int len_nodes = 0;
+            int stored_items = 0;
 
             OctreeDataStructure() {};
 
             OctreeDataStructure(Octree* oct) : _oct(oct) {};
 
             void Build();
+
+            bool isValid(Octant* octants);
 
     };
 

@@ -101,9 +101,15 @@ int main(int argc, char **argv)
         std::cout << "\n-------------------------------<  finished Octree  >-------------------------------" << std::endl;
 
         //----------------------------------------------------------------------------
-        // Save as static octree data structure
+        // Allocate memory for octree and store it as new data structure
         //----------------------------------------------------------------------------
+        std::cout << "\n-------------------------------< Allocating memory for octree >--------------------\n" << std::endl;
         octree->_octree_data_structure->Build();
+        bool octree_Data_structure_valid = octree->_octree_data_structure->isValid(octree->_octree_data_structure->octants);
+        std::cout << "    octree_data_structure_valid        = " << octree_Data_structure_valid         << std::endl;
+        std::cout << "    octree_data_structure_nodes        = " << octree->_octree_data_structure->len_nodes         << std::endl;
+        std::cout << "    octree_data_structure_stored_items        = " << octree->_octree_data_structure->stored_items         << std::endl;
+        std::cout << "\n-------------------------------<  finished storing octree data  >------------------" << std::endl;
 
         //----------------------------------------------------------------------------
         // Raycasting

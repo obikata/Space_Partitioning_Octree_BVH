@@ -10,14 +10,28 @@ namespace OCT
         // Get nodes recursively to count the total number of nodes 
         std::vector<OctreeNode*> nodes;
         _oct->_root->getNodes_recursive(nodes);
-        int len = nodes.size();
+        len_nodes = nodes.size();
 
-        octants = (Octant*)malloc(len * sizeof(Octant));
+        octants = (Octant*)malloc(len_nodes * sizeof(Octant));
 
-        int counter = 0;
+        // Store nodes
+        storeNodes_recursive(nodes);
 
-        storeNodeRecursively(nodes);
+    }
 
+    bool OctreeDataStructure::isValid(Octant* octants)
+    {
+        for (int i = 0; i<len_nodes; i++)
+        {
+            if (!octants[i].isLeaf)
+            { // non-leaf
+                if( octants[i].NUM_IDX_triangles != 0 )
+                {
+                    return false; // non-leaf contains zero triangle
+                }
+            }
+        }
+        return true;
     }
 
 }
