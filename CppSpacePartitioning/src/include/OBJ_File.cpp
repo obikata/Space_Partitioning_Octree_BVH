@@ -446,15 +446,15 @@ namespace OBJ_Loader
         
         float min[3]
         {
-            vector3.minComponent(A[0], B[0], C[0]),
-            vector3.minComponent(A[1], B[1], C[1]),
-            vector3.minComponent(A[2], B[2], C[2])
+            Math::Vec3::minComponent(A[0], B[0], C[0]),
+            Math::Vec3::minComponent(A[1], B[1], C[1]),
+            Math::Vec3::minComponent(A[2], B[2], C[2])
         };
         float max[3]
         {
-            vector3.maxComponent(A[0], B[0], C[0]),
-            vector3.maxComponent(A[1], B[1], C[1]),
-            vector3.maxComponent(A[2], B[2], C[2])
+            Math::Vec3::maxComponent(A[0], B[0], C[0]),
+            Math::Vec3::maxComponent(A[1], B[1], C[1]),
+            Math::Vec3::maxComponent(A[2], B[2], C[2])
         };
         _f[face_id]._aabb.init();
         _f[face_id]._aabb._min[0] = min[0];

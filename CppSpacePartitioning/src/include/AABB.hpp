@@ -14,8 +14,6 @@ namespace Math
         float* _min = new float[3];
         float* _max = new float[3];
 
-        Math::Vec3 vector3;
-
         // Default Constructor without arguments
         AABB() {};
 
@@ -47,12 +45,7 @@ namespace Math
 
         float* getSize();
 
-        // float* getHalfSize()
-        // {
-        //     float* dst = new float[3];
-        //     vector3.scale_ref(getSize(), 0.5f, dst);
-        //     return dst;
-        // }
+        float* getHalfSize();
 
         float* getCenter();
 

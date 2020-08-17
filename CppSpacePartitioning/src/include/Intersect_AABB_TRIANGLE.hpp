@@ -8,7 +8,6 @@ class Intersect_AABB_TRIANGLE
 {
   
   private:
-    static Math::Vec3 vector3;
     static bool AXISTEST(float rad, float p0, float p1){
       return (std::min(p0,p1) > rad || std::max(p0,p1)< -rad);
     }

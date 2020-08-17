@@ -1,8 +1,6 @@
 #ifndef __VEC3_HPP__
 #define __VEC3_HPP__
 
-// #include <algorithm>
-// #include <cmath>
 #include <random>
 #include <sstream>
 #include <iostream>

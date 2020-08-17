@@ -252,7 +252,7 @@ namespace OCT
                 ch_bb_min[2] = ot->_aabb->_min[2] + ( ( (int)(i&1) > 0 ) ? half_size[2] : 0 );
 
                 float* ch_bb_max = new float[3];
-                vector3.add_ref(ch_bb_min, half_size, ch_bb_max);
+                Math::Vec3::add_ref(ch_bb_min, half_size, ch_bb_max);
                 Math::AABB* aabb = new Math::AABB(ch_bb_min, ch_bb_max);
                 _oct->_node_count++;
                 ot->childs.push_back(new OctreeNode(_oct->_node_count, child_depth, aabb));

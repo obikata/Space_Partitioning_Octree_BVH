@@ -30,7 +30,6 @@ namespace OBJ_Loader
         int row_mat = 0;
 
         Math::AABB _aabb; // Axis Aligned Bounding Box
-        Math::Vec3 vector3;
 
     	/**
     	Constructor 

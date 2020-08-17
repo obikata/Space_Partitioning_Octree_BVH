@@ -44,7 +44,7 @@ namespace Math
 
         AABB AABB::deep_copy()
         {
-            return AABB(vector3.copy_new(_min), vector3.copy_new(_max));
+            return AABB(Math::Vec3::copy_new(_min), Math::Vec3::copy_new(_max));
         }
 
         AABB* AABB::shallow_copy()
@@ -61,25 +61,24 @@ namespace Math
         float AABB::getSurfaceArea()
         {
             float* s = getSize();
-            return (s[0]*s[1] + s[0]*s[2] + s[1]*s[2]) * 2;
+            return (s[0]*s[1] + s[0]*s[2] + s[1]*s[2]) * 2.0f;
         }
 
         float* AABB::getSize()
         {
-            return vector3.sub_new(_max, _min);
+            return Math::Vec3::sub_new(_max, _min);
         }
 
-        // float* getHalfSize()
-        // {
-        //     float* dst = new float[3];
-        //     vector3.scale_ref(getSize(), 0.5f, dst);
-        //     return dst;
-        // }
+        float* AABB::getHalfSize()
+        {
+            float* dst = Math::Vec3::scale_new(getSize(), 0.5f);
+            return dst;
+        }
 
         float* AABB::getCenter()
         {
             float* dst = new float[3];
-            vector3.scale_ref(vector3.add_new(_max, _min), 0.5f, dst);
+            Math::Vec3::scale_ref(Math::Vec3::add_new(_max, _min), 0.5f, dst);
             return dst;
         }
 
@@ -92,7 +91,7 @@ namespace Math
 
         void AABB::getCenterRef(float* dst)
         {
-            vector3.scale_ref(vector3.add_new(_max, _min), 0.5f, dst);
+            Math::Vec3::scale_ref(Math::Vec3::add_new(_max, _min), 0.5f, dst);
         }
 
         float** AABB::getCorners()
@@ -129,8 +128,8 @@ namespace Math
 
         void AABB::grow(AABB aabb)
         {
-            vector3.min_ref_slf(this->_min, aabb._min);
-            vector3.max_ref_slf(this->_max, aabb._max);
+            Math::Vec3::min_ref_slf(this->_min, aabb._min);
+            Math::Vec3::max_ref_slf(this->_max, aabb._max);
             // if( aabb.min[0] < min[0] ) min[0]=aabb.min[0];
             // if( aabb.min[1] < min[1] ) min[1]=aabb.min[1];
             // if( aabb.min[2] < min[2] ) min[2]=aabb.min[2];

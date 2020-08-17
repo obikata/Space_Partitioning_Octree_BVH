@@ -8,8 +8,6 @@
 namespace Math
 {
 
-    Vec3 vector3;
-
     class Mat4
     {
 
@@ -966,17 +964,17 @@ namespace Math
 
         static void lookAt_ref (float* eye, float* center, float* up, float* dst_mat)
         {
-            if( vector3.equals(eye, center) )
+            if( Math::Vec3::equals(eye, center) )
             {
                 identity_ref(dst_mat);
                 return;
             }
 
-            float* z = vector3.sub_new(eye, center); vector3.normalize_ref_slf(z);
-            float* x = vector3.cross_new(up, z );    vector3.normalize_ref_slf(x);
-            float* y = vector3.cross_new(z, x );     vector3.normalize_ref_slf(y);
+            float* z = Math::Vec3::sub_new(eye, center); Math::Vec3::normalize_ref_slf(z);
+            float* x = Math::Vec3::cross_new(up, z );    Math::Vec3::normalize_ref_slf(x);
+            float* y = Math::Vec3::cross_new(z, x );     Math::Vec3::normalize_ref_slf(y);
 
-            float w[3] { -(vector3.dot(x, eye)), -(vector3.dot(y, eye)), -(vector3.dot(z, eye)) };
+            float w[3] { -(Math::Vec3::dot(x, eye)), -(Math::Vec3::dot(y, eye)), -(Math::Vec3::dot(z, eye)) };
 
             dst_mat[ 0] = x[0];   dst_mat[ 4] = x[1];   dst_mat[ 8] = x[2];   dst_mat[12] = w[0];
             dst_mat[ 1] = y[0];   dst_mat[ 5] = y[1];   dst_mat[ 9] = y[2];   dst_mat[13] = w[1];
@@ -987,17 +985,17 @@ namespace Math
         static float* lookAt_new(float* eye, float* center, float* up)
         {
             float* dst_mat = new float[16];
-            if(  vector3.equals(eye, center) )
+            if(  Math::Vec3::equals(eye, center) )
             {
                 identity_ref(dst_mat);
                 return dst_mat;
             }
 
-            float* z = vector3.sub_new(eye, center); vector3.normalize_ref_slf(z);
-            float* x = vector3.cross_new(up, z );    vector3.normalize_ref_slf(x);
-            float* y = vector3.cross_new(z, x );     vector3.normalize_ref_slf(y);
+            float* z = Math::Vec3::sub_new(eye, center); Math::Vec3::normalize_ref_slf(z);
+            float* x = Math::Vec3::cross_new(up, z );    Math::Vec3::normalize_ref_slf(x);
+            float* y = Math::Vec3::cross_new(z, x );     Math::Vec3::normalize_ref_slf(y);
 
-            float w[3] { -(vector3.dot(x, eye)), -(vector3.dot(y, eye)), -(vector3.dot(z, eye)) };
+            float w[3] { -(Math::Vec3::dot(x, eye)), -(Math::Vec3::dot(y, eye)), -(Math::Vec3::dot(z, eye)) };
 
             dst_mat[ 0] = x[0];   dst_mat[ 4] = x[1];   dst_mat[ 8] = x[2];   dst_mat[12] = w[0];
             dst_mat[ 1] = y[0];   dst_mat[ 5] = y[1];   dst_mat[ 9] = y[2];   dst_mat[13] = w[1];

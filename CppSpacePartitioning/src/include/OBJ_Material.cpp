@@ -7,7 +7,6 @@
 #include <string>
 #include <iostream>
 #include "HELPER.hpp"
-// #include "Vec3.hpp"
 #include "OBJ_Material.hpp"
 
 namespace OBJ_Loader
@@ -21,12 +20,12 @@ namespace OBJ_Loader
         std::cout << "   Ni     = " << _Ni << std::endl;
         std::cout << "   d      = " << _d << std::endl;
         std::cout << "   Tr     = " << _Tr << std::endl;
-        std::cout << "   Tf     = " << vector3.toStr(_Tf, 3) << std::endl;
+        std::cout << "   Tf     = " << Math::Vec3::toStr(_Tf, 3) << std::endl;
         std::cout << "   illum  = " << _illum << std::endl;
-        std::cout << "   Ka     = " << vector3.toStr(_Ka, 3) << std::endl;
-        std::cout << "   Kd     = " << vector3.toStr(_Kd, 3) << std::endl;
-        std::cout << "   Ks     = " << vector3.toStr(_Ks, 3) << std::endl;
-        std::cout << "   Ke     = " << vector3.toStr(_Ke, 3) << std::endl;
+        std::cout << "   Ka     = " << Math::Vec3::toStr(_Ka, 3) << std::endl;
+        std::cout << "   Kd     = " << Math::Vec3::toStr(_Kd, 3) << std::endl;
+        std::cout << "   Ks     = " << Math::Vec3::toStr(_Ks, 3) << std::endl;
+        std::cout << "   Ke     = " << Math::Vec3::toStr(_Ke, 3) << std::endl;
         std::cout << "   reflectivity = " << _reflectivity << std::endl;
         std::cout << "------------------- </ OBJ MTL > -------------------" << std::endl;
     }

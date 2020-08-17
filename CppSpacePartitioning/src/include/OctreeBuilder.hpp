@@ -31,7 +31,6 @@ namespace OCT
     public:
 
         Octree* _oct;
-        Math::Vec3 vector3;
         float MIN_DEPTH_FILL_RATIO = 1.5f; // most important value, small values makes deep trees, especially for big scenes
         int MAX_DEPTH = 10;
 

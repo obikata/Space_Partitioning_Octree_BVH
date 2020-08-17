@@ -42,7 +42,7 @@ namespace OCT
     int Octree::getSubdivisionPlane(Math::AABB& aabb)
     {
         float* s = aabb.getSize();
-        float max = vector3.maxComponent(s);
+        float max = Math::Vec3::maxComponent(s);
         if( s[0] == max )
         {
             return 0; // x-extent is max
