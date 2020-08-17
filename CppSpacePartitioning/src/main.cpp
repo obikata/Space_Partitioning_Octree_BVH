@@ -101,7 +101,42 @@ int main(int argc, char **argv)
         std::cout << "\n-------------------------------<  finished Octree  >-------------------------------" << std::endl;
 
         //----------------------------------------------------------------------------
-        // Allocate memory for octree and store it as new data structure
+        // Raycasting
+        //----------------------------------------------------------------------------
+
+        // traverse OCTREE
+        for (int i=0; i<8; i++)
+        {
+            std::cout << "\n-------------------------------<  RayCast Test  >----------------------------------\n" << std::endl;
+            std::cout << "RAYCAST#: " << std::setfill('0') << std::setw(5) << i << std::endl;
+            int item = -1;
+            float* corner = octree->_root->_aabb->getCorners()[i];
+            float* center = octree->_root->_aabb->getCenter();
+            float* direction(Math::Vec3::normalize_new(Math::Vec3::sub_new(corner, center)));
+            float* origin = Math::Vec3::add_new(center, Math::Vec3::scale_new(Math::Vec3::negate_new(direction), 1.0f));
+            std::cout << "RAY DIRECTION VECTOR: " << direction[0] << " " << direction[1] << " " << direction[2] << std::endl;
+            std::cout << "RAY ORIGIN VECTOR from ROOT CENTER: " << origin[0]-center[0] << " " << origin[1]-center[1] << " " << origin[2]-center[2] << std::endl;
+            // Math::Vec3::sub_ref_slf(center, origin);
+            Math::Vec3::normalize_ref_slf(origin);
+            Math::Ray3D* ray = new Math::Ray3D(origin, direction);
+            
+            OCT::OctreeHitResult* hit_result = new OCT::OctreeHitResult(ray, 0.0f, 1.0f);
+            octree->_octree_traversal->traverseRayTopDown(hit_result);
+            item = hit_result->_item_idx;
+            if (item == -1)
+            {
+                std::cout << "\nNO HIT" << std::endl;
+            }
+            else
+            {
+                std::cout << "\nHIT!\n" << std::endl;
+                hit_result->printCounters();
+            }
+        }
+        std::cout << "\n-------------------------------<  Finished RayCast Test  >--------------------------" << std::endl;
+
+        //----------------------------------------------------------------------------
+        // Allocate memory area for the octree and store it as a new data structure
         //----------------------------------------------------------------------------
         std::cout << "\n-------------------------------< Allocating memory for octree >--------------------\n" << std::endl;
         octree->_octree_data_structure->Build();
@@ -112,39 +147,11 @@ int main(int argc, char **argv)
         std::cout << "\n-------------------------------<  finished storing octree data  >------------------" << std::endl;
 
         //----------------------------------------------------------------------------
-        // Raycasting
+        // RayCast against the new octree structure
         //----------------------------------------------------------------------------
-
-        // traverse OCTREE
-        // for (int i=0; i<8; i++)
-        // {
-        //     std::cout << "\n-------------------------------<  RayCast Test  >----------------------------------\n" << std::endl;
-        //     std::cout << "RAYCAST#: " << std::setfill('0') << std::setw(5) << i << std::endl;
-        //     int item = -1;
-        //     float* corner = octree->_root->_aabb->getCorners()[i];
-        //     float* center = octree->_root->_aabb->getCenter();
-        //     float* direction(Math::Vec3::normalize_new(Math::Vec3::sub_new(corner, center)));
-        //     float* origin = Math::Vec3::add_new(center, Math::Vec3::scale_new(Math::Vec3::negate_new(direction), 1.0f));
-        //     std::cout << "RAY DIRECTION VECTOR: " << direction[0] << " " << direction[1] << " " << direction[2] << std::endl;
-        //     std::cout << "RAY ORIGIN VECTOR from ROOT CENTER: " << origin[0]-center[0] << " " << origin[1]-center[1] << " " << origin[2]-center[2] << std::endl;
-        //     // Math::Vec3::sub_ref_slf(center, origin);
-        //     Math::Vec3::normalize_ref_slf(origin);
-        //     Math::Ray3D* ray = new Math::Ray3D(origin, direction);
-            
-        //     OCT::OctreeHitResult* hit_result = new OCT::OctreeHitResult(ray, 0.0f, 1.0f);
-        //     octree->_octree_traversal->traverseRayTopDown(hit_result);
-        //     item = hit_result->_item_idx;
-        //     if (item == -1)
-        //     {
-        //         std::cout << "\nNO HIT" << std::endl;
-        //     }
-        //     else
-        //     {
-        //         std::cout << "\nHIT!\n" << std::endl;
-        //         hit_result->printCounters();
-        //     }
-        // }
-        // std::cout << "\n-------------------------------<  Finished RayCast Test  >--------------------------" << std::endl;
+        
+        // TODO
+        // traverseOctreeRecursive against the new data struture
 
     }
 
