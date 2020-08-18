@@ -175,7 +175,7 @@ int main(int argc, char **argv)
         bool octree_Data_structure_valid = octree->_ascv_octree->isValid(octree->_ascv_octree->octants);
         std::cout << "    octree_data_structure_valid        = " << octree_Data_structure_valid         << std::endl;
         std::cout << "    octree_data_structure_nodes        = " << octree->_ascv_octree->len_nodes         << std::endl;
-        std::cout << "    octree_data_structure_stored_items        = " << octree->_ascv_octree->stored_items         << std::endl;
+        std::cout << "    octree_data_structure_stored_items        = " << octree->_ascv_octree->stored_items[0]         << std::endl;
         std::cout << "\n-------------------------------<  finished storing octree data  >------------------" << std::endl;
 
         //----------------------------------------------------------------------------

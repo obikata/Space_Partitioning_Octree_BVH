@@ -17,9 +17,21 @@ namespace ascv
         len_nodes = nodes.size();
 
         octants = (Octant*)malloc(len_nodes * sizeof(Octant));
+        for (int i = 0; i < len_nodes; i++)
+        {
+            octants[i] = Octant();
+        }
+
+        ptr_octants = (Octant**)malloc(len_nodes * sizeof(Octant*));
+        for (int i = 0; i < len_nodes; i++)
+        {
+            ptr_octants[i] = &octants[i];
+        }
 
         // Store nodes
-        storeNodes_recursive(nodes);
+        // storeNodes_recursive(nodes);
+        ptr_octants[0]->ptr_storeNodes_recursive(nodes, counter, stored_items, ptr_octants);
+
 
     }
 
