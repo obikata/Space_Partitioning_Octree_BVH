@@ -28,7 +28,7 @@ namespace oct
         // if ray hits octree (root), traverse childs
         if( otd->tNear() < otd->tFar() )
         {
-            std::cout << otd->tNear() << " " << otd->tFar() << std::endl;
+            // std::cout << otd->tNear() << " " << otd->tFar() << std::endl;
         
             traverseOctreeRecursive(otd, hit_result);
             for( OctreeTraversalData* td_checked : hit_result->_traversal_history)

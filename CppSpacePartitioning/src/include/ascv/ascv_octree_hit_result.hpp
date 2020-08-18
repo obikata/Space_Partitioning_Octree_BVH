@@ -4,7 +4,7 @@
 
 #include "../Vec3.hpp"
 #include "../Ray3D.hpp"
-#include "ascv_octant.hpp"
+#include "ascv_octree.hpp"
 
 namespace ascv
 {
@@ -17,7 +17,7 @@ namespace ascv
         float _t_max;
         float _t_min;
         float _t;
-        Octant _node;
+        Octant* _node;
         int _item_idx = -1;
         bool _two_sided_check = true;
         float _hit_backface = 1.0f;
@@ -29,7 +29,7 @@ namespace ascv
 
         OctreeHitResult(Math::Ray3D* ray, float t_min, float t_max) : _ray(ray), _t_min(t_min), _t_max(t_max), _t(t_max), _item_idx(-1), _hit_backface(1.0f), _got_hit(false) {}; 
 
-        bool checkIfCloser(float t_new, int item_idx, Octant& node, float hit_backface, float u, float v)
+        bool checkIfCloser(float t_new, int item_idx, Octant* node, float hit_backface, float u, float v)
         {
             if( _t_min < t_new && t_new < _t)
             {
@@ -46,7 +46,7 @@ namespace ascv
         }
 
 
-        bool checkIfCloser(float* tuv, int item_idx, Octant& node, float hit_backface)
+        bool checkIfCloser(float* tuv, int item_idx, Octant* node, float hit_backface)
         {
             std::cout << "_t_min = " << _t_min << ", tuv[0] = " << tuv[0] << ", _t = " << _t << std::endl;
             if( _t_min < tuv[0] && tuv[0] < _t)

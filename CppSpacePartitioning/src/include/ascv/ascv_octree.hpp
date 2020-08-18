@@ -3,8 +3,10 @@
 
 #include "../OctreeNode.hpp"
 
-using namespace oct;
-class Octree;
+namespace oct
+{
+    class Octree;
+}
 
 namespace ascv
 {
@@ -69,7 +71,7 @@ namespace ascv
                         {
                             if ( nodes[counter]->childs[i] != nullptr)
                             {
-                                octants[counter].child_node_idx[i] = nodes[counter]->childs[i]->_nodeIdx;
+                                octants[counter].child_node_idx[i] = nodes[counter]->childs[i]->_nodeIdx; //TODO
                             }
                         }
                     }                        

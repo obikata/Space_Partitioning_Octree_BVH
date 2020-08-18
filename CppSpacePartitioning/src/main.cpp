@@ -12,6 +12,8 @@
 #include "include/AABB.hpp"
 
 #include "include/ascv/ascv_octree.hpp"
+#include "include/ascv/ascv_octree_hit_result.hpp"
+#include "include/ascv/ascv_octree_traversal.hpp"
 
 static std::string toStr(double a, int prec) 
 {
@@ -180,40 +182,26 @@ int main(int argc, char **argv)
         // RayCast against the new octree structure
         //----------------------------------------------------------------------------
 
-        // ascv::Octant* octants;
-        // octants = octree->_ascv_octree->octants;
+        ascv::Octant* octants = octree->_ascv_octree->octants;
 
-        // // traverse OCTREE
-        // for (int i=0; i<8; i++)
-        // {
-        //     std::cout << "\n-------------------------------<  RayCast Test  >----------------------------------\n" << std::endl;
-        //     std::cout << "RAYCAST#: " << std::setfill('0') << std::setw(5) << i << std::endl;
-        //     int item = -1;
-        //     // float* corner = octree->_root->_aabb->getCorners()[i];
-        //     float* corner = getCorners(octants[0])[i];
-        //     float* center = getCenter(octants[0]);
-        //     float* direction(Math::Vec3::normalize_new(Math::Vec3::sub_new(corner, center)));
-        //     float* origin = Math::Vec3::add_new(center, Math::Vec3::scale_new(Math::Vec3::negate_new(direction), 1.0f));
-        //     std::cout << "RAY DIRECTION VECTOR: " << direction[0] << " " << direction[1] << " " << direction[2] << std::endl;
-        //     std::cout << "RAY ORIGIN VECTOR from ROOT CENTER: " << origin[0]-center[0] << " " << origin[1]-center[1] << " " << origin[2]-center[2] << std::endl;
-        //     Math::Vec3::normalize_ref_slf(origin);
-        //     Math::Ray3D* ray = new Math::Ray3D(origin, direction);
-        //     ascv::OctreeHitResult* hit_result = new ascv::OctreeHitResult(ray, 0.0f, 1.0f);
-            
-        //     // AXI Master module
-        //     ascv::OctreeTraverse(octants, ray, hit_result); // arg1 = octree structure, arg2 = ray, arg3 = leaf or not = 0/1
-        //     item = hit_result->_item_idx;
-        //     if (item == -1)
-        //     {
-        //         std::cout << "\nNO HIT" << std::endl;
-        //     }
-        //     else
-        //     {
-        //         std::cout << "\nHIT!\n" << std::endl;
-        //         hit_result->printCounters();
-        //     }
-        // }
-        // std::cout << "\n-------------------------------<  Finished RayCast Test  >-------------------------" << std::endl;
+        // traverse OCTREE
+        for (int i = 0; i < 8; i++)
+        {
+            std::cout << "\n-------------------------------<  RayCast Test 2 >---------------------------------\n" << std::endl;
+            std::cout << "RAYCAST#: " << std::setfill('0') << std::setw(5) << i << std::endl;
+            float* corner = getCorners(octants[0])[i];
+            float* center = getCenter(octants[0]);
+            float* direction(Math::Vec3::normalize_new(Math::Vec3::sub_new(corner, center)));
+            float* origin = Math::Vec3::add_new(center, Math::Vec3::scale_new(Math::Vec3::negate_new(direction), 1.0f));
+            std::cout << "RAY DIRECTION VECTOR: " << direction[0] << " " << direction[1] << " " << direction[2] << std::endl;
+            std::cout << "RAY ORIGIN VECTOR from ROOT CENTER: " << origin[0]-center[0] << " " << origin[1]-center[1] << " " << origin[2]-center[2] << std::endl;
+            Math::Vec3::normalize_ref_slf(origin);
+            Math::Ray3D* ray = new Math::Ray3D(origin, direction);
+            ascv::OctreeHitResult* hit_result = new ascv::OctreeHitResult(ray, 0.0f, 1.0f);
+            int IDX_SHFT = 0;
+            ascv::ascv_octree_traversal::Traverse(octants, ray, hit_result, IDX_SHFT);
+        }
+        std::cout << "\n-------------------------------<  Finished RayCast Test 2 >------------------------" << std::endl;
 
     }
 

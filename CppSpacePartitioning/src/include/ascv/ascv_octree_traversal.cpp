@@ -15,8 +15,7 @@ namespace ascv
         if(mirrorComponent(octants[0].aabb_min, octants[0].aabb_max, ray_mod, 0)) IDX_SHFT |= 4;
         if(mirrorComponent(octants[0].aabb_min, octants[0].aabb_max, ray_mod, 1)) IDX_SHFT |= 2;
         if(mirrorComponent(octants[0].aabb_min, octants[0].aabb_max, ray_mod, 2)) IDX_SHFT |= 1;
-        // std::cout << IDX_SHFT << std::endl;
-        
+
         // get intersection intervals
         float* t0 = Math::Vec3::multiply_new(Math::Vec3::sub_new(octants[0].aabb_min, ray_mod->_o), ray_mod->_d_rec);
         float* t1 = Math::Vec3::multiply_new(Math::Vec3::sub_new(octants[0].aabb_max, ray_mod->_o), ray_mod->_d_rec);
