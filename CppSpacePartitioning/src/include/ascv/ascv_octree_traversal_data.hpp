@@ -16,12 +16,24 @@ namespace ascv
 
             // OctreeTraversalData* prev;
             Octant* _node;
-            float* _t0;
-            float* _t1;
+            float _t0[3];
+            float _t1[3];
             
-            OctreeTraversalData(Octant* node, float* t0, float* t1) : _node(node), _t0(t0), _t1(t1) {};
+            OctreeTraversalData(Octant* node, float* t0, float* t1) : _node(node)
+            {
+                for(int i=0;i<3;i++) _t0[i]=t0[i];
+                for(int i=0;i<3;i++) _t1[i]=t1[i];
+            };
             
-            OctreeTraversalData(Octant* node, float t0x, float t0y, float t0z, float t1x, float t1y, float t1z) : _node(node), _t0(new float[3] {t0x, t0y, t0z}), _t1(new float[3] {t1x, t1y, t1z}) {};
+            OctreeTraversalData(Octant* node, float t0x, float t0y, float t0z, float t1x, float t1y, float t1z) : _node(node)
+            {
+                _t0[0] = t0x;
+                _t0[1] = t0y;
+                _t0[2] = t0z;
+                _t1[0] = t1x;
+                _t1[1] = t1y;
+                _t1[2] = t1z;
+            };
             
             float* tm()
             {

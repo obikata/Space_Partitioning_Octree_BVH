@@ -90,6 +90,8 @@ namespace oct
             int curr_node   = first_node(t0, tm);
             while(curr_node < 8 )
             { // 8=indication for ray-exit    
+                // std::cout << curr_node << std::endl;
+                // std::cout << IDX_SHFT << std::endl;
                 switch (curr_node)
                 {
                     case 0:  OTD = new OctreeTraversalData(node->childs[0^IDX_SHFT], t0[0],t0[1],t0[2], tm[0],tm[1],tm[2]);  curr_node = next_node(OTD->_t1,4,2,1);  break;

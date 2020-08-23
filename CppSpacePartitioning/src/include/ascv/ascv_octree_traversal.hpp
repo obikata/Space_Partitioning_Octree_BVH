@@ -68,14 +68,17 @@ namespace ascv
             if( OTD->_node->isLeaf )
             { // this presumes, that items are only located in leafes!
                 std::cout << "isleaf" << std::endl;
+                std::cout << "Number of IDX_triangles = " << OTD->_node->NUM_IDX_triangles << std::endl;
                 for (int i=0; i<10; i++)
                 {
                     if (OTD->_node->IDX_triangles[i] != -1)
                     {
-                        std::cout << OTD->_node->IDX_triangles[i] << " " << std::flush;
+                        std::cout << "IDX_triangle #" << OTD->_node->IDX_triangles[i] << " " << std::flush;
+                        std::cout << "did not pass intersect2" << std::endl;
                     }
                 }
-                std::cout << std::endl;
+                // return intersectRayObjects(OTD, hit_result);
+                return false; // TODO : need to do intersect check
             }
             std::cout << "is not leaf" << std::endl;
             
@@ -86,6 +89,8 @@ namespace ascv
             int curr_node   = first_node(t0, tm);
             while(curr_node < 8 )
             { // 8=indication for ray-exit    
+                // std::cout << curr_node << std::endl;
+                // std::cout << IDX_SHFT << std::endl;
                 switch (curr_node)
                 {
                     case 0:  OTD = new OctreeTraversalData(node->childs[0^IDX_SHFT], t0[0],t0[1],t0[2], tm[0],tm[1],tm[2]);  curr_node = next_node(OTD->_t1,4,2,1);  break;

@@ -58,14 +58,15 @@ namespace oct
             }
             f.FLAG_CHECKED = true;
 
-            std::cout << "IDX_triangle = " << id << std::endl;
+            std::cout << "IDX_triangle #" << id << " " << std::flush;
             
             if(Intersect_RAY_TRIANGLE::intersect2(hit_result->_ray, f.A(), f.B(), f.C(), hit_result->_two_sided_check, ptr_hit_backface, tuv))
             {
-                std::cout << "Passed intersect2" << std::endl;
+                std::cout << "passed intersect2" << std::endl;
                 hit_result->checkIfCloser(tuv, id, OTD->_node, ptr_hit_backface[0]);
                 hit_result->COUNT_triangle_intersection_tests++;
             }
+            std::cout << "did not pass intersect2" << std::endl;
         }
 
         // because some objects exceed the nodes aabb, an intersection (at t) can 

@@ -139,7 +139,7 @@ int main(int argc, char **argv)
         //----------------------------------------------------------------------------
 
         // traverse OCTREE
-        for (int i=0; i<8; i++)
+        for (int i=0; i<1; i++)
         {
             std::cout << "\n-------------------------------<  RayCast Test  >----------------------------------\n" << std::endl;
             std::cout << "RAYCAST#: " << std::setfill('0') << std::setw(5) << i << std::endl;
@@ -185,10 +185,11 @@ int main(int argc, char **argv)
         ascv::Octant* octants = octree->_ascv_octree->octants;
 
         // traverse OCTREE
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < 1; i++)
         {
             std::cout << "\n-------------------------------<  RayCast Test 2 >---------------------------------\n" << std::endl;
             std::cout << "RAYCAST#: " << std::setfill('0') << std::setw(5) << i << std::endl;
+            int item = -1;
             float* corner = getCorners(octants[0])[i];
             float* center = getCenter(octants[0]);
             float* direction(Math::Vec3::normalize_new(Math::Vec3::sub_new(corner, center)));
@@ -200,6 +201,16 @@ int main(int argc, char **argv)
             ascv::OctreeHitResult* hit_result = new ascv::OctreeHitResult(ray, 0.0f, 1.0f);
             int IDX_SHFT = 0;
             ascv::ascv_octree_traversal::Traverse(octants, ray, hit_result, IDX_SHFT);
+            item = hit_result->_item_idx;
+            if (item == -1)
+            {
+                std::cout << "\nNO HIT" << std::endl;
+            }
+            else
+            {
+                std::cout << "\nHIT!\n" << std::endl;
+                hit_result->printCounters();
+            }
         }
         std::cout << "\n-------------------------------<  Finished RayCast Test 2 >------------------------" << std::endl;
 

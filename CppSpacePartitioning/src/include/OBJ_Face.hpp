@@ -17,9 +17,12 @@ namespace OBJ_Loader
     
     public:
 
-        int* IDX_V; // indices - vertices
-        int* IDX_N; // indices - normals
-        int* IDX_T; // indices - texture coordinates                
+        // int* IDX_V; // indices - vertices
+        // int* IDX_N; // indices - normals
+        // int* IDX_T; // indices - texture coordinates                
+        int IDX_V[3]; // indices - vertices
+        int IDX_N[3]; // indices - normals
+        int IDX_T[3]; // indices - texture coordinates                
         Math::AABB _aabb;
 
         /*
@@ -38,7 +41,13 @@ namespace OBJ_Loader
     	Constructor 
         */
         // OBJ_Face() : IDX_V(new int[3] {-1, -1, -1}), IDX_N(new int[3] {-1, -1, -1}), IDX_T(new int[3] {-1, -1, -1}), MeshGroupIdx(0) {};
-        OBJ_Face(OBJ_File* obj) : ptr_obj(obj), IDX_V(new int[3] {-1, -1, -1}), IDX_N(new int[3] {-1, -1, -1}), IDX_T(new int[3] {-1, -1, -1}), MeshGroupIdx(0), MaterialIdx(0) {};
+        // OBJ_Face(OBJ_File* obj) : ptr_obj(obj), IDX_V(new int[3] {-1, -1, -1}), IDX_N(new int[3] {-1, -1, -1}), IDX_T(new int[3] {-1, -1, -1}), MeshGroupIdx(0), MaterialIdx(0) {};
+        OBJ_Face(OBJ_File* obj) : ptr_obj(obj), MeshGroupIdx(0), MaterialIdx(0)
+        {
+            for (int i=0; i<3; i++) IDX_V[i]=-1;
+            for (int i=0; i<3; i++) IDX_N[i]=-1;
+            for (int i=0; i<3; i++) IDX_T[i]=-1;
+        };
         // OBJ_Face() : IDX_V(new int[3] {-1, -1, -1}), IDX_N(new int[3] {-1, -1, -1}), IDX_T(new int[3] {-1, -1, -1}), MeshGroupIdx(0), MaterialIdx(0) {};
         
         float* A();

@@ -27,8 +27,8 @@ namespace ascv
         {
             depth = 0;
             NUM_IDX_triangles = 0;
-            for(int i = 0; i<3; i++) aabb_min[i] = 0.0f;
-            for(int i = 0; i<3; i++) aabb_max[i] = 0.0f;
+            for(int i = 0; i<3; i++) aabb_min[i] = 100000000000000000000.0f;
+            for(int i = 0; i<3; i++) aabb_max[i] = -100000000000000000000.0f;
             for(int i = 0; i<10; i++) IDX_triangles[i] = -1;
             childs = (Octant**)malloc(8 * sizeof(Octant*));
         };
@@ -58,6 +58,11 @@ namespace ascv
                             this->childs[i] = ptr_octants[counter+1];
                             counter = ptr_octants[counter+1]->ptr_storeNodes_recursive(nodes, (counter+1), stored_items, ptr_octants);
                         }
+                        else
+                        {
+                            this->childs[i] = nullptr;
+                        }
+                        
                     }
                 }                         
             }
